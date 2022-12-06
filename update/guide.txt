@@ -1,0 +1,25 @@
+FOODSIFY v1.0.1 Update Documentation
+
+// ------------------------------------- //
+
+1) How To Update
+
+
+
+- replace Route.php file from root/script/vendor/laravel/framework/src/Illuminate/Routing
+
+
+
+
+// ------------------------------------- //
+
+you will get every resource from update directory.
+
+
+Created: 	15 September 2022
+Last Update: 6 October 2022
+By: AMCoders
+Email: amcoders360@gmail.com
+
+
+Copyright © 2022 AMCoders All rights reserved
