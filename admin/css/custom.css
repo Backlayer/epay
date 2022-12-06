@@ -1,0 +1,314 @@
+.single-modal img {
+    max-width: 85% !important;
+}
+
+textarea.form-control {
+    height: 80px !important;
+}
+
+.is-invalid {
+    color: #EE2D41 !important;
+}
+
+label.required:after {
+    content:" *";
+    color:red;
+}
+label.optional:after {
+    content:" (optional)";
+    color: #6b6b6b;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__clear {
+    margin-right: 40px!important;
+    margin-top: 7px!important;
+}
+
+.tasks-body {
+    max-height: 500px; height: 500px;
+}
+
+.notification-content {
+    max-height: 350px !important;
+    height: unset !important;
+}
+
+label.custom-label {
+    border: 3px dotted #e0e2f0;
+    padding: 50px 0px;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+label.custom-label i {
+    font-size: 40px;
+}
+
+.product-show table th {
+    background-color: #FFF !important;
+}
+
+textarea.codes {
+    height: 190px !important;
+}
+.supportStatusSelect {
+    z-index: 1000;
+    position: absolute;
+    right: 0;
+}
+.right.ticket-content{
+    width: 100% !important;
+    text-align: right;
+}
+.right .ticket-description{
+ text-align:right;
+ display: block;
+}
+.right .ticket-header, .right .ticket-header{
+    align-items: end;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.right .ticket-sender-picture{
+    /* width: 70px !important; */
+    margin-left: 5px;
+    margin-right: 0 !important;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%) !important
+}
+
+.bg-gradient-secondary {
+    background: linear-gradient(87deg, #f7fafc 0, #f7f8fc 100%) !important
+}
+
+.bg-gradient-success {
+    background: linear-gradient(87deg, #2dce89 0, #2dcecc 100%) !important
+}
+
+.bg-gradient-info {
+    background: linear-gradient(87deg, #11cdef 0, #1171ef 100%) !important
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(87deg, #fb6340 0, #fbb140 100%) !important
+}
+
+.bg-gradient-danger {
+    background: linear-gradient(87deg, #f5365c 0, #f56036 100%) !important
+}
+
+.bg-gradient-light {
+    background: linear-gradient(87deg, #adb5bd 0, #adaebd 100%) !important
+}
+
+.bg-gradient-dark {
+    background: linear-gradient(87deg, #212529 0, #212229 100%) !important
+}
+
+.bg-gradient-default {
+    background: linear-gradient(87deg, #172b4d 0, #1a174d 100%) !important
+}
+
+.bg-gradient-white {
+    background: linear-gradient(87deg, #fff 0, #fff 100%) !important
+}
+
+.bg-gradient-neutral {
+    background: linear-gradient(87deg, #fff 0, #fff 100%) !important
+}
+
+.bg-gradient-darker {
+    background: linear-gradient(87deg, #000 0, #000 100%) !important
+}
+
+.bg-gradient-blue {
+    background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%) !important
+}
+
+.bg-gradient-indigo {
+    background: linear-gradient(87deg, #5603ad 0, #9d03ad 100%) !important
+}
+
+.bg-gradient-purple {
+    background: linear-gradient(87deg, #8965e0 0, #bc65e0 100%) !important
+}
+
+.bg-gradient-pink {
+    background: linear-gradient(87deg, #f3a4b5 0, #f3b4a4 100%) !important
+}
+
+.bg-gradient-red {
+    background: linear-gradient(87deg, #f5365c 0, #f56036 100%) !important
+}
+
+.bg-gradient-orange {
+    background: linear-gradient(87deg, #fb6340 0, #fbb140 100%) !important
+}
+
+.bg-gradient-yellow {
+    background: linear-gradient(87deg, #ffd600 0, #beff00 100%) !important
+}
+
+.bg-gradient-green {
+    background: linear-gradient(87deg, #2dce89 0, #2dcecc 100%) !important
+}
+
+.bg-gradient-teal {
+    background: linear-gradient(87deg, #11cdef 0, #1171ef 100%) !important
+}
+
+.bg-gradient-cyan {
+    background: linear-gradient(87deg, #2bffc6 0, #2be0ff 100%) !important
+}
+
+.bg-gradient-white {
+    background: linear-gradient(87deg, #fff 0, #fff 100%) !important
+}
+
+.bg-gradient-gray {
+    background: linear-gradient(87deg, #8898aa 0, #888aaa 100%) !important
+}
+
+.bg-gradient-gray-dark {
+    background: linear-gradient(87deg, #32325d 0, #44325d 100%) !important
+}
+
+.bg-gradient-light {
+    background: linear-gradient(87deg, #ced4da 0, #cecfda 100%) !important
+}
+
+.bg-gradient-lighter {
+    background: linear-gradient(87deg, #e9ecef 0, #e9eaef 100%) !important
+}
+
+.icon-shape
+{
+    display: inline-flex;
+
+    padding: 12px;
+
+    text-align: center;
+
+    border-radius: 50%;
+
+    align-items: center;
+    justify-content: center;
+}
+.icon-shape i,
+.icon-shape svg
+{
+    font-size: 1.25rem;
+}
+.icon-shape.icon-lg i,
+.icon-shape.icon-lg svg
+{
+    font-size: 1.625rem;
+}
+.icon-shape.icon-sm i,
+.icon-shape.icon-sm svg
+{
+    font-size: .875rem;
+}
+.icon-shape.icon-xs i,
+.icon-shape.icon-xs svg
+{
+    font-size: .6rem;
+}
+.icon-shape svg
+{
+    width: 30px;
+    height: 30px;
+}
+
+.icon-shape-primary
+{
+    color: #2643e9;
+    background-color: rgba(138, 152, 235, .5);
+}
+
+.icon-shape-secondary
+{
+    color: #cfe3f1;
+    background-color: rgba(255, 255, 255, .5);
+}
+
+.icon-shape-success
+{
+    color: #1aae6f;
+    background-color: rgba(84, 218, 161, .5);
+}
+
+.icon-shape-info
+{
+    color: #03acca;
+    background-color: rgba(65, 215, 242, .5);
+}
+
+.icon-shape-warning
+{
+    color: #ff3709;
+    background-color: rgba(252, 140, 114, .5);
+}
+
+.icon-shape-danger
+{
+    color: #f80031;
+    background-color: rgba(247, 103, 131, .5);
+}
+
+.icon-shape-light
+{
+    color: #879cb0;
+    background-color: rgba(201, 207, 212, .5);
+}
+
+.icon-shape-dark
+{
+    color: #090c0e;
+    background-color: rgba(56, 63, 69, .5);
+}
+
+.icon-shape-default
+{
+    color: #091428;
+    background-color: rgba(35, 65, 116, .5);
+}
+
+.icon-shape-white
+{
+    color: #e8e3e3;
+    background-color: rgba(255, 255, 255, .5);
+}
+
+.icon-shape-neutral
+{
+    color: #e8e3e3;
+    background-color: rgba(255, 255, 255, .5);
+}
+
+.icon-shape-darker
+{
+    color: black;
+    background-color: rgba(26, 26, 26, .5);
+}
+
+a.clipboard-button,
+p.clipboard-button,
+span.clipboard-button
+{
+    cursor: pointer;
+    color: #007bff;
+}
+a.clipboard-button:hover,
+p.clipboard-button:hover,
+span.clipboard-button:hover
+{
+    cursor: pointer;
+    color: #0168d0;
+}

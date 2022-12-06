@@ -1,0 +1,8 @@
+.is-invalid {
+    color: red;
+    font-weight: normal;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
