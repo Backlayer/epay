@@ -27,7 +27,7 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-4">
-                                <label for="item_name" class="required">{{__('Item Name')}}</label>
+                                <label for="item_name" class="required">{{__('Invoice Title')}}</label>
                                 <input type="text" name="item_name" id="item_name" class="form-control" placeholder="{{ __("Enter invoice title") }}" required>
                             </div>
                             <div class="form-group col-md-3">

@@ -8,7 +8,7 @@
 ## Payment Status: {{ $invoice->is_paid ? 'Paid':"Unpaid" }}
 
 @component('mail::table')
-|Item|Amount|Quantity|
+|Invoice|Amount|Quantity|
 |:--:|:----:|:------:|
 @foreach($invoice->items as $item)
 |{{ $item->name }}|{{ currency_format($item->amount, currency: $invoice->currency) }}|{{ $item->quantity }}|{{ currency_format($item->subtotal, currency: $invoice->currency) }}|

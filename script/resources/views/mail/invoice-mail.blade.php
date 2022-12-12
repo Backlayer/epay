@@ -6,7 +6,7 @@
 <strong>Payment Status:</strong> {{ $invoice->is_paid ? 'Paid':"Unpaid" }}<br>
 
 @component('mail::table')
-|Item|Amount|Quantity|Sub Total|
+|Invoice|Amount|Quantity|Sub Total|
 |:--:|:----:|:------:|:-------:|
 @foreach($invoice->items as $item)
 |{{ $item->name }}|{{ currency_format($item->amount, currency: $invoice->currency) }}|{{ $item->quantity }}|{{ currency_format($item->subtotal, currency: $invoice->currency) }}|
