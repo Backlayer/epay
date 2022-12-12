@@ -257,7 +257,6 @@ class PaymentController extends Controller
             $gateway = $invoiceData['gateway'];
             $originalAmount = Session::get('amount');
             $userInfo = Session::get('userInfo');
-
             // Calculate Income, taxes etc
             $convertToDefaultAmount = convert_money($originalAmount, $invoice->currency);
             $getTax = calculate_taxes($convertToDefaultAmount, false);

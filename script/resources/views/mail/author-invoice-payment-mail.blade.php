@@ -10,7 +10,9 @@
 @component('mail::table')
 |Item|Amount|Quantity|
 |:--:|:----:|:------:|
-|{{ $invoice->item_name }}|{{ $invoice->amount }}|{{ $invoice->quantity }}|
+@foreach($invoice->items as $item)
+|{{ $item->name }}|{{ currency_format($item->amount, currency: $invoice->currency) }}|{{ $item->quantity }}|{{ currency_format($item->subtotal, currency: $invoice->currency) }}|
+@endforeach
 @endcomponent
 
 
@@ -20,10 +22,11 @@
 {{ $invoice->note }}
 @endif
 
-## Sub Total: {{ $subTotal }}
-## Discount: {{ $invoice->discount }}%
-## Tax: {{ $invoice->tax }}%
-## Total: {{ $total }}
+<hr>
+<strong>Sub Total:</strong> {{ $subTotal }}
+<strong>Discount:</strong> {{ $invoice->discount }}%
+<strong>Tax:</strong> {{ $invoice->tax }}%
+<strong>Total:</strong> {{ $total }}
 
 Thanks,<br>
 {{ config('app.name') }}
