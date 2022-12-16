@@ -7,6 +7,8 @@ La configuracion del docker contiene los siguientes servicios:
 - `PhpMyadmin`: ui web para manejo de base datos mysql, contenedor: `epay-phpmyadmin`, version Latest
 - `Nginx`: servidor web, contenedor: `epay-nginx`, version Alpine
 
+`IMPORTANTE:` se debe crear el archivo `.env` a partir de `.env.example` y colocar los key correspondientes.
+
 ## Comandos Docker
 
 Todos los comandos se deben ejecutar dentro del directorio `./script`.
