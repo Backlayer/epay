@@ -81,7 +81,7 @@
             "docker-compose -f ../docker/docker-compose.yml --env-file ./.env up -d"
         ],
         "docker-install": [
-            "docker exec epay-app rm -rf ./script/composer.lock ./script/vendor/ && composer install -d ./script/ --no-cache -v"
+            "docker exec epay-app rm -rf ./script/composer.lock ./script/vendor/ && composer install --no-cache -v"
         ]
     },
     "extra": {
