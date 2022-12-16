@@ -25,3 +25,12 @@ composer run-script docker-up
 # Instalar paquetes composer del proyecto
 composer run-script docker-install
 ```
+
+## URLs para acceso a servicios
+
+Los puertos para el acceso a los servicios web se pueden configurar en el archivo `.env`, las urls por defecto son:
+
+- `App`: http://localhost:8000
+- `PhpMyadmin`: http://localhost:5080
+
+
