@@ -1,5 +1,158 @@
 @php
     $logo = get_option('logo_setting');
+
+    $primaryMenu = [
+        'deposit' => [
+            'ruleActive' => Route::is('user.deposits.index'),
+            'route' => route('user.deposits.index'),
+            'classIcon' => 'fas fa-arrow-up text-info',
+            'title' => __('Deposit'),
+            'enable' => false
+        ],
+        'transfers' => [
+            'ruleActive' => Route::is('user.transfers.index') || Route::is('user.transfers.create'),
+            'route' => route('user.transfers.index'),
+            'classIcon' => 'fas fa-random text-orange',
+            'title' => __('Transfer Money'),
+            'enable' => false
+        ],
+        'qr-payments' => [
+            'ruleActive' => Route::is('user.qr-payments.index'),
+            'route' => route('user.qr-payments.index'),
+            'classIcon' => 'fas fa-qrcode text-info',
+            'title' => __('Qr Payments'),
+            'enable' => false
+        ],
+        'supports' => [
+            'ruleActive' => Route::is('user.supports.index'),
+            'route' => route('user.supports.index'),
+            'classIcon' => 'fas fa-flag-usa text-default',
+            'title' => __('Support'),
+            'enable' => true
+        ],
+        'subscribers' => [
+            'ruleActive' => Route::is('user.subscribers.index'),
+            'route' => route('user.subscribers.index'),
+            'classIcon' => 'fa fa-user text-primary',
+            'title' => __('Subscribers'),
+            'enable' => false
+        ],
+        'transactions' => [
+            'ruleActive' => Route::is('user.transactions.index'),
+            'route' => route('user.transactions.index'),
+            'classIcon' => 'fas fa-money-check-alt text-green',
+            'title' => __('Transactions'),
+            'enable' => true
+        ],
+        'payouts' => [
+            'ruleActive' => Route::is('user.payouts.index'),
+            'route' => route('user.payouts.index'),
+            'classIcon' => 'fas fa-arrow-circle-down text-info',
+            'title' => __('Payouts'),
+            'enable' => true
+        ],
+        'charges' => [
+            'ruleActive' => Route::is('user.charges.index'),
+            'route' => route('user.charges.index'),
+            'classIcon' => 'fas fa-comment-dollar text-red',
+            'title' => __('Charges'),
+            'enable' => true
+        ]
+    ];
+
+    $secondaryMenu = [
+        'categories' => [
+            'ruleActive' => Route::is('user.categories.index'),
+            'route' => route('user.categories.index'),
+            'classIcon' => 'fas fa-sitemap text-dark',
+            'title' => __('Categories'),
+            'enable' => false
+        ],
+        'storefronts' => [
+            'ruleActive' => Route::is('user.storefronts.index'),
+            'route' => route('user.storefronts.index'),
+            'classIcon' => 'fas fa-store-alt text-pink',
+            'title' => __('Store front'),
+            'enable' => false
+        ],
+        'products' => [
+            'ruleActive' => request()->is('*/digital-products') || request()->is('*/physical-products'),
+            'route' => 'navbar-products',
+            'classIcon' => 'fas fa-shopping-bag text-gray',
+            'title' => __('Products'),
+            'enable' => false,
+            'children' => [
+                'physical-products' => [
+                    'ruleActive' => request()->is('*/physical-products'),
+                    'route' => route('user.physical-products.index'),
+                    'title' => __('Physical products'),
+                    'enable' => true
+                ],
+                'digital-products' => [
+                    'ruleActive' => request()->is('*/digital-products'),
+                    'route' => route('user.digital-products.index'),
+                    'title' => __('Digital products'),
+                    'enable' => true
+                ]
+            ]
+        ],
+        'shipping-rate' => [
+            'ruleActive' => Route::is('user.shipping-rate.index'),
+            'route' => route('user.shipping-rate.index'),
+            'classIcon' => 'fas fa-street-view',
+            'title' => __('Shippings'),
+            'enable' => false
+        ],
+        'orders' => [
+            'ruleActive' => Route::is('user.orders.index'),
+            'route' => route('user.orders.index'),
+            'classIcon' => 'fas fa-shopping-cart text-info',
+            'title' => __('Orders'),
+            'enable' => false
+        ],
+        'request-money' => [
+            'ruleActive' => Route::is('user.request-money.index'),
+            'route' => route('user.request-money.index'),
+            'classIcon' => 'fas fa-handshake text-success',
+            'title' => __('Request Money'),
+            'enable' => true
+        ],
+        'single-charges' => [
+            'ruleActive' => Route::is('user/single-charges*'),
+            'route' => route('user.single-charges.index'),
+            'classIcon' => 'fas fa-link text-primary',
+            'title' => __('Single Charge'),
+            'enable' => true
+        ],
+        'donations' => [
+            'ruleActive' => Request::is('user/donations'),
+            'route' => route('user.donations.index'),
+            'classIcon' => 'fas fa-gift text-default',
+            'title' => __('Donation'),
+            'enable' => false
+        ],
+        'invoices' => [
+            'ruleActive' => Route::is('user.invoices.index'),
+            'route' => route('user.invoices.index'),
+            'classIcon' => 'fas fa-envelope text-red',
+            'title' => __('Invoice'),
+            'enable' => true
+        ],
+        'plans' => [
+            'ruleActive' => Route::is('user.plans.index'),
+            'route' => route('user.plans.index'),
+            'classIcon' => 'fas fa-layer-group text-info',
+            'title' => __('Plan'),
+            'enable' => false
+        ],
+        'websites' => [
+            'ruleActive' => Route::is('user.websites.index'),
+            'route' => route('user.websites.index'),
+            'classIcon' => 'fas fa-laptop',
+            'title' => __('Website Integration'),
+            'enable' => false
+        ]
+    ];
 @endphp
 
 <!-- Sidenav -->
@@ -42,137 +195,49 @@
                 <h6 class="navbar-heading p-0 mt-3 text-muted">{{ __('YOUR BUSINESS') }}</h6>
                 <!-- Navigation -->
                 <ul class="navbar-nav mb-md-3">
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Route::is('user.deposits.index')]) href="{{ route('user.deposits.index') }}">
-                            <i class="fas fa-arrow-up text-info"></i>
-                            <span class="nav-link-text">{{ __('Deposit') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class([
-                            'nav-link',
-                            'active' =>
-                                Route::is('user.transfers.index') || Route::is('user.transfers.create'),
-                        ]) href="{{ route('user.transfers.index') }}">
-                            <i class="fas fa-random text-orange"></i>
-                            <span class="nav-link-text">{{ __('Transfer Money') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Route::is('user.qr-payments.index')]) href="{{ route('user.qr-payments.index') }}">
-                            <i class="fas fa-qrcode text-info"></i>
-                            <span class="nav-link-text">{{ __('Qr Payments') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Route::is('user.supports.index')]) href="{{ route('user.supports.index') }}">
-                            <i class="fas fa-flag-usa text-default"></i>
-                            <span class="nav-link-text">{{ __('Support') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Route::is('user.subscribers.index')]) href="{{ route('user.subscribers.index') }}">
-                            <i class="fa fa-user text-primary" aria-hidden="true"></i>
-                            <span class="nav-link-text">{{ __('Subscribers') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Route::is('user.transactions.index')]) href="{{ route('user.transactions.index') }}">
-                            <i class="fas fa-money-check-alt text-green"></i>
-                            <span class="nav-link-text">{{ __('Transactions') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Route::is('user.payouts.index')]) href="{{ route('user.payouts.index') }}">
-                            <i class="fas fa-arrow-circle-down text-info"></i>
-                            <span class="nav-link-text">{{ __('Payouts') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Route::is('user.charges.index')]) href="{{ route('user.charges.index') }}">
-                            <i class="fas fa-comment-dollar text-red"></i>
-                            <span class="nav-link-text">{{ __('Charges') }}</span>
-                        </a>
-                    </li>
+                    @foreach ($primaryMenu as $item)
+                        @if($item['enable'])
+                        <li class="nav-item">
+                            <a @class(['nav-link', 'active' => $item['ruleActive']]) href="{{ $item['route'] }}">
+                                <i class="{{ $item['classIcon'] }}"></i>
+                                <span class="nav-link-text">{{ $item['title'] }}</span>
+                            </a>
+                        </li>
+                        @endif
+                    @endforeach
                 </ul>
                 <h6 class="navbar-heading p-0 text-muted">{{ __('COLLECT PAYMENTS') }}</h6>
                 <ul class="navbar-nav mb-md-3">
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Route::is('user.categories.index')]) href="{{ route('user.categories.index') }}">
-                            <i class="fas fa-sitemap text-dark"></i>
-                            <span class="nav-link-text">{{ __('Categories') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Route::is('user.storefronts.index')]) href="{{ route('user.storefronts.index') }}">
-                            <i class="fas fa-store-alt text-pink"></i>
-                            <span class="nav-link-text">{{ __('Store front') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => request()->is('*/digital-products') || request()->is('*/physical-products')]) href="#navbar-products" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-dashboards">
-                            <i class="fas fa-shopping-bag text-gray"></i>
-                            <span class="nav-link-text">{{ __('Products') }}</span>
-                        </a>
-                        <div class="{{ request()->is('*/digital-products') || request()->is('*/physical-products') ? '':'collapse' }}" id="navbar-products">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a href="{{ route('user.physical-products.index') }}" @class(['nav-link', 'active' => request()->is('*/physical-products')])>{{ __('Physical products') }}</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('user.digital-products.index') }}" @class(['nav-link', 'active' => request()->is('*/digital-products')])>{{ __('Digital products') }}</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Route::is('user.shipping-rate.index')]) href="{{ route('user.shipping-rate.index') }}">
-                            <i class="fas fa-street-view"></i>
-                            <span class="nav-link-text">{{ __('Shippings') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Route::is('user.orders.index')]) href="{{ route('user.orders.index') }}">
-                            <i class="fas fa-shopping-cart text-info"></i>
-                            <span class="nav-link-text">{{ __('Orders') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Route::is('user.request-money.index'), ]) href="{{ route('user.request-money.index') }}">
-                            <i class="fas fa-handshake text-success"></i>
-                            <span class="nav-link-text">{{ __('Request Money') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Request::is('user/single-charges*')]) href="{{ route('user.single-charges.index') }}">
-                            <i class="fas fa-link text-primary"></i>
-                            <span class="nav-link-text">{{ __('Single Charge') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Request::is('user/donations')]) href="{{ route('user.donations.index') }}">
-                            <i class="fas fa-gift text-default"></i>
-                            <span class="nav-link-text">{{ __('Donation') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Route::is('user.invoices.index')]) href="{{ route('user.invoices.index') }}">
-                            <i class="fas fa-envelope text-red"></i>
-                            <span class="nav-link-text">{{ __('Invoice') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Route::is('user.plans.index')]) href="{{ route('user.plans.index') }}">
-                            <i class="fas fa-layer-group text-info"></i>
-                            <span class="nav-link-text">{{ __('Plan') }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a @class(['nav-link', 'active' => Route::is('user.websites.index')]) href="{{ route('user.websites.index') }}">
-                            <i class="fas fa-laptop"></i>
-                            <span class="nav-link-text">{{ __('Website Integration') }}</span>
-                        </a>
-                    </li>
+                    @foreach ($secondaryMenu as $item)
+                        @if($item['enable'])
+                        <li class="nav-item">
+                            @if(@!isset($item['children']))
+                            <a @class(['nav-link', 'active' => $item['ruleActive']]) href="{{ $item['route'] }}">
+                                <i class="{{ $item['classIcon'] }}"></i>
+                                <span class="nav-link-text">{{ $item['title'] }}</span>
+                            </a>
+                            @else
+                            <a @class(['nav-link', 'active' => $item['ruleActive']]) href="#{{ $item['route'] }}" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-dashboards">
+                                <i class="{{ $item['classIcon'] }}"></i>
+                                <span class="nav-link-text">{{ $item['title'] }}</span>
+                            </a>
+                            <div class="{{ $item['ruleActive'] ? '' : 'collapse' }}" id="{{ $item['route'] }}">
+                                <ul class="nav nav-sm flex-column">
+                                @foreach (@$item['children'] as $subitem)
+                                    @if($subitem['enable'])
+                                    <li class="nav-item">
+                                        <a href="{{ $subitem['route'] }}" @class(['nav-link', 'active' => $subitem['ruleActive']])>
+                                            {{ $subitem['title'] }}
+                                        </a>
+                                    </li>
+                                    @endif
+                                @endforeach
+                                </ul>
+                            </div>
+                            @endif
+                        </li>
+                        @endif
+                    @endforeach
                 </ul>
             </div>
         </div>

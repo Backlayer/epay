@@ -18,20 +18,23 @@ class KycMethodController extends Controller
         $this->middleware('permission:kyc-methods-delete')->only('edit', 'destroy', 'massDestroy');
     }
 
-    public $types = ['text', 'number', 'email', 'tel', 'textarea', 'file'];
+    public $types = ['text', 'number', 'email', 'tel', 'textarea', 'file', 'date'];
 
-    public function index(){
+    public function index()
+    {
         $kycMethods = KycMethod::latest()->paginate(20);
-        return view('admin.kycmethod.index',compact('kycMethods'));
+        return view('admin.kycmethod.index', compact('kycMethods'));
     }
 
-    public function create(){
+    public function create()
+    {
         $types = $this->types;
 
         return view('admin.kycmethod.create', compact('types'));
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
         $request->validate([
             'image' => ['required', 'string'],
@@ -58,13 +61,15 @@ class KycMethodController extends Controller
         ]);
     }
 
-    public function edit(KycMethod $kycMethod){
+    public function edit(KycMethod $kycMethod)
+    {
         $types = $this->types;
 
-        return view('admin.kycmethod.edit',compact('kycMethod','types'));
+        return view('admin.kycmethod.edit', compact('kycMethod', 'types'));
     }
 
-    public function update(Request $request, KycMethod $kycMethod){
+    public function update(Request $request, KycMethod $kycMethod)
+    {
         $request->validate([
             'image' => ['required', 'string'],
             'title' => ['required', 'string'],
@@ -89,16 +94,17 @@ class KycMethodController extends Controller
         ]);
     }
 
-    public function massDestroy(Request $request){
-        if ($request->ids){
+    public function massDestroy(Request $request)
+    {
+        if ($request->ids) {
             foreach ($request->ids as $id) {
                 $kycMethod = KycMethod::find($id);
-                if ( file_exists($kycMethod->image)) {
+                if (file_exists($kycMethod->image)) {
                     Storage::delete($kycMethod->image);
                 }
                 $kycMethod->delete();
             }
-        }else{
+        } else {
             response()->json([
                 'message' => __('Methods not found')
             ], 422);
@@ -108,5 +114,4 @@ class KycMethodController extends Controller
             'redirect' => route('admin.kyc-method.index')
         ]);
     }
-
 }
