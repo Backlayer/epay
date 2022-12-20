@@ -13,9 +13,12 @@ use Artesaos\SEOTools\Facades\TwitterCard;
 use Artesaos\SEOTools\Facades\JsonLd;
 use Artesaos\SEOTools\Facades\JsonLdMulti;
 use Artesaos\SEOTools\Facades\SEOTools;
+use App\Lib\TraitShortLink;
 
 class HomeController extends Controller
 {
+    use TraitShortLink;
+
     public function index()
     {
         //Set SEO
@@ -40,7 +43,7 @@ class HomeController extends Controller
         SEOTools::jsonLd()->addImage(asset($logo));
 
         //Get data
-        $data = cache_remember('website.heading.'.current_locale(), function (){
+        $data = cache_remember('website.heading.' . current_locale(), function () {
             $headingData = Option::whereLang(current_locale())
                 ->whereIn('key', [
                     'heading.welcome',
@@ -79,5 +82,10 @@ class HomeController extends Controller
         return view('frontend.index', [
             'data' => $data
         ]);
+    }
+
+    public function shortLink(string $hash)
+    {
+        return $this->redirectToUrl($hash);
     }
 }
