@@ -81,7 +81,7 @@
             "docker-compose -f ../docker/docker-compose.yml --env-file ./.env up -d"
         ],
         "docker-install": [
-            "docker-compose -f ../docker/docker-compose.yml --env-file ./.env exec -w '/var/www/script/' app sh -c 'rm -rf ./composer.lock ./vendor/ && composer install --no-cache -v -n'"
+            "docker-compose -f ../docker/docker-compose.yml --env-file ./.env exec -w '/var/www/script/' app sh -c 'rm -rf ./composer.lock ./vendor/ && composer install --no-cache -v -n && php artisan vendor:publish --tag=laravel-pagination'"
         ]
     },
     "extra": {

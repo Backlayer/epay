@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 //Without verified
-Route::group(['prefix' => 'user','as' => 'user.','namespace' => 'App\Http\Controllers\User','middleware' => ['auth', 'user']], function () {
+Route::group(['prefix' => 'user', 'as' => 'user.', 'namespace' => 'App\Http\Controllers\User', 'middleware' => ['auth', 'user']], function () {
     Route::get('set-bank', 'ConfigureBankAccountController@index')->withoutMiddleware('hasBank')->name('set-bank.index');
     Route::post('set-bank/store', 'ConfigureBankAccountController@store')->withoutMiddleware('hasBank')->name('set-bank.store');
 });
@@ -21,7 +21,7 @@ Route::group([
 ], function () {
     Route::get('dashboard', 'DashboardController@index')->name('dashboard.index');
     // Money request
-    Route::get('request-money/cancle/{id}', 'RequestMoneyController@cancle')->name('request-money.cancel');
+    Route::get('request-money/cancel/{id}', 'RequestMoneyController@cancle')->name('request-money.cancel');
     Route::get('request-money/approved/{id}', 'RequestMoneyController@approved')->name('request-money.approved');
     Route::get('received-request/', 'RequestMoneyController@receivedRequest')->name('received-request.index');
 
@@ -99,13 +99,13 @@ Route::group([
 
     Route::get('store-products/{store}', [PhysicalProductController::class, 'storeProducts'])->name('store-products');
     // Payment
-    Route::group(['prefix' => 'payment', 'as' => 'payment.'], function (){
+    Route::group(['prefix' => 'payment', 'as' => 'payment.'], function () {
         Route::get('success', [PaymentController::class, 'success'])->name('success');
     });
-    
+
     // INVOICES
-     Route::get('invoices/{invoice}', 'InvoiceController@show')->name('invoices.show');
-     Route::get('invoices/{invoice}/edit', 'InvoiceController@edit')->name('invoices.edit');
+    Route::get('invoices/{invoice}', 'InvoiceController@show')->name('invoices.show');
+    Route::get('invoices/{invoice}/edit', 'InvoiceController@edit')->name('invoices.edit');
 });
 
 Route::group([
@@ -113,7 +113,7 @@ Route::group([
     'as' => 'user.',
     'middleware' => ['auth', 'verified'],
     'namespace' => 'App\Lib'
-], function (){
+], function () {
     Route::get('/payment/paypal', 'Paypal@status');
     Route::post('/stripe/payment', 'Stripe@status')->name('stripe.payment');
     Route::get('/stripe', 'Stripe@view')->name('stripe.view');

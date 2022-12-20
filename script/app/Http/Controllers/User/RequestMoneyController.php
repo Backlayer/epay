@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Mail\MoneyRequestMail;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
+use App\Lib\Twilio;
 
 class RequestMoneyController extends Controller
 {
@@ -19,20 +20,20 @@ class RequestMoneyController extends Controller
         $search = $request->get('search');
 
         $requests = Moneyrequest::with(['receiver', 'sender_currency', 'sender'])
-                    ->where('sender_id', auth()->id())
-                    ->orWhere('receiver_id', auth()->id())
-                    ->when(!is_null($search), function (Builder $builder) use($search) {
-                        $builder->whereHas('sender', function (Builder $builder) use ($search){
-                            $builder->where('name', 'LIKE', '%'.$search.'%')
-                                ->orWhere('email', 'LIKE', '%'.$search.'%');
-                            })
-                            ->orWhereHas('receiver', function (Builder $builder) use ($search){
-                                $builder->where('name', 'LIKE', '%'.$search.'%')
-                                    ->orWhere('email', 'LIKE', '%'.$search.'%');
-                            });
-                    })
-                    ->latest()
-                    ->paginate();
+            ->where('sender_id', auth()->id())
+            ->orWhere('receiver_id', auth()->id())
+            ->when(!is_null($search), function (Builder $builder) use ($search) {
+                $builder->whereHas('sender', function (Builder $builder) use ($search) {
+                    $builder->where('name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('email', 'LIKE', '%' . $search . '%');
+                })
+                    ->orWhereHas('receiver', function (Builder $builder) use ($search) {
+                        $builder->where('name', 'LIKE', '%' . $search . '%')
+                            ->orWhere('email', 'LIKE', '%' . $search . '%');
+                    });
+            })
+            ->latest()
+            ->paginate();
 
         return view('user.request-money.index', compact('requests'));
     }
@@ -41,15 +42,15 @@ class RequestMoneyController extends Controller
     {
         $search = $request->get('search');
         $requests = Moneyrequest::with(['sender_currency', 'sender'])
-                    ->where('receiver_id', auth()->id())
-                    ->when(!is_null($search), function (Builder $builder) use($search) {
-                        $builder->whereHas('sender', function (Builder $builder) use ($search){
-                            $builder->where('name', 'LIKE', '%'.$search.'%')
-                            ->orWhere('email', 'LIKE', '%'.$search.'%');
-                        });
-                    })
-                    ->latest()
-                    ->paginate();
+            ->where('receiver_id', auth()->id())
+            ->when(!is_null($search), function (Builder $builder) use ($search) {
+                $builder->whereHas('sender', function (Builder $builder) use ($search) {
+                    $builder->where('name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('email', 'LIKE', '%' . $search . '%');
+                });
+            })
+            ->latest()
+            ->paginate();
 
         return view('user.request-money.received-request', compact('requests'));
     }
@@ -108,20 +109,31 @@ class RequestMoneyController extends Controller
         $sender_currency = Currency::findOrFail($moneyRequest->request_currency_id);
         $receiver_currency = Currency::findOrFail($moneyRequest->approved_currency_id);
 
+        $amount = $receiver_currency->symbol . number_format(convert_money($request->amount, $sender_currency) * $receiver_currency->rate, 2);
+        $link = route('user.request-money.index');
+
         $options = [
             'receiver_name' => $user->name,
             'sender_name' => auth()->user()->name,
             'sender_email' => auth()->user()->email,
             'request_at' => $moneyRequest->created_at,
-            'link' => route('user.request-money.index'),
-            'amount' => $receiver_currency->symbol.number_format(convert_money($request->amount, $sender_currency) * $receiver_currency->rate, 2),
+            'link' => $link,
+            'amount' => $amount,
         ];
 
-        if (config('system.queue.mail')){
+        if (config('system.queue.mail')) {
             \Mail::to($request->email)->queue(new MoneyRequestMail($options));
-        }else{
+        } else {
             \Mail::to($request->email)->send(new MoneyRequestMail($options));
         }
+
+        $twilio = new Twilio();
+        $twilio->sendLink(
+            auth()->user()->phone,
+            auth()->user()->meta['business_name'] ?? auth()->user()->name,
+            $amount,
+            $link
+        );
 
         return response()->json([
             'redirect' => route('user.request-money.index'),
@@ -129,7 +141,7 @@ class RequestMoneyController extends Controller
         ]);
     }
 
-    public function cancle($id)
+    public function cancel($id)
     {
         $request = Moneyrequest::where('receiver_id', auth()->id())->findOrFail($id);
         $request->status = 0;
@@ -168,7 +180,7 @@ class RequestMoneyController extends Controller
             Transaction::create([
                 'rate' => $rq_receiver_currency->rate,
                 'user_id' => $money_sender->id,
-                'amount' => '-'.$money_sender_amount,
+                'amount' => '-' . $money_sender_amount,
                 'charge' => $money_sender_charge,
                 'name' => $money_sender->name,
                 'email' => $money_sender->email,

@@ -996,5 +996,6 @@
     "Money Withdraw Charge Rate": "Money Withdraw Charge Rate",
     "Money Transfer Charge Type": "Money Transfer Charge Type",
     "Money Transfer Charge Rate": "Money Transfer Charge Rate",
-    "Bank Transaction Charge Type": "Bank Transaction Charge Type"
+    "Bank Transaction Charge Type": "Bank Transaction Charge Type",
+    "Twilio.Message.SMS": ":business :amount :link"
 }

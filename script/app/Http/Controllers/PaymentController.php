@@ -136,8 +136,8 @@ class PaymentController extends Controller
                 Mail::to($singleCharge->user)->send(new AuthorSingleChargeOrderMail($singleChargeOrder, $userInfo));
             }
 
-
             $this->clearSessions();
+
             if ($singleCharge->return_url) {
                 return redirect($singleCharge->return_url);
             } elseif (Auth::check()) {
