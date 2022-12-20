@@ -33,7 +33,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                
+
                                 <div class="table-responsive">
                                     <table class="table table-bordered mb-3">
                                         <tbody>
@@ -117,11 +117,11 @@
                                     @if(!$invoice->is_paid)
                                         <div class="row align-items-center">
                                             @foreach($gateways as $gateway)
-                                                <div class="col-md-4 my-5 my-sm-1">
+                                                <div class="col-md-4">
                                                     <div class="custom-control shadow-sm custom-radio image-checkbox">
                                                         <input type="radio" name="gateway" id="{{ str($gateway->name)->slug('_') }}" value="{{ $gateway->id }}" class="custom-control-input">
-                                                        <label class="custom-control-label d-flex align-items-center" for="{{ str($gateway->name)->slug('_') }}">
-                                                            <img src="{{ $gateway->logo }}" alt="#" class="img-fluid">
+                                                        <label class="custom-control-label d-flex justify-content-center align-items-center" for="{{ str($gateway->name)->slug('_') }}">
+                                                            <img src="{{ $gateway->logo }}" alt="#" class="img-fluid" width="80">
                                                         </label>
                                                     </div>
                                                 </div>
