@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
@@ -36,7 +37,8 @@ class Phone implements Rule
      */
     protected function isPhone($value)
     {
-        return $this->isE123($value) || $this->isE164($value) || $this->isNANP($value) || $this->isDigits($value);
+        return $this->isE164($value);
+        // return $this->isE123($value) || $this->isE164($value) || $this->isNANP($value) || $this->isDigits($value);
     }
 
     /**

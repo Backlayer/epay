@@ -112,9 +112,16 @@
                             <input type="text" class="form-control" value="{{ $invoice->invoice_no }}" >
                         </div>
                     </div>
+                </div>
+                <div class="form-group row">
                     <label class="col-form-label col-lg-2">{{__('Customer Email')}}</label>
                     <div class="col-lg-4">
                         <input type="email" name="customer_email" class="form-control" value="{{ $invoice->customer_email }}" placeholder="{{ __('Enter customer email') }}" required>
+                    </div>
+                    <label class="col-form-label col-lg-2">{{__('Customer Phone Number')}}</label>
+                    <div class="col-lg-4">
+                        <input type="tel" name="customer_phone_number" aria-describedby="phoneNumberHelp" class="form-control" value="{{ $invoice->customer_phone_number }}" placeholder="{{ __('Enter customer phone number (optional)') }}">
+                        <small id="phoneNumberHelp" class="form-text text-danger">{{ __('The phone number must contain the country code: Example: +584145551212') }}</small>
                     </div>
                 </div>
                 <div class="form-group row">

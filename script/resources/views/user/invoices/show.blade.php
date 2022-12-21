@@ -45,10 +45,14 @@
                                     </div>
                                 </div>
 
-                                <div class="text-95 col-sm-6 align-self-start d-sm-flex justify-content-end">
+                                <div class="text-95 col-sm-6 align-self-start align-items-end d-sm-flex flex-column justify-content-end">
                                     <div>
                                         <span class="text-sm text-grey-m2 align-middle">{{ __('To:') }}</span>
                                         <span class="text-600 text-110 text-blue align-middle">{{ $invoice->customer_email }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-sm text-grey-m2 align-middle"></span>
+                                        <span class="text-600 text-110 text-blue align-middle">{{ $invoice->customer_phone_number }}</span>
                                     </div>
                                 </div>
                             </div>

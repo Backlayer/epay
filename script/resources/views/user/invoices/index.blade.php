@@ -44,9 +44,9 @@
             @if($invoices->count() > 0)
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card">
+                        <div class="card h-100">
                             <div class="card-body">
-                                <div class="table-responsive">
+                                <div class="table-responsive h-100">
                                     <table class="table align-items-center table-flush">
                                         <thead class="thead-light">
                                         <tr>
