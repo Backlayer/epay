@@ -82,6 +82,9 @@
         ],
         "docker-install": [
             "docker-compose -f ../docker/docker-compose.yml --env-file ./.env exec -w '/var/www/script/' app sh -c 'rm -rf ./composer.lock ./vendor/ && composer install --no-cache -v -n && php artisan vendor:publish --tag=laravel-pagination'"
+        ],
+        "docker-queue": [
+            "docker-compose -f ../docker/docker-compose.yml --env-file ./.env exec -w '/var/www/script/' app sh -c 'nohup php artisan queue:work --daemon &'"
         ]
     },
     "extra": {

@@ -129,7 +129,7 @@ class RequestMoneyController extends Controller
 
         $twilio = new Twilio();
         $twilio->sendLink(
-            auth()->user()->phone,
+            $user->phone,
             auth()->user()->meta['business_name'] ?? auth()->user()->name,
             $amount,
             $link
