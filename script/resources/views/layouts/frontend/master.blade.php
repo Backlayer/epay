@@ -11,9 +11,6 @@
     {!! OpenGraph::generate() !!}
     {!! Twitter::generate() !!}
     {!! JsonLd::generate() !!}
-   
-    
-
 
     <!-- Favicon -->
     <link rel="icon" href="{{ get_option('logo_setting', true)->favicon ?? null }}"/>
@@ -34,7 +31,6 @@
     <!-- Stylesheet -->
     <link rel="stylesheet" href="{{ asset('frontend/style.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/custom.css') }}">
-
 </head>
 
 <body @class([$bodyClass ?? null])>

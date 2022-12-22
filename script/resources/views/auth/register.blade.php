@@ -22,7 +22,8 @@
             </div>
             <div class="col-md-6 mb-20">
                 <label for="phone" class="col-form-label">{{ __('Phone') }}</label>
-                <input type="text" class="form-control focus-input100" name="phone" id="phone" placeholder="{{ __('Your phone number') }}" required>
+                <input type="tel" class="form-control focus-input100" aria-describedby="phoneNumberHelp"  name="phone" id="phone" placeholder="{{ __('Your phone number') }}" required>
+                <div id="phoneNumberHelp" class="form-text text-danger">{{ __('The phone number must contain the country code: Example: +584145551212') }}</div>
             </div>
         </div>
 
@@ -55,3 +56,11 @@
         <span>{{ __('Already have an account?') }} <a href="{{ route('login') }}">{{ __('Login') }}</a></span>
     </div>
 @endsection
+
+@push('css')
+<style>
+    #phoneNumberHelp {
+        font-size: 11px;
+    }
+</style>
+@endpush
