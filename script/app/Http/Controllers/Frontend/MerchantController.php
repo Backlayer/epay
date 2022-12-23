@@ -8,9 +8,9 @@ use App\Models\Gateway;
 use App\Models\WebOrder;
 use App\Models\Website;
 use App\Models\WebTestOrder;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Session;
+use Illuminate\Support\Facades\Session;
 
 class MerchantController extends Controller
 {
@@ -18,21 +18,24 @@ class MerchantController extends Controller
 
     public function index(Website $website, $uuid)
     {
-        if ($website->mode){
+        if ($website->mode) {
             $order = WebOrder::whereUuid($uuid)->firstOrFail();
-        }else{
+        } else {
             $order = WebTestOrder::whereUuid($uuid)->firstOrFail();
         }
-        $this->clearSessions();
+
         abort_if($website->id !== $order->website_id, 404);
-        $gateways = Gateway::whereStatus(1)->where('is_auto',1)
-            ->when(!Auth::check(), function ($builder){
+
+        $this->clearSessions();
+
+        $gateways = Gateway::whereStatus(1)->where('is_auto', 1)
+            ->when(!Auth::check(), function ($builder) {
                 $builder->whereNotIn("namespace", ["App\\Lib\\Credit"]);
             })
             ->orderBy('name')
             ->get();
 
-        return view('frontend.merchant.index', compact( 'gateways', 'website','order'));
+        return view('frontend.merchant.index', compact('gateways', 'website', 'order'));
     }
 
     public function gateway(Request $request, Website $website,  $uuid)
@@ -41,33 +44,36 @@ class MerchantController extends Controller
             'gateway' => ['required', 'exists:gateways,id'],
         ]);
 
-        if ($website->mode){
+        if ($website->mode) {
             $order = WebOrder::whereUuid($uuid)->firstOrFail();
-        }else{
+        } else {
             $order = WebTestOrder::whereUuid($uuid)->firstOrFail();
         }
+
         abort_if($website->id !== $order->website_id, 404);
 
         $this->clearSessions();
+
         $gateway = Gateway::findOrFail($request->input('gateway'));
+
         $amount = $order->amount * $order->quantity;
 
-        return view('frontend.merchant.gateway', compact('website','order', 'gateway', 'amount'));
+        return view('frontend.merchant.gateway', compact('website', 'order', 'gateway', 'amount'));
     }
 
     public function payment(Request $request, Website $website, $uuid, Gateway $gateway)
     {
         $this->validateRequest($request, $gateway);
 
-        if ($website->mode){
+        if ($website->mode) {
             $order = WebOrder::whereUuid($uuid)->firstOrFail();
-        }else{
+        } else {
             $order = WebTestOrder::whereUuid($uuid)->firstOrFail();
             Session::put('charge_wallet', false);
         }
+
         abort_if($website->id !== $order->website_id, 404);
         abort_if($order->is_paid, 403, __('Transaction Already Paid'));
-
 
         //Store Data For Save to DB
         Session::put('merchantPaymentData', [
@@ -75,12 +81,12 @@ class MerchantController extends Controller
             'gateway' => $gateway
         ]);
 
-        if (Auth::check()){
+        if (Auth::check()) {
             $info = [
                 'name' => Auth::user()->name,
                 'email' => Auth::user()->email
             ];
-        }else{
+        } else {
             $info = [
                 'name' => $request->input('name'),
                 'email' => $request->input('email')
@@ -108,15 +114,16 @@ class MerchantController extends Controller
         Session::put('without_tax', true);
         Session::put('fund_callback.success_url', '/payment/success');
         Session::put('fund_callback.cancel_url', '/payment/failed');
-        if (!Auth::check()){
+
+        if (!Auth::check()) {
             Session::put('without_auth', true);
-        }else{
+        } else {
             Session::put('without_auth', false);
         }
 
-        if ($website->mode){
+        if ($website->mode) {
             return $this->proceedToPayment($request, $gateway, $data);
-        }else{
+        } else {
             $order = WebTestOrder::whereUuid($uuid)->firstOrFail();
             $amount = $order->amount * $order->quantity;
             Session::put('testData', $data);

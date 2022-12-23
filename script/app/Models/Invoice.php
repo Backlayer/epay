@@ -14,6 +14,11 @@ class Invoice extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'fields' => 'json',
+        'data' => 'json',
+    ];
+
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id', 'id');
@@ -33,7 +38,7 @@ class Invoice extends Model
     {
         parent::boot();
 
-        static::creating(function (self $donation){
+        static::creating(function (self $donation) {
             $donation->uuid = Str::uuid()->toString();
         });
     }

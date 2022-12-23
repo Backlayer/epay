@@ -9,9 +9,12 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
+use App\Helpers\HasUploader;
 
 trait HasPayment
 {
+    use HasUploader;
+
     private function validateRequest(Request $request, Gateway $gateway): void
     {
         $request->validate([
@@ -69,5 +72,30 @@ trait HasPayment
         Session::forget('qrPaymentData');
         Session::forget('charge_wallet');
         Session::forget('amount');
+    }
+
+    private function getFields($gateway, $request)
+    {
+        $dataFields = [];
+
+        foreach ($gateway->fields ?? [] as $index => $item) {
+            if ($item['type'] == 'file') {
+                /*$request->validate([
+                    'fields.' . $item['label'] => ['required', 'mimes:jpg,jpeg,png.pdf', 'max:2048'], // 2MB
+                ]);*/
+            }
+        }
+
+        foreach ($request->fields as $key => $value) {
+            $field = $request->fields[$key];
+
+            if (is_file($field)) {
+                $dataFields[$key] = $this->upload($request, 'fields.' . $key);
+            } else {
+                $dataFields[$key] = $field;
+            }
+        }
+
+        return $dataFields;
     }
 }

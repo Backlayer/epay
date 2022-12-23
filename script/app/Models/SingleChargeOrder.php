@@ -15,6 +15,11 @@ class SingleChargeOrder extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'fields' => 'json',
+        'data' => 'json',
+    ];
+
     public function from(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

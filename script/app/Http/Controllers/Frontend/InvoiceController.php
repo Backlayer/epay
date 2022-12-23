@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Helpers\HasPayment;
-use App\Helpers\HasUploader;
 
 use App\Http\Controllers\Controller;
 use App\Models\Gateway;
@@ -16,7 +15,6 @@ use Illuminate\Validation\Rule;
 class InvoiceController extends Controller
 {
     use HasPayment;
-    use HasUploader;
 
     private function getTotalAmount(Invoice $invoice)
     {
@@ -31,9 +29,11 @@ class InvoiceController extends Controller
 
     public function index(Invoice $invoice)
     {
+        abort_if($invoice->is_paid, 403, __('Transaction Already Paid'));
+
         $this->clearSessions();
 
-        $gateways = Gateway::where('is_auto', 1)->whereStatus(1)
+        $gateways = Gateway::whereStatus(1)
             ->when(!Auth::check(), function ($builder) {
                 $builder->whereNotIn("namespace", ["App\\Lib\\Credit"]);
             })
@@ -47,7 +47,7 @@ class InvoiceController extends Controller
 
     public function gateway(Request $request, Invoice $invoice)
     {
-        abort_if($invoice->is_paid, 404);
+        abort_if($invoice->is_paid, 403, __('Transaction Already Paid'));
 
         $request->validate([
             'gateway' => ['required', 'exists:gateways,id'],
@@ -56,7 +56,7 @@ class InvoiceController extends Controller
 
         $amount = $this->getTotalAmount($invoice);
 
-        $gateway = Gateway::where('is_auto', 1)->findOrFail($request->input('gateway'));
+        $gateway = Gateway::findOrFail($request->input('gateway'));
 
         return view('frontend.invoice.gateway', compact('invoice', 'gateway', 'amount'));
     }
@@ -89,25 +89,7 @@ class InvoiceController extends Controller
 
         $convertedAmount = convert_money_direct($amount, $invoice->currency, $gateway->currency);
 
-        $dataFields = [];
-
-        foreach ($gateway->fields ?? [] as $index => $item) {
-            if ($item['type'] == 'file') {
-                /*$request->validate([
-                    'fields.' . $item['label'] => ['required', 'mimes:jpg,jpeg,png.pdf', 'max:2048'], // 2MB
-                ]);*/
-            }
-        }
-
-        foreach ($request->fields as $key => $value) {
-            $field = $request->fields[$key];
-
-            if (is_file($field)) {
-                $dataFields[$key] = $this->upload($request, 'fields.' . $key);
-            } else {
-                $dataFields[$key] = $field;
-            }
-        }
+        $dataFields = $this->getFields($gateway, $request);
 
         $data = [
             'currency' => $gateway->currency->code,

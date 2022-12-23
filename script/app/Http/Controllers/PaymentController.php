@@ -37,7 +37,9 @@ class PaymentController extends Controller
     public function success()
     {
         $paymentInfo = Session::get('payment_info');
+
         abort_if(!$paymentInfo, 404);
+
         if ($paymentInfo['payment_type'] == 'single_charge') {
             return $this->singleChargePayment($paymentInfo);
         } elseif ($paymentInfo['payment_type'] == 'donation') {
@@ -83,11 +85,17 @@ class PaymentController extends Controller
                 "amount" => $convertToOwnerAmount - $convertToOwnerCharge,
                 "rate" => $singleCharge->user->currency->rate,
                 "charge" => $convertToOwnerCharge,
-                "status" => true,
+                "status" => (bool) $gateway->is_auto,
                 "user_id" => $singleCharge->user_id,
                 "gateway_id" => $gateway->id,
                 "singlecharge_id" => $singleCharge->id,
-                "currency_id" => $singleCharge->user->currency_id
+                "currency_id" => $singleCharge->user->currency_id,
+                'fields' => $paymentInfo['fields'],
+                'data' => $paymentInfo['data'],
+            ]);
+
+            $singleCharge->update([
+                "status" => 2,
             ]);
 
             // Add Income to Author Profile
@@ -280,6 +288,7 @@ class PaymentController extends Controller
                 'gateway_id' => $gateway->id,
                 'charge' => $convertToOwnerCharge,
                 'rate' => $invoice->owner->currency->rate,
+                "is_paid" => true,
                 'name' => $userInfo['name'],
                 'email' => $userInfo['email'],
                 'fields' => $paymentInfo['fields'],
@@ -326,7 +335,6 @@ class PaymentController extends Controller
                 Mail::to($userInfo['email'])->send(new InvoicePaymentMail($invoice, $userInfo));
                 Mail::to($invoice->owner)->send(new AuthorInvoicePaymentMail($invoice, $userInfo));
             }
-
 
             $this->clearSessions();
 
