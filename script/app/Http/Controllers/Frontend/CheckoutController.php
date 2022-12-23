@@ -18,13 +18,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Support\Facades\Session;
 use Gloudemans\Shoppingcart\Facades\Cart;
-use Hash;
+use Illuminate\Support\Facades\Hash;
 use Artesaos\SEOTools\Facades\SEOMeta;
 use Artesaos\SEOTools\Facades\OpenGraph;
 use Artesaos\SEOTools\Facades\TwitterCard;
 use Artesaos\SEOTools\Facades\JsonLd;
 use Artesaos\SEOTools\Facades\JsonLdMulti;
 use Artesaos\SEOTools\Facades\SEOTools;
+use Illuminate\Support\Facades\Mail;
+
 class CheckoutController extends Controller
 {
     public function index()
@@ -32,18 +34,18 @@ class CheckoutController extends Controller
         $store = Storefront::with('user')->findOrFail(request('store'));
         $logo = asset($store->image);
 
-        JsonLdMulti::setTitle('Checkout - '.$store->name ?? env('APP_NAME'));
+        JsonLdMulti::setTitle('Checkout - ' . $store->name ?? env('APP_NAME'));
         JsonLdMulti::setDescription($store->description ?? null);
         JsonLdMulti::addImage(asset($logo));
 
-        SEOMeta::setTitle('Checkout - '.$store->name ?? env('APP_NAME'));
+        SEOMeta::setTitle('Checkout - ' . $store->name ?? env('APP_NAME'));
         SEOMeta::setDescription($store->description ?? null);
-        
-        SEOTools::setTitle('Checkout - '.$store->name ?? env('APP_NAME'));
+
+        SEOTools::setTitle('Checkout - ' . $store->name ?? env('APP_NAME'));
         SEOTools::setDescription($store->description ?? null);
-  
+
         SEOTools::opengraph()->addProperty('image', asset($logo));
-        SEOTools::twitter()->setTitle('Checkout - '.$store->name ?? env('APP_NAME'));
+        SEOTools::twitter()->setTitle('Checkout - ' . $store->name ?? env('APP_NAME'));
         SEOTools::jsonLd()->addImage(asset($logo));
 
         $shippings = Shipping::where('user_id', $store->user_id)->get();
@@ -130,8 +132,8 @@ class CheckoutController extends Controller
             }
             $user = User::with('currency')->findOrFail(auth()->id());
             $seller = User::with('currency')->findOrFail($store->user_id);
-            $amount = Cart::instance('shopping_'.request('store'))->subtotal();
-            $products = Cart::instance('shopping_'.request('store'))->content();
+            $amount = Cart::instance('shopping_' . request('store'))->subtotal();
+            $products = Cart::instance('shopping_' . request('store'))->content();
             $user_amount = number_format((convert_money($amount, $seller->currency) * $user->currency->rate), 2);
             $user_amount = $user_amount + ($shipping->amount ?? 0);
 
@@ -149,7 +151,7 @@ class CheckoutController extends Controller
                 'amount' => $amount,
                 'storefront_id' => $store->id,
                 'shipping_id' => $shipping->id ?? null,
-                "trx" => 'trx_'.Str::random(10).rand(1,100),
+                "trx" => 'trx_' . Str::random(10) . rand(1, 100),
                 'currency_id' => $seller->currency->id ?? '',
             ]);
 
@@ -160,7 +162,7 @@ class CheckoutController extends Controller
                     'quantity' => $cart->qty,
                 ]);
 
-                Cart::instance('shopping_'.$store->id)->remove($cart->rowId);
+                Cart::instance('shopping_' . $store->id)->remove($cart->rowId);
                 $product = Product::findOrFail($cart->id);
                 $product->quantity = $product->quantity - $cart->qty;
                 $product->save();
@@ -172,7 +174,7 @@ class CheckoutController extends Controller
             Transaction::create([
                 'user_id' => $user->id,
                 'reason' => 'Purchased',
-                'amount' => '-'.$user_amount,
+                'amount' => '-' . $user_amount,
                 'currency_id' => $user->currency_id,
                 'type' => 'debit',
                 'name' => $user->name,
@@ -206,12 +208,12 @@ class CheckoutController extends Controller
 
             $seller_template = 'mail.send-seller-invoice';
             $user_template = 'mail.send-user-invoice';
-            if (config('system.queue.mail')){
-                \Mail::to($user->email)->queue(new SendInvoiceMail($options, $user_template));
-                \Mail::to($seller->email)->queue(new SendInvoiceMail($options, $seller_template));
+            if (config('system.queue.mail')) {
+                Mail::to($user->email)->queue(new SendInvoiceMail($options, $user_template));
+                Mail::to($seller->email)->queue(new SendInvoiceMail($options, $seller_template));
             } else {
-                \Mail::to($user->email)->send(new SendInvoiceMail($options, $user_template));
-                \Mail::to($seller->email)->send(new SendInvoiceMail($options, $seller_template));
+                Mail::to($user->email)->send(new SendInvoiceMail($options, $user_template));
+                Mail::to($seller->email)->send(new SendInvoiceMail($options, $seller_template));
             }
 
             DB::commit();
@@ -220,7 +222,6 @@ class CheckoutController extends Controller
                 'message' => __("Order placed successfully."),
                 'redirect' => route('frontend.order.placed', [$order->id, 'store' => $store->id])
             ]);
-
         } catch (Throwable $th) {
             DB::rollback();
             return response()->json([
@@ -231,14 +232,14 @@ class CheckoutController extends Controller
 
     public function makePayment(Request $request, Gateway $gateway)
     {
-        if ($gateway->is_auto == 0){
+        if ($gateway->is_auto == 0) {
             return redirect()->back()->with('error', __('This gateway is not supported'));
         }
 
         $store = Session::get('store');
         $order_infos = Session::get('order_infos');
         $shipping = Session::get('shipping')['amount'] ?? 0;
-        $seller_price = Cart::instance('shopping_'.$store->id)->subtotal() + ($shipping ?? 0);
+        $seller_price = Cart::instance('shopping_' . $store->id)->subtotal() + ($shipping ?? 0);
         $price = convert_money($seller_price, $store->user->currency) * $gateway->currency->rate;
 
         Session::put('payment_type', 'payment');
@@ -283,14 +284,14 @@ class CheckoutController extends Controller
 
             $shipping = Session::get('shipping');
             $order_infos = Session::get('order_infos');
-            $price = Cart::instance('shopping_'.$store->id)->subtotal() + ($shipping['amount'] ?? 0);
+            $price = Cart::instance('shopping_' . $store->id)->subtotal() + ($shipping['amount'] ?? 0);
 
             $gateway_id = Session::get('payment_info')['gateway_id'];
             $trx = Session::get('payment_info')['payment_id'];
             $payment_status = Session::get('payment_info')['payment_status'] ?? 0;
 
             $seller = User::with('currency')->findOrFail($store->user_id);
-            $products = Cart::instance('shopping_'.$store->id)->content();
+            $products = Cart::instance('shopping_' . $store->id)->content();
 
             if ($payment_status) {
                 $order = Order::create([
@@ -313,7 +314,7 @@ class CheckoutController extends Controller
                         'quantity' => $cart->qty,
                     ]);
 
-                    Cart::instance('shopping_'.$store->id)->remove($cart->rowId);
+                    Cart::instance('shopping_' . $store->id)->remove($cart->rowId);
                     $product = Product::findOrFail($cart->id);
                     $product->quantity = $product->quantity - $cart->qty;
                     $product->save();
@@ -346,12 +347,12 @@ class CheckoutController extends Controller
                 // Email
                 $seller_template = 'mail.send-seller-invoice';
                 $user_template = 'mail.send-user-invoice';
-                if (config('system.queue.mail')){
-                    \Mail::to($order_infos['email'])->queue(new SendInvoiceMail($options, $user_template));
-                    \Mail::to($seller->email)->queue(new SendInvoiceMail($options, $seller_template));
+                if (config('system.queue.mail')) {
+                    Mail::to($order_infos['email'])->queue(new SendInvoiceMail($options, $user_template));
+                    Mail::to($seller->email)->queue(new SendInvoiceMail($options, $seller_template));
                 } else {
-                    \Mail::to($order_infos['email'])->send(new SendInvoiceMail($options, $user_template));
-                    \Mail::to($seller->email)->send(new SendInvoiceMail($options, $seller_template));
+                    Mail::to($order_infos['email'])->send(new SendInvoiceMail($options, $user_template));
+                    Mail::to($seller->email)->send(new SendInvoiceMail($options, $seller_template));
                 }
 
                 DB::commit();
@@ -367,7 +368,6 @@ class CheckoutController extends Controller
             Session::forget('payment_type');
 
             return redirect(route('frontend.order.placed', [$order->id, 'store' => $store->id]))->with('success', __("Order placed successfully."));
-
         } catch (Throwable $th) {
             DB::rollback();
             Session::forget('store');

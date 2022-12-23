@@ -6,22 +6,24 @@ use App\Models\Gateway;
 use App\Rules\Phone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
-use Session;
 
 trait HasPayment
 {
     private function validateRequest(Request $request, Gateway $gateway): void
     {
         $request->validate([
-            'name' => [Rule::requiredIf(fn() => !\Auth::check()), 'string'],
-            'email' => [Rule::requiredIf(fn() => !\Auth::check()), 'email'],
+            'name' => [Rule::requiredIf(fn () => !Auth::check()), 'string'],
+            'email' => [Rule::requiredIf(fn () => !Auth::check()), 'email'],
             'phone' => [
-                Rule::requiredIf(fn() => $gateway->phone_required),
+                Rule::requiredIf(fn () => $gateway->phone_required),
                 new Phone
             ],
             'comment' => ['nullable', 'string', 'max:255'],
-            'screenshot' => ['nullable', 'image', 'max:2048'] // 2MB
+            'screenshot' => ['nullable', 'image', 'max:2048'], // 2MB
+            'fields' => ['required', 'array'],
         ]);
     }
 
@@ -30,8 +32,8 @@ trait HasPayment
         // Upload files if exists
         if ($gateway->is_auto == 0) {
             $paymentData['comment'] = $request->input('comment');
-            if ($request->hasFile('screenshot')) {
 
+            if ($request->hasFile('screenshot')) {
                 $path = 'uploads/' . strtolower(config('app.name')) . '/payments' . date('/y/m/');
                 $name = uniqid() . date('dmy') . time() . "." . $request->file('screenshot')->getClientOriginalExtension();
 
@@ -44,7 +46,8 @@ trait HasPayment
         }
 
         $gatewayInfo = json_decode($gateway->data, true);
-        if (!empty($gatewayInfo)){
+
+        if (!empty($gatewayInfo)) {
             foreach ($gatewayInfo as $key => $value) {
                 $paymentData[$key] = $value;
             }

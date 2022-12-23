@@ -4,7 +4,7 @@ namespace App\Lib;
 
 use App\Models\Gateway;
 use Illuminate\Support\Facades\Session;
-use Str;
+use Illuminate\Support\Str;
 
 class CustomGateway
 {
@@ -48,6 +48,8 @@ class CustomGateway
         $data['image'] = $array['screenshot'] ?? '';
         $data['comment'] = $array['comment'] ?? '';
         $data['payment_type'] = $array['payment_type'];
+        $data['fields'] = $array['fields'];
+        $data['data'] = $array['data'];
 
         if ($test_mode == 0) {
             $data['env'] = false;
@@ -56,7 +58,6 @@ class CustomGateway
             $data['env'] = true;
             $test_mode = true;
         }
-
         Session::put('manual_credentials', $data);
 
         return request()->expectsJson() ?
@@ -69,6 +70,7 @@ class CustomGateway
         if (!Session::has('manual_credentials')) {
             return abort(404);
         }
+
         $info = Session::get('manual_credentials');
 
         $data['payment_id'] = $this->generateString();
@@ -81,6 +83,8 @@ class CustomGateway
         $data['status'] = 2;
         $data['payment_status'] = 2;
         $data['meta'] = array('image' => $info['image'] ?? '', 'comment' => $info['comment'] ?? '');
+        $data['fields'] = $info['fields'];
+        $data['data'] = $info['data'];
 
         Session::forget('manual_credentials');
         Session::put('payment_info', $data);

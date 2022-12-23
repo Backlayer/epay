@@ -113,6 +113,9 @@ class InvoiceController extends Controller
             Mail::to($invoice->customer_email)->send(new InvoiceMail($invoice));
         }
 
+        $invoice->is_sent = true;
+        $invoice->save();
+
         if ($invoice->customer_phone_number) {
             $invoice_currency = Currency::findOrFail($invoice->currency_id);
             $amount = $invoice_currency->symbol . number_format($invoice->total, 2);

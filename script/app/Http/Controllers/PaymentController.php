@@ -59,13 +59,13 @@ class PaymentController extends Controller
     public function singleChargePayment($paymentInfo)
     {
         DB::beginTransaction();
+
         try {
             $singlePaymentData = Session::get('singlePaymentData');
             $singleCharge = $singlePaymentData['singleCharge'];
             $gateway = $singlePaymentData['gateway'];
             $originalAmount = Session::get('amount');
             $userInfo = Session::get('userInfo');
-
 
             // Calculate Income, taxes etc
             $convertToDefaultAmount = convert_money($originalAmount, $singleCharge->currency);
@@ -99,6 +99,7 @@ class PaymentController extends Controller
             //Generate Transaction for buyers
             if (Auth::check()) {
                 $convertToBuyerAmount = convert_money($convertToDefaultAmount, user_currency(), true);
+
                 Transaction::create([
                     'name' => $userInfo['name'],
                     'email' => $userInfo['email'],
@@ -156,6 +157,7 @@ class PaymentController extends Controller
     public function donationPayment($paymentInfo)
     {
         DB::beginTransaction();
+
         try {
             $donationData = Session::get('donationPaymentData');
             $donation = $donationData['donation'];
@@ -178,7 +180,6 @@ class PaymentController extends Controller
                 'wallet' => $wallet + ($convertToOwnerAmount - $convertToOwnerCharge)
             ]);
 
-
             $donationOrder = DonationOrder::create([
                 "trx" => $paymentInfo['payment_id'],
                 "amount" => $convertToOwnerAmount - $convertToOwnerCharge,
@@ -195,10 +196,10 @@ class PaymentController extends Controller
                 "donation_id" => $donation->id
             ]);
 
-
             //Generate Transaction for buyers
             if (Auth::check()) {
                 $convertToBuyerAmount = convert_money($convertToDefaultAmount, user_currency(), true);
+
                 Transaction::create([
                     'name' => $userInfo['name'],
                     'email' => $userInfo['email'],
@@ -236,8 +237,8 @@ class PaymentController extends Controller
                 Mail::to($donation->user)->send(new AuthorDonationOrderMail($donationOrder, $userInfo));
             }
 
-
             $this->clearSessions();
+
             return to_route('frontend.donation.index', $donation->uuid)
                 ->with('success', __('Thank you :name for donation.', ['name' => $userInfo['name']]));
         } catch (Throwable $exception) {
@@ -251,6 +252,7 @@ class PaymentController extends Controller
     public function invoicePayment($paymentInfo)
     {
         DB::beginTransaction();
+
         try {
             $invoiceData = Session::get('invoicePaymentData');
             $invoice = $invoiceData['invoice'];
@@ -273,19 +275,21 @@ class PaymentController extends Controller
             ]);
 
             $invoice->update([
-                'is_paid' => true,
                 'trx' => $paymentInfo['payment_id'],
                 'paid_at' => now(),
                 'gateway_id' => $gateway->id,
                 'charge' => $convertToOwnerCharge,
                 'rate' => $invoice->owner->currency->rate,
                 'name' => $userInfo['name'],
-                'email' => $userInfo['email']
+                'email' => $userInfo['email'],
+                'fields' => $paymentInfo['fields'],
+                'data' => $paymentInfo['data'],
             ]);
 
             //Generate Transaction for buyers
             if (Auth::check()) {
                 $convertToBuyerAmount = convert_money($convertToDefaultAmount, user_currency(), true);
+
                 Transaction::create([
                     'name' => $userInfo['name'],
                     'email' => $userInfo['email'],
@@ -343,15 +347,14 @@ class PaymentController extends Controller
 
     public function merchantPayment($paymentInfo)
     {
-
         DB::beginTransaction();
+
         try {
             $merchantPaymentData = Session::get('merchantPaymentData');
             $order = $merchantPaymentData['order'];
             $order = $order->website->mode ? WebOrder::findOrFail($order->id) : WebTestOrder::findOrFail($order->id);
             $gateway = $merchantPaymentData['gateway'];
             $userInfo = Session::get('userInfo');
-
 
             // Calculate Income, taxes etc
             $convertToDefaultAmount = convert_money($order->amount * $order->quantity, $order->currency);
@@ -381,6 +384,7 @@ class PaymentController extends Controller
                 //Generate Transaction for buyers
                 if (Auth::check()) {
                     $convertToBuyerAmount = convert_money($convertToDefaultAmount, user_currency(), true);
+
                     Transaction::create([
                         'name' => $userInfo['name'],
                         'email' => $userInfo['email'],
@@ -434,13 +438,13 @@ class PaymentController extends Controller
     public function qrPayment($paymentInfo)
     {
         DB::beginTransaction();
+
         try {
             $qrPaymentData = Session::get('qrPaymentData');
             $user = $qrPaymentData['user'];
             $gateway = $qrPaymentData['gateway'];
             $originalAmount = Session::get('amount');
             $userInfo = Session::get('userInfo');
-
 
             // Calculate Income, taxes etc
             $convertToDefaultAmount = convert_money($originalAmount, $user->currency);
@@ -471,6 +475,7 @@ class PaymentController extends Controller
             if (Auth::check()) {
                 $convertToBuyerAmount = convert_money($convertToDefaultAmount, user_currency(), true);
                 $convertToBuyerCharge = convert_money($totalCharge, user_currency(), true);
+
                 Transaction::create([
                     'name' => $userInfo['name'],
                     'email' => $userInfo['email'],
@@ -498,7 +503,6 @@ class PaymentController extends Controller
             ]);
 
             DB::commit();
-
 
             $this->clearSessions();
             if (Auth::check()) {

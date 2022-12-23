@@ -1000,5 +1000,8 @@
     "Money Transfer Charge Type": "Money Transfer Charge Type",
     "Money Transfer Charge Rate": "Money Transfer Charge Rate",
     "Bank Transaction Charge Type": "Bank Transaction Charge Type",
-    "Twilio.Message.SMS": ":business :amount :link"
+    "Twilio.Message.SMS": ":business :amount :link",
+    "Enter your payment details below": "Enter your payment details below",
+    "These data must be completed after making your payment": "These data must be completed after making your payment",
+    "Use the following information to make your payment": "Use the following information to make your payment"
 }

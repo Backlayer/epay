@@ -11,15 +11,13 @@ trait HasUploader
     {
         $file = $request->file($input);
         $ext = $file->getClientOriginalExtension();
-        $filename = now()->timestamp.'.'.$ext;
+        $filename = now()->timestamp . '.' . $ext;
 
-        $path = 'uploads/' . \Auth::id() . date('/y') . '/' . date('m') . '/';
-        $filePath = $path.$filename;
+        $path = 'uploads/' . date('Ymdhis') . date('/y') . '/' . date('m') . '/';
+        $filePath = $path . $filename;
 
-        if($oldFile) {
-            if (file_exists($oldFile)) {
-                Storage::delete($oldFile);
-            }
+        if ($oldFile && file_exists($oldFile)) {
+            Storage::delete($oldFile);
         }
 
         Storage::disk(config('filesystems.default'))->put($filePath, file_get_contents($file));

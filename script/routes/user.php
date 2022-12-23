@@ -111,7 +111,7 @@ Route::group([
 Route::group([
     'prefix' => 'user',
     'as' => 'user.',
-    'middleware' => ['auth', 'verified'],
+    // 'middleware' => ['auth', 'verified'],
     'namespace' => 'App\Lib'
 ], function () {
     Route::get('/payment/paypal', 'Paypal@status');
