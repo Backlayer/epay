@@ -17,7 +17,7 @@ class SingleCharge extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'meta' => 'json'
+        'meta' => 'json',
     ];
 
     public function user(): BelongsTo

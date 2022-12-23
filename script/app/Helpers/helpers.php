@@ -21,6 +21,11 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Date;
 
 if (!function_exists('disquscomment')) {
     /**
@@ -183,12 +188,11 @@ if (!function_exists('amount_format')) {
     /**
      * This function will return number format
      * EX: 100.00
-     * @param int $value
+     * @param float|int $value
      * @return int|float
      */
-    function amount_format(int $value = 0): int|float
-    {
-        {
+    function amount_format(float|int $value = 0): int|float
+    { {
             return number_format($value, 2);
         }
     }
@@ -266,7 +270,6 @@ if (!function_exists('check_expire')) {
     {
         return Auth::user()->will_expire >= date('Y-m-d');
     }
-
 }
 
 if (!function_exists('pending_order')) {
@@ -278,7 +281,6 @@ if (!function_exists('pending_order')) {
     {
         return Order::where('user_id', auth()->user()->id)->where('payment_status', '2')->latest()->first();
     }
-
 }
 
 if (!function_exists('cache_remember')) {
@@ -403,14 +405,14 @@ if (!function_exists('default_currency')) {
     function default_currency($key = null, Currency $currency = null): object|int|string
     {
         $currency = $currency ?? cache_remember('default_currency', function () {
-                $currency = Currency::whereIsDefault(1)->first();
+            $currency = Currency::whereIsDefault(1)->first();
 
-                if (!$currency) {
-                    $currency = (object)['name' => 'US Dollar', 'code' => 'USD', 'rate' => 1, 'symbol' => '$', 'position' => 'left', 'status' => true, 'is_default' => true,];
-                }
+            if (!$currency) {
+                $currency = (object)['name' => 'US Dollar', 'code' => 'USD', 'rate' => 1, 'symbol' => '$', 'position' => 'left', 'status' => true, 'is_default' => true,];
+            }
 
-                return $currency;
-            });
+            return $currency;
+        });
 
         return $key ? $currency->$key : $currency;
     }
@@ -442,7 +444,7 @@ if (!function_exists('get_money')) {
 }
 
 if (!function_exists('calculate_taxes')) {
-    function calculate_taxes(int $amount, $withAmount = true)
+    function calculate_taxes(float|int $amount, $withAmount = true)
     {
         $taxes = Tax::whereStatus(1)->get();
 
@@ -462,7 +464,7 @@ if (!function_exists('calculate_taxes')) {
 }
 
 if (!function_exists('calculate_extra_charge')) {
-    function calculate_extra_charge(int $amount, $chargeName, $withAmount = false)
+    function calculate_extra_charge(float|int $amount, $chargeName, $withAmount = false)
     {
         $option = get_option('charges')[$chargeName] ?? ['rate' => 0, 'type' => 'percentage'];
 
@@ -525,25 +527,26 @@ function convert_money($amount, $currency, $multiply = false)
     }
 }
 
-function convert_money_direct(int|float|null $amount, null|Currency $baseCurrency, null|Currency $secondCurrency, $currencyFormat = false, $numberFormat = false) {
-    if (!$amount || !$baseCurrency || !$secondCurrency){
+function convert_money_direct(int|float|null $amount, null|Currency $baseCurrency, null|Currency $secondCurrency, $currencyFormat = false, $numberFormat = false)
+{
+    if (!$amount || !$baseCurrency || !$secondCurrency) {
         return 0;
     }
 
     $baseAmount = convert_money($amount, $baseCurrency);
 
     $amount = convert_money($baseAmount, $secondCurrency, true);
-    if ($currencyFormat){
+    if ($currencyFormat) {
         return currency_format($amount, currency: $secondCurrency);
-    }elseif ($numberFormat){
+    } elseif ($numberFormat) {
         return round($amount, 2, PHP_ROUND_HALF_ODD);
-    }else{
+    } else {
         return $amount;
     }
 }
 
-function convert_money_by_rate($amount){
-
+function convert_money_by_rate($amount)
+{
 }
 
 function my_balance($currency)
@@ -601,19 +604,21 @@ if (!function_exists('user_currency')) {
     }
 }
 
-if (!function_exists('support_setting')){
-    function support_setting(User $user){
+if (!function_exists('support_setting')) {
+    function support_setting(User $user)
+    {
         return $user->supportSetting;
     }
 }
 
-if (!function_exists('total_new_message')){
-    function total_new_message() {
+if (!function_exists('total_new_message')) {
+    function total_new_message()
+    {
         return Message::where('reciever_id', auth()->id())->where('is_seen', 0)->count();
     }
 }
 
-if (!function_exists('get_percentage_change')){
+if (!function_exists('get_percentage_change')) {
 
     /**
      * * Calculates in percent, the change between 2 numbers.

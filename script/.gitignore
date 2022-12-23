@@ -1,6 +1,6 @@
 .env
 node_modules
-vendor
+/vendor
 composer.lock
 package-lock.json
 error_log

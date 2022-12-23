@@ -58,6 +58,7 @@ class CustomGateway
             $data['env'] = true;
             $test_mode = true;
         }
+
         Session::put('manual_credentials', $data);
 
         return request()->expectsJson() ?

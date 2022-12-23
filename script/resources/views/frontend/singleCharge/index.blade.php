@@ -62,22 +62,10 @@
                                     </div>
                                 </div>
 
-                                <div class="row align-items-center">
-                                    @foreach($gateways as $gateway)
-                                        <div class="col-md-4">
-                                            <div class="custom-control custom-radio image-checkbox">
-                                                <input type="radio" name="gateway" id="{{ str($gateway->name)->slug('_') }}" value="{{ $gateway->id }}" class="custom-control-input">
-                                                <label class="custom-control-label" for="{{ str($gateway->name)->slug('_') }}">
-                                                    <img src="{{ $gateway->logo }}" alt="#" class="img-fluid">
-                                                </label>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-
-                                <button class="btn btn-dark">
-                                    {{ __("Pay Now") }}
-                                </button>
+                                @include('payment.gatewayList', [
+                                    'is_paid' => $singleCharge->status == 2,
+                                    'gateways' => $gateways
+                                ])
                             </div>
                         </div>
                     </form>
