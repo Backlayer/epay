@@ -79,8 +79,7 @@
                                 <th>{{ __("Amount") }}</th>
                                 <th>{{ __("Discount") }}</th>
                                 <th>{{ __("Tax") }}</th>
-                                <th>{{ __("Quantity") }}</th>
-                                <th>{{ __("Item Name") }}</th>
+                                <th>{{ __("Total") }}</th>
                                 <th>{{ __("Transactions") }}</th>
                             </tr>
                             </thead>
@@ -106,11 +105,30 @@
                                         </span>
                                         @endif
                                     </td>
-                                    <td>{{ convert_money_direct($invoice->amount, $invoice->currency, default_currency(), true) }}</td>
-                                    <td>{{ __(":percentage %", ['percentage' => $invoice->discount]) }}</td>
-                                    <td>{{ __(":percentage %", ['percentage' => $invoice->tax]) }}</td>
-                                    <td>{{ $invoice->quantity }}</td>
-                                    <td>{{ $invoice->item_name }}</td>
+                                    <td> @php
+                                            $tax = $invoice->tax ? $invoice->tax : 0;
+                                            $discount = $invoice->discount ? $invoice->discount : 0;
+                                            $total = $invoice->total ? $invoice->total : 0;
+                                            $amount = $total - $tax + $discount;
+                                            @endphp
+                                           {{ convert_money_direct($amount, $invoice->currency, default_currency(), true)
+                                        }}
+                                    </td>
+                                    <td>
+                                        @if($invoice->discount)
+                                            <span>{{ __(":percentage %", ['percentage' => $invoice->discount]) }}</span>
+                                        @else
+                                             <span>0%</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($invoice->tax)
+                                            <span>{{ __(":percentage %", ['percentage' => $invoice->tax]) }}</span>
+                                        @else
+                                             <span>0%</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ convert_money_direct($invoice->total, $invoice->currency, default_currency(), true) }}</td>
                                     <td>
                                         <a href="{{ route('admin.invoices.show', $invoice->id) }}" class="btn btn-primary btn-sm">
                                             <i class="fas fa-eye"></i>
