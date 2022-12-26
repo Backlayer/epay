@@ -41,7 +41,7 @@
                                         <th>{{ __("From") }}</th>
                                         <th>{{ __("Amount") }}</th>
                                         <th>{{ __("Charge") }}</th>
-                                        <th>{{ __("Status") }}</th>
+                                        <th>{{ __('Payment Status') }}</th>
                                         <th>{{ __("Created At") }}</th>
                                     </tr>
                                     </thead>
@@ -57,13 +57,7 @@
                                             <td>
                                                 {{ currency_format($order->charge, 'icon', $order->currency->symbol) }}
                                             </td>
-                                            <td>
-                                                @if($order->status)
-                                                    <span class="badge badge-pill badge-success">{{ __("Success") }}</span>
-                                                @else
-                                                    <span class="badge badge-pill badge-danger">{{ __("Failed") }}</span>
-                                                @endif
-                                            </td>
+                                            <td>{!! $order->PaymentStatus !!}</td>
                                             <td>{{ formatted_date($order->created_at) }}</td>
                                         </tr>
                                     @endforeach

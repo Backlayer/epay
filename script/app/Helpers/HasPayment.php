@@ -98,4 +98,32 @@ trait HasPayment
 
         return $dataFields;
     }
+
+    private function checkIsPaid($payment)
+    {
+        return $payment->status_paid !== '0';
+    }
+
+    private function checkConfirmed($payment)
+    {
+        return $payment->status_paid === '2';
+    }
+
+    private function paymentStatus($status)
+    {
+        $classBadge = 'badge badge-pill badge-';
+        $classIcon = 'fas fa-';
+
+        return [
+            '0' => "<span class=\"" . $classBadge . "danger\">
+                    <i class=\"" . $classIcon . "spinner\"></i> " . __('Pending') . "
+                </span>",
+            '1' => "<span class=\"" . $classBadge . "info\">
+                    <i class=\"" . $classIcon . "spinner\"></i> " . __('Paid') . "
+                </span>",
+            '2' => "<span class=\"" . $classBadge . "success\">
+                    <i class=\"" . $classIcon . "check\"></i> " . __('Confirmed') . "
+                </span>"
+        ][$status];
+    }
 }

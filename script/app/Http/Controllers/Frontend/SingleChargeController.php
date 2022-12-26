@@ -18,7 +18,7 @@ class SingleChargeController extends Controller
 
     public function index(SingleCharge $singleCharge)
     {
-        abort_if(!$singleCharge->status, 403, __('Transaction Already Paid'));
+        abort_if($singleCharge->isPaid, 403, __('Transaction Already Paid'));
 
         $this->clearSessions();
 
@@ -36,7 +36,7 @@ class SingleChargeController extends Controller
 
     public function gateway(Request $request, SingleCharge $singleCharge)
     {
-        abort_if(!$singleCharge->status, 403, __('Transaction Already Paid'));
+        abort_if($singleCharge->isPaid, 403, __('Transaction Already Paid'));
 
         $request->validate([
             'gateway' => ['required', 'exists:gateways,id'],

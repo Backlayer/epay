@@ -374,7 +374,11 @@
     "Invoice Generated Successfully": "Invoice Generated Successfully",
     "Invoice sent to customer email": "Invoice sent to customer email",
     "Invoice is already paid": "Invoice is already paid",
+    "Invoice has not been paid": "Invoice has not been paid",
+    "Single Charge has not been paid": "Single Charge has not been paid",
     "Invoice Updated Successfully": "Invoice Updated Successfully",
+    "Invoice Payment Confirmed Successfully": "Invoice Payment Confirmed Successfully",
+    "Single Charge Payment Confirmed Successfully": "Single Charge Payment Confirmed Successfully",
     "You are not allowed to delete this invoice": "You are not allowed to delete this invoice",
     "Invoice Deleted Successfully": "Invoice Deleted Successfully",
     "KYC Document Submitted Successfully": "KYC Document Submitted Successfully",
@@ -670,6 +674,7 @@
     "An OTP has been sent to your mail. Please check and confirm.": "An OTP has been sent to your mail. Please check and confirm.",
     "OTP": "OTP",
     "Confirm": "Confirm",
+    "Confirm Payment": "Confirm Payment",
     "Current balance is": "Current balance is",
     "Payout request amount": "Payout request amount",
     "Total charge": "Total charge",
@@ -1003,5 +1008,6 @@
     "Twilio.Message.SMS": ":business :amount :link",
     "Enter your payment details below": "Enter your payment details below",
     "These data must be completed after making your payment": "These data must be completed after making your payment",
-    "Use the following information to make your payment": "Use the following information to make your payment"
+    "Use the following information to make your payment": "Use the following information to make your payment",
+    "Payment Status": "Payment Status"
 }

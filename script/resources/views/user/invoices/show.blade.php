@@ -32,15 +32,9 @@
                                         <div class="my-2">
                                             <i class="fa fa-circle text-blue-m2 text-xs mr-1"></i>
                                             <span class="text-600 text-90">{{ __('Status:') }}</span>
-                                            @if($invoice->is_paid)
-                                                <span class="badge badge-success badge-pill px-25">
-                                                    {{ __('Paid') }}
-                                                </span>
-                                            @else
-                                                <span class="badge badge-warning badge-pill px-25">
-                                                    {{ __('Unpaid') }}
-                                                </span>
-                                            @endif
+                                            <span class="px-25">
+                                                {!! $invoice->PaymentStatus !!}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -114,11 +108,13 @@
                                     <div class="col-6"></div>
                                 </div>
 
-                                <form action="{{ route('user.invoices.send', $invoice->id) }}" method="post" class="ajaxform_instant_reload">
+                                <form action="{{ route('user.invoices.send', $invoice->id) }}" method="post" class="ajaxform_instant_reload d-inline">
                                     @csrf
                                     <a href="{{ route('user.invoices.index') }}" class="btn btn-outline-danger">
                                         {{ __('All Invoices') }}
                                     </a>
+
+                                    @if ($invoice->status_paid === '0')
                                     <button class="btn btn-neutral float-right submit-button submit-btn">
                                         <i class="fas fa-paper-plane"></i>
                                         @if($invoice->is_sent)
@@ -127,6 +123,7 @@
                                             {{ __('Send') }}
                                         @endif
                                     </button>
+                                    @endif
                                 </form>
                             </div>
                         </div>

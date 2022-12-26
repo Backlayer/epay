@@ -139,8 +139,9 @@ class InvoiceController extends Controller
     public function edit(Invoice $invoice)
     {
         $userId = Auth::id();
+
         abort_if((int)$invoice->owner_id !== Auth::id(), 404);
-        abort_if((int)$invoice->is_paid, 403, __('Invoice is already paid'));
+        abort_if($invoice->IsConfirmed, 403, __('Invoice is already paid'));
 
         $charge = get_option('charges')['invoice_charge'] ?? ['rate' => 0, 'type' => 'percentage'];
         return view('user.invoices.edit', compact('invoice', 'charge'));
@@ -149,7 +150,8 @@ class InvoiceController extends Controller
     public function update(Request $request, Invoice $invoice)
     {
         abort_if((int)$invoice->owner_id !== Auth::id(), 404);
-        abort_if((int)$invoice->is_paid, 403, __('Invoice is already paid'));
+        abort_if($invoice->IsConfirmed, 403, __('Invoice is already paid'));
+
         $validated = $request->validate([
             'items' => ['required', 'array', 'min:1'],
             'items.*.item_name' => ['required', 'string', 'max:255'],
@@ -210,7 +212,8 @@ class InvoiceController extends Controller
     public function destroy(Invoice $invoice)
     {
         abort_if($invoice->owner_id !== Auth::id(), 404);
-        if ($invoice->is_paid) {
+
+        if ($invoice->IsConfirmed) {
             return response()->json([
                 'message' => __('You are not allowed to delete this invoice'),
             ], 403);

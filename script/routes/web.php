@@ -119,14 +119,19 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'App\Http\Co
     Route::group(['prefix' => 'payments', 'as' => 'payments.'], function () {
         Route::get('single-charge', 'SingleChargeController@index')->name('single-charge.index');
         Route::get('single-charge/{singleCharge}', 'SingleChargeController@show')->name('single-charge.show');
+        Route::post('single-charge/{singleChargeOrder}', 'SingleChargeController@confirm')->name('single-charge.confirm');
+
         Route::get('donations', 'DonationController@index')->name('donations.index');
         Route::get('donations/{donation}', 'DonationController@show')->name('donations.show');
         Route::get('get-donations', 'DonationController@getDonations')->name('get-donations');
         Route::get('get-single-charge', 'SingleChargeController@getSingleCharge')->name('single-charge');
     });
+
     Route::get('invoices', 'InvoiceController@index')->name('invoices.index');
     Route::get('invoices/{invoice}', 'InvoiceController@show')->name('invoices.show');
     Route::get('get-invoices', 'InvoiceController@getInvoices')->name('get-invoices');
+    Route::post('invoices/{invoice}/confirm', 'InvoiceController@confirm')->name('invoices.confirm');
+
     Route::get('merchants', 'MerchantController@index')->name('merchants.index');
     Route::get('merchants/{merchant}/log', 'MerchantController@log')->name('merchants.log');
     Route::get('payment-plans', 'PaymentPlanController@index')->name('payment-plans.index');
