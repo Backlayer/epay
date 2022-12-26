@@ -20,15 +20,21 @@ Route::group([
     'middleware' => ['auth', 'verified', 'user', 'hasBank', 'kyc']
 ], function () {
     Route::get('dashboard', 'DashboardController@index')->name('dashboard.index');
+
     // Money request
     Route::get('request-money/cancel/{id}', 'RequestMoneyController@cancle')->name('request-money.cancel');
     Route::get('request-money/approved/{id}', 'RequestMoneyController@approved')->name('request-money.approved');
     Route::get('received-request/', 'RequestMoneyController@receivedRequest')->name('received-request.index');
 
+    // Invoices
+    Route::get('invoices/{invoice}', 'InvoiceController@show')->name('invoices.show');
+    Route::get('invoices/{invoice}/edit', 'InvoiceController@edit')->name('invoices.edit');
+    Route::post('invoices/{invoice}/send', 'InvoiceController@send')->name('invoices.send');
+
     Route::post('single-charges/disable/{charge}', 'SingleChargeController@disable')->name('single-charges.disable');
+
     Route::post('donations/disable/{charge}', 'DonationController@disable')->name('donations.disable');
     Route::post('plans/disable/{plan}', 'PlanController@disable')->name('plans.disable');
-    Route::post('invoices/{invoice}/send', 'InvoiceController@send')->name('invoices.send');
     Route::post('websites/{website}/live', 'WebsiteController@live')->name('websites.live');
     Route::get('websites/documentation', 'WebsiteController@documentation')->name('websites.documentation');
 
@@ -102,10 +108,6 @@ Route::group([
     Route::group(['prefix' => 'payment', 'as' => 'payment.'], function () {
         Route::get('success', [PaymentController::class, 'success'])->name('success');
     });
-
-    // INVOICES
-    Route::get('invoices/{invoice}', 'InvoiceController@show')->name('invoices.show');
-    Route::get('invoices/{invoice}/edit', 'InvoiceController@edit')->name('invoices.edit');
 });
 
 Route::group([

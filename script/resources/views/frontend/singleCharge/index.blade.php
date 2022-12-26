@@ -58,12 +58,12 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text text-future">{{ $singleCharge->user->currency->symbol  }}</span>
                                         </div>
-                                        <input class="form-control" type="number" name="amount" value="{{ round($singleCharge->amount, 2, PHP_ROUND_HALF_ODD) }}" step="any" @if($singleCharge->amount > 0) readonly @endif>
+                                        <input class="form-control" type="number" name="amount" value="{{ number_format($singleCharge->amount, 2) }}" step="any" min="0.1" @if($singleCharge->amount > 0) readonly @endif>
                                     </div>
                                 </div>
 
                                 @include('payment.gatewayList', [
-                                    'is_paid' => $singleCharge->status == 2,
+                                    'is_paid' => $singleCharge->IsPaid,
                                     'gateways' => $gateways
                                 ])
                             </div>

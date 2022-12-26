@@ -29,7 +29,7 @@ class InvoiceController extends Controller
 
     public function index(Invoice $invoice)
     {
-        abort_if($invoice->is_paid, 403, __('Transaction Already Paid'));
+        abort_if($invoice->isPaid, 403, __('Transaction Already Paid'));
 
         $this->clearSessions();
 
@@ -47,7 +47,7 @@ class InvoiceController extends Controller
 
     public function gateway(Request $request, Invoice $invoice)
     {
-        abort_if($invoice->is_paid, 403, __('Transaction Already Paid'));
+        abort_if($invoice->isPaid, 403, __('Transaction Already Paid'));
 
         $request->validate([
             'gateway' => ['required', 'exists:gateways,id'],

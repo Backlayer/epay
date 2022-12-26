@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use function Clue\StreamFilter\fun;
+use App\Helpers\HasPayment;
 
 class SingleChargeOrder extends Model
 {
     use HasFactory;
+    use HasPayment;
 
     protected $table = 'singlechargeorders';
 
@@ -38,6 +40,11 @@ class SingleChargeOrder extends Model
     public function currency(): BelongsTo
     {
         return $this->belongsTo(Currency::class);
+    }
+
+    public function getPaymentStatusAttribute()
+    {
+        return $this->paymentStatus($this->status_paid ?? '0');
     }
 
     public static function boot()

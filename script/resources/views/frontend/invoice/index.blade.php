@@ -110,12 +110,12 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text text-future">{{ $invoice->currency->symbol  }}</span>
                                             </div>
-                                            <input class="form-control" type="number" name="amount" value="{{ round($amount, 2, PHP_ROUND_HALF_ODD) }}" @if($amount) readonly @endif>
+                                            <input class="form-control" type="number" name="amount" value="{{ number_format($amount, 2) }}" step="any" min="0.1" @if($amount > 0) readonly @endif>
                                         </div>
                                     </div>
 
                                     @include('payment.gatewayList', [
-                                        'is_paid' => $invoice->is_paid,
+                                        'is_paid' => $invoice->IsPaid,
                                         'gateways' => $gateways
                                     ])
                                 </div>

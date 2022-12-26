@@ -85,7 +85,8 @@ class PaymentController extends Controller
                 "amount" => $convertToOwnerAmount - $convertToOwnerCharge,
                 "rate" => $singleCharge->user->currency->rate,
                 "charge" => $convertToOwnerCharge,
-                "status" => (bool) $gateway->is_auto,
+                'paid_at' => now(),
+                "status_paid" => '1',
                 "user_id" => $singleCharge->user_id,
                 "gateway_id" => $gateway->id,
                 "singlecharge_id" => $singleCharge->id,
@@ -284,11 +285,11 @@ class PaymentController extends Controller
 
             $invoice->update([
                 'trx' => $paymentInfo['payment_id'],
-                'paid_at' => now(),
                 'gateway_id' => $gateway->id,
                 'charge' => $convertToOwnerCharge,
                 'rate' => $invoice->owner->currency->rate,
-                "is_paid" => true,
+                'paid_at' => now(),
+                "status_paid" => '1',
                 'name' => $userInfo['name'],
                 'email' => $userInfo['email'],
                 'fields' => $paymentInfo['fields'],

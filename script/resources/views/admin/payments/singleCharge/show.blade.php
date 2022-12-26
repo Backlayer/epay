@@ -45,8 +45,9 @@
                                             <th>{{ __("From") }}</th>
                                             <th>{{ __("Amount") }}</th>
                                             <th>{{ __("Charge") }}</th>
-                                            <th>{{ __("Status") }}</th>
+                                            <th>{{ __('Payment Status') }}</th>
                                             <th>{{ __("Created At") }}</th>
+                                            <th>{{ __("Action") }}</th>
                                         </tr>
                                         </thead>
                                         <tbody class="list" style="min-height: 200px">
@@ -61,14 +62,21 @@
                                                 <td>
                                                     {{ currency_format($order->charge, 'icon', $order->currency->symbol) }}
                                                 </td>
-                                                <td>
-                                                    @if($order->status)
-                                                        <span class="badge badge-pill badge-success">{{ __("Success") }}</span>
-                                                    @else
-                                                        <span class="badge badge-pill badge-danger">{{ __("Failed") }}</span>
+                                                <td>{!! $order->PaymentStatus !!}</td>
+                                                <td>{{ formatted_date($order->created_at) }}</td>
+                                                <td class="text-center">
+                                                    @if ($order->status_paid === '1')
+                                                    <a class="dropdown-item d-flex confirm-action text-success"
+                                                        href="#"
+                                                        data-icon="fas fa-check"
+                                                        data-action="{{ route('admin.payments.single-charge.confirm', $order->id) }}"
+                                                        data-method="POST"
+                                                    >
+                                                        <i class="fas fa-check fa-fw text-success"></i>
+                                                        {{ __("Confirm") }}
+                                                    </a>
                                                     @endif
                                                 </td>
-                                                <td>{{ formatted_date($order->created_at) }}</td>
                                             </tr>
                                         @endforeach
                                         </tbody>

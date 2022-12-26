@@ -18,20 +18,10 @@
                         </div>
                         <div class="d-flex flex-row align-self-start">
                             <ul>
-                                <li>
-                                    <span class="mr-2 font-weight-bold">
-                                        {{ __('Trx') }}:
-                                    </span>
-                                    @if($invoice->trx)
-                                        {{ $invoice->trx }}
-                                    @else
-                                        N/A
-                                    @endif
-                                </li>
-                                @if($invoice->is_paid)
-                                    <li>
-                                            <span class="mr-2 font-weight-bold">{{ __('Is Paid') }}:</span> {{ formatted_date($invoice->paid_at) }}
-                                    </li>
+                                <li><span class="mr-2 font-weight-bold">{{ __('Trx') }}:</span> {{ $invoice->trx ?? 'N/A' }}</li>
+                                <li><span class="mr-2 font-weight-bold">{{ __('Status:') }}</span> {!! $invoice->PaymentStatus !!}</li>
+                                @if($invoice->isPaid)
+                                <li><span class="mr-2 font-weight-bold">{{ __('Paid At') }}:</span> {{ formatted_date($invoice->paid_at) }}</li>
                                 @endif
                                 <li><span class="mr-2 font-weight-bold">{{ __('Created At') }}:</span> {{ formatted_date($invoice->created_at)  }}</li>
                                 <li><span class="mr-2 font-weight-bold">{{ __('Due Date') }}:</span> {{ formatted_date($invoice->due_date) }}</li>
@@ -127,6 +117,18 @@
                         </table>
                     </div>
                 </div>
+
+                @if ($invoice->status_paid === '1')
+                <form action="{{ route('admin.invoices.confirm', $invoice->id) }}" method="post" class="ajaxform_instant_reload_after_confirm d-inline p-4">
+                    @csrf
+
+                    <button class="btn btn-success float-right submit-button submit-btn">
+                        <i class="fas fa-check"></i>
+
+                        {{ __('Confirm Payment') }}
+                    </button>
+                </form>
+                @endif
             </div>
         </div>
     </div>
