@@ -59,6 +59,11 @@ class SingleChargeController extends Controller
         return response()->json($data);
     }
 
+    public function order(SingleCharge $singleCharge, SingleChargeOrder $singleChargeOrder)
+    {
+        return view('admin.payments.singleCharge.order', compact('singleCharge', 'singleChargeOrder'));
+    }
+
     public function confirm(SingleChargeOrder $singleChargeOrder)
     {
         abort_if($singleChargeOrder->status_paid !== '1', 403, __('Single Charge has not been paid'));

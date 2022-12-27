@@ -36,6 +36,11 @@ class Invoice extends Model
         return $this->hasMany(InvoiceItem::class);
     }
 
+    public function gateway(): BelongsTo
+    {
+        return $this->belongsTo(Gateway::class);
+    }
+
     public function getIsPaidAttribute()
     {
         return $this->checkIsPaid((object) $this->attributes);
