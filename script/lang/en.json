@@ -1009,5 +1009,8 @@
     "Enter your payment details below": "Enter your payment details below",
     "These data must be completed after making your payment": "These data must be completed after making your payment",
     "Use the following information to make your payment": "Use the following information to make your payment",
-    "Payment Status": "Payment Status"
+    "Payment Status": "Payment Status",
+    "Paid by Client": "Paid by Client",
+    "Payment Details": "Payment Details",
+    "View Document": "View Document"
 }

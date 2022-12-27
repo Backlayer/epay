@@ -65,17 +65,9 @@
                                                 <td>{!! $order->PaymentStatus !!}</td>
                                                 <td>{{ formatted_date($order->created_at) }}</td>
                                                 <td class="text-center">
-                                                    @if ($order->status_paid === '1')
-                                                    <a class="dropdown-item d-flex confirm-action text-success"
-                                                        href="#"
-                                                        data-icon="fas fa-check"
-                                                        data-action="{{ route('admin.payments.single-charge.confirm', $order->id) }}"
-                                                        data-method="POST"
-                                                    >
-                                                        <i class="fas fa-check fa-fw text-success"></i>
-                                                        {{ __("Confirm") }}
+                                                    <a href="{{ route('admin.payments.single-charge.order', [$singleCharge->id, $order->id]) }}" class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-eye"></i>
                                                     </a>
-                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

@@ -37,13 +37,17 @@
                             <span class="mx-4 mb-2 font-weight-bold">{{ __('Customer Email') }}:</span>
                             <span>{{ $invoice->customer_email }}</span>
                         </div>
+                        <div class="d-flex flex-row align-self-start">
+                            <span class="mx-4 mb-2 font-weight-bold">{{ __('Customer Phone Number') }}:</span>
+                            <span>{{ $invoice->customer_phone_number }}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="table-responsive px-4">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th scope="col">{{ __('Invoice Name') }}</th>
+                                <th scope="col">{{ __('Item Name') }}</th>
                                 <th scope="col">{{ __('Amount') }}</th>
                                 <th scope="col">{{ __('Quantity') }}</th>
                                 <th scope="col">{{ __('Sub Total') }}</th>
@@ -69,7 +73,7 @@
                 </div>
                 @if($invoice->note)
                  <div class="d-flex px-4 align-items-center">
-                     <span class="font-weight-bold">{{ __('Nota') }}:</span>
+                     <span class="font-weight-bold">{{ __('Notes') }}:</span>
                      <span class="ml-2">{{ $invoice->note }}</span>
                  </div>
                 @endif
@@ -78,17 +82,15 @@
                         <table class="table table-borderless">
                             <tbody>
                                 <tr>
-                                    <th style="height:40px">
-                                        {{ __('Charge') }}
+                                    <th style="height:40px; width: 80px" class="text-right">
+                                        {{ __('Charge') }}:
                                     </th>
-                                    <td style="height:40px">:</td>
                                     <td style="height:40px">{{ convert_money_direct($invoice->charge, $invoice->currency, default_currency(), true) }}</td>
                                 </tr>
                                 <tr>
-                                    <th style="height:40px">
-                                        {{ __('Tax') }}
+                                    <th style="height:40px" class="text-right">
+                                        {{ __('Tax') }}:
                                     </th>
-                                    <td style="height:40px">:</td>
                                     @if($invoice->tax)
                                       <td style="height:40px">{{ __(":percentage %", ['percentage' => $invoice->tax]) }}</td>
                                     @else
@@ -96,10 +98,9 @@
                                     @endif
                                 </tr>
                                 <tr>
-                                    <th style="height:40px">
-                                        {{ __('Discount') }}
+                                    <th style="height:40px" class="text-right">
+                                        {{ __('Discount') }}:
                                     </th>
-                                    <td style="height:40px">:</td>
                                     @if($invoice->discount)
                                         <td style="height:40px">{{ __(":percentage %", ['percentage' => $invoice->discount]) }}</td>
                                     @else
@@ -107,16 +108,22 @@
                                     @endif
                                 </tr>
                                 <tr>
-                                    <th style="height:40px">
-                                        {{ __('Total') }}
+                                    <th style="height:40px" class="text-right">
+                                        {{ __('Total') }}:
                                     </th>
-                                    <td style="height:40px">:</td>
                                     <td style="height:40px">{{ convert_money_direct($invoice->total, $invoice->currency, default_currency(), true)}}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
+
+                @if ($invoice->IsPaid)
+                    @include('admin.payments.detailInformation', [
+                        'gateway' => $invoice->gateway,
+                        'payment' => $invoice,
+                    ])
+                @endif
 
                 @if ($invoice->status_paid === '1')
                 <form action="{{ route('admin.invoices.confirm', $invoice->id) }}" method="post" class="ajaxform_instant_reload_after_confirm d-inline p-4">

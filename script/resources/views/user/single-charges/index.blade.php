@@ -137,7 +137,7 @@
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                        @if ($charge->lastOrder()->status_paid === '0')
+                                                        @if ($charge->lastOrder()?->status_paid === '0')
                                                         <a class="dropdown-item" href="{{ route('user.single-charges.edit', $charge->id) }}">
                                                             <i class="fas fa-edit fa-fw"></i>
                                                             {{ __("Edit") }}

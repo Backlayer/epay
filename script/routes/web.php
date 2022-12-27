@@ -119,6 +119,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'App\Http\Co
     Route::group(['prefix' => 'payments', 'as' => 'payments.'], function () {
         Route::get('single-charge', 'SingleChargeController@index')->name('single-charge.index');
         Route::get('single-charge/{singleCharge}', 'SingleChargeController@show')->name('single-charge.show');
+        Route::get('single-charge/{singleCharge}/order/{singleChargeOrder}', 'SingleChargeController@order')->name('single-charge.order');
         Route::post('single-charge/{singleChargeOrder}', 'SingleChargeController@confirm')->name('single-charge.confirm');
 
         Route::get('donations', 'DonationController@index')->name('donations.index');
