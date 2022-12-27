@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Helpers\HasPayment;
+
 use App\Http\Controllers\Controller;
 use App\Models\Gateway;
 use App\Models\Invoice;
@@ -20,16 +21,20 @@ class InvoiceController extends Controller
         $invoice->loadSum('items', 'subtotal');
         $subTotal = $invoice->items_sum_subtotal;
         $discount = ($subTotal * $invoice->discount) / 100;
-        $afterDiscountAmount = $subTotal- $discount;
+        $afterDiscountAmount = $subTotal - $discount;
         $tax = ($afterDiscountAmount * $invoice->tax) / 100;
+
         return $afterDiscountAmount + $tax;
     }
 
     public function index(Invoice $invoice)
     {
+        abort_if($invoice->isPaid, 403, __('Transaction Already Paid'));
+
         $this->clearSessions();
-        $gateways = Gateway::where('is_auto',1)->whereStatus(1)
-            ->when(!Auth::check(), function ($builder){
+
+        $gateways = Gateway::whereStatus(1)
+            ->when(!Auth::check(), function ($builder) {
                 $builder->whereNotIn("namespace", ["App\\Lib\\Credit"]);
             })
             ->orderBy('name')
@@ -42,15 +47,16 @@ class InvoiceController extends Controller
 
     public function gateway(Request $request, Invoice $invoice)
     {
-        abort_if($invoice->is_paid, 404);
+        abort_if($invoice->isPaid, 403, __('Transaction Already Paid'));
+
         $request->validate([
             'gateway' => ['required', 'exists:gateways,id'],
-            'amount' => [Rule::requiredIf(fn() => !$invoice->amount), 'numeric']
+            'amount' => [Rule::requiredIf(fn () => !$invoice->amount), 'numeric']
         ]);
 
         $amount = $this->getTotalAmount($invoice);
 
-        $gateway = Gateway::where('is_auto',1)->findOrFail($request->input('gateway'));
+        $gateway = Gateway::findOrFail($request->input('gateway'));
 
         return view('frontend.invoice.gateway', compact('invoice', 'gateway', 'amount'));
     }
@@ -65,12 +71,12 @@ class InvoiceController extends Controller
             'gateway' => $gateway
         ]);
 
-        if (Auth::check()){
+        if (Auth::check()) {
             $info = [
                 'name' => Auth::user()->name,
                 'email' => Auth::user()->email
             ];
-        }else{
+        } else {
             $info = [
                 'name' => $request->input('name'),
                 'email' => $request->input('email')
@@ -78,9 +84,13 @@ class InvoiceController extends Controller
         }
 
         $amount = $this->getTotalAmount($invoice);
+
         Session::put('amount', $amount);
 
         $convertedAmount = convert_money_direct($amount, $invoice->currency, $gateway->currency);
+
+        $dataFields = $this->getFields($gateway, $request);
+
         $data = [
             'currency' => $gateway->currency->code,
             'name' => $info['name'],
@@ -93,18 +103,22 @@ class InvoiceController extends Controller
             'pay_amount' => round($convertedAmount + $gateway->charge, 2, PHP_ROUND_HALF_ODD),
             'gateway_id' => $gateway->id,
             'payment_type' => 'invoice',
-            'request_from' => 'merchant'
+            'request_from' => 'merchant',
+            'data' => $dataFields,
+            'fields' => $gateway->fields
         ];
 
         Session::put('userInfo', $info);
         Session::put('without_tax', true);
         Session::put('fund_callback.success_url', '/payment/success');
         Session::put('fund_callback.cancel_url', '/payment/failed');
-        if (!Auth::check()){
+
+        if (!Auth::check()) {
             Session::put('without_auth', true);
-        }else{
+        } else {
             Session::put('without_auth', false);
         }
+
         return $this->proceedToPayment($request, $gateway, $data);
     }
 }

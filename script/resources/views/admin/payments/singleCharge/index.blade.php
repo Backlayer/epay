@@ -76,11 +76,11 @@
                                 <th>{{__('Amount')}}</th>
                                 <th>{{__('Currency')}}</th>
                                 <th>{{__('Redirect Url')}}</th>
-                                <th>{{__('Status')}}</th>
+                                <th>{{__('Payment Status')}}</th>
                                 <th>{{__('Created')}}</th>
                                 <th>{{__('Updated')}}</th>
                                 <th>{{__('Link')}}</th>
-                                <th>{{ __("Action") }}</th>
+                                <th>{{__("Action")}}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -100,25 +100,18 @@
                                             -
                                         @endif
                                     </td>
-                                    <td>
-                                        @if($singleCharge->status)
-                                            <span class="badge badge-success">{{ __("Active") }}</span>
-                                        @else
-                                            <span class="badge badge-danger">{{ __("Inactive") }}</span>
-                                        @endif
-                                    </td>
+                                    <td>{!! $singleCharge->PaymentStatus !!}</td>
                                     <td>{{ formatted_date($singleCharge->created_at) }}</td>
                                     <td>{{ formatted_date($singleCharge->updated_at) }}</td>
-                                    <td>
-                                    <span
-                                        class="clipboard-button"
-                                        data-clipboard-text="{{ route('frontend.single-charge.index', $singleCharge->uuid) }}"
-                                    >
-                                        <i class="fas fa-clipboard"></i>
-
-                                    </span>
+                                    <td class="text-center">
+                                        <span
+                                            class="clipboard-button"
+                                            data-clipboard-text="{{ route('frontend.single-charge.index', $singleCharge->uuid) }}"
+                                        >
+                                            <i class="fas fa-clipboard"></i>
+                                        </span>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <a href="{{ route('admin.payments.single-charge.show', $singleCharge->id) }}" class="btn btn-primary btn-sm">
                                             <i class="fas fa-eye"></i>
                                         </a>

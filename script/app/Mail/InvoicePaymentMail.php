@@ -25,8 +25,8 @@ class InvoicePaymentMail extends Mailable
     {
         $this->invoice = $invoice;
         $this->userInfo = $userInfo;
-
-        $subTotal = $invoice->amount * $invoice->quantity;
+        $invoice->loadSum('items', 'subtotal');
+        $subTotal = $invoice->items_sum_subtotal;
         $discount = ($subTotal * $invoice->discount) / 100;
         $tax = (($subTotal - $discount) * $invoice->tax) / 100;
         $total = ($subTotal - $discount) + $tax;

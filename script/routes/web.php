@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['verify' => true]);
 
-Route::group(['as' => 'frontend.', 'namespace' => 'App\Http\Controllers\Frontend'], function (){
+Route::group(['as' => 'frontend.', 'namespace' => 'App\Http\Controllers\Frontend'], function () {
+    Route::get('/lnk/{hash:string}', 'HomeController@shortLink')->name('home.shortLink');
     Route::get('/', 'HomeController@index')->name('home.index');
     Route::get('/about', 'AboutController@index')->name('about.index');
     Route::get('/products', 'ProductController@index')->name('products.index');
@@ -30,7 +31,6 @@ Route::group(['as' => 'frontend.', 'namespace' => 'App\Http\Controllers\Frontend
 
     Route::get('locale/{locale}', 'LocaleController@setLanguage')->name('set-language');
     Route::post('newsletter-subscribe', '\App\Http\Controllers\CommonController@subscribeToNewsLetter')->name('subscribe-to-news-letter');
-
 
     Route::get('single-charge/{single_charge:uuid}', 'SingleChargeController@index')->name('single-charge.index');
     Route::post('single-charge/{single_charge:uuid}', 'SingleChargeController@gateway')->name('single-charge.gateway');
@@ -61,7 +61,7 @@ Route::group(['as' => 'frontend.', 'namespace' => 'App\Http\Controllers\Frontend
     Route::post('qr/{user:qr}', 'QRPaymentController@gateway')->name('qr.gateway');
     Route::post('qr/{user:qr}/{gateway}/payment', 'QRPaymentController@payment')->name('qr.payment');
 
-    Route::group(['prefix' => 'payment', 'as' => 'payment.'], function (){
+    Route::group(['prefix' => 'payment', 'as' => 'payment.'], function () {
         Route::get('success', [PaymentController::class, 'success'])->name('success');
         Route::get('failed', [PaymentController::class, 'failed'])->name('failed');
         Route::post('test/{website}/{order:uuid}/{gateway}', [PaymentController::class, 'test'])->name('test');
@@ -70,7 +70,7 @@ Route::group(['as' => 'frontend.', 'namespace' => 'App\Http\Controllers\Frontend
 
 Route::group([
     'namespace' => 'App\Lib'
-], function (){
+], function () {
     Route::get('/payment/paypal', 'Paypal@status');
     Route::post('/stripe/payment', 'Stripe@status')->name('stripe.payment');
     Route::get('/stripe', 'Stripe@view')->name('stripe.view');
@@ -89,7 +89,7 @@ Route::group([
     Route::post('/payu/status', 'Payu@status')->name('payu.status');
 });
 
-Route::group(['prefix' => 'cron', 'as' => 'cron.'], function (){
+Route::group(['prefix' => 'cron', 'as' => 'cron.'], function () {
     Route::get('run/temporary-files', [\App\Http\Controllers\CronController::class, 'deleteTemporaryFiles'])->name('run.temporary-files');
 
     Route::get('run/delete-unpaid-external-orders', [\App\Http\Controllers\CronController::class, 'deleteUnpaidExternalOrders'])->name('run.delete-unpaid-external-orders');
@@ -101,8 +101,6 @@ Route::group(['prefix' => 'cron', 'as' => 'cron.'], function (){
     Route::get('run/auto-renew', [\App\Http\Controllers\CronController::class, 'autoRenew'])->name('run.auto-renew');
 });
 
-
-
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['auth', 'admin']], function () {
     // Website
     Route::post('customers/send-email/{user}', 'CustomerController@sendEmail')->name('customers.send-email');
@@ -112,23 +110,29 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'App\Http\Co
     Route::resource('staff', 'StaffController');
     Route::get('promotional-email', 'PromotionalEmailController@index')->name('promotional-email.index');
     Route::post('promotion-email-send', 'PromotionalEmailController@sendEmail')->name('promotional-email.send-email');
-    Route::group(['prefix' => 'reports', 'as' => 'reports.'], function (){
+    Route::group(['prefix' => 'reports', 'as' => 'reports.'], function () {
         Route::get('banks', 'ReportController@banks')->name('banks.index');
     });
     Route::get('transactions', 'TransactionController@index')->name('transactions.index');
     Route::get('transactions/{transaction}', 'TransactionController@show')->name('transactions.show');
     Route::get('get-transaction', 'TransactionController@getTransaction')->name('get-transaction');
-    Route::group(['prefix' => 'payments', 'as' => 'payments.'], function (){
+    Route::group(['prefix' => 'payments', 'as' => 'payments.'], function () {
         Route::get('single-charge', 'SingleChargeController@index')->name('single-charge.index');
         Route::get('single-charge/{singleCharge}', 'SingleChargeController@show')->name('single-charge.show');
+        Route::get('single-charge/{singleCharge}/order/{singleChargeOrder}', 'SingleChargeController@order')->name('single-charge.order');
+        Route::post('single-charge/{singleChargeOrder}', 'SingleChargeController@confirm')->name('single-charge.confirm');
+
         Route::get('donations', 'DonationController@index')->name('donations.index');
         Route::get('donations/{donation}', 'DonationController@show')->name('donations.show');
         Route::get('get-donations', 'DonationController@getDonations')->name('get-donations');
         Route::get('get-single-charge', 'SingleChargeController@getSingleCharge')->name('single-charge');
     });
+
     Route::get('invoices', 'InvoiceController@index')->name('invoices.index');
     Route::get('invoices/{invoice}', 'InvoiceController@show')->name('invoices.show');
     Route::get('get-invoices', 'InvoiceController@getInvoices')->name('get-invoices');
+    Route::post('invoices/{invoice}/confirm', 'InvoiceController@confirm')->name('invoices.confirm');
+
     Route::get('merchants', 'MerchantController@index')->name('merchants.index');
     Route::get('merchants/{merchant}/log', 'MerchantController@log')->name('merchants.log');
     Route::get('payment-plans', 'PaymentPlanController@index')->name('payment-plans.index');
@@ -149,7 +153,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'App\Http\Co
     Route::put('currencies/default/{currency}', 'CurrencyController@makeDefault')->name('currencies.make.default');
     Route::resource('currencies', 'CurrencyController');
     Route::resource('banks', 'BankController')->only('index', 'update', 'store', 'destroy');
-//    Route::resource('taxes', 'TaxController');
+    //    Route::resource('taxes', 'TaxController');
     Route::post('update-general', 'AdminController@updateGeneral')->name('update-general');
     Route::post('update-password', 'AdminController@updatePassword')->name('update-password');
     Route::get('clear-cache', 'AdminController@clearCache')->name('clear-cache');
@@ -163,7 +167,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'App\Http\Co
     Route::post('page/delete-all',  'PageController@deleteAll')->name('page.delete-all');
     Route::resource('page', 'PageController');
     Route::resource('payment-gateways', 'PaymentGatewayController')->except('show');
-    Route::post('/orders/mass-destroy','OrderController@massDestroy')->name('orders.mass-destroy');
+    Route::post('/orders/mass-destroy', 'OrderController@massDestroy')->name('orders.mass-destroy');
     Route::get('orders/invoice/{order}/print', 'OrderController@print')->name('orders.print.invoice');
     Route::get('orders/pdf', 'OrderController@orderPdf')->name('orders.pdf');
     Route::post('orders/payment-status/{id}', 'OrderController@paymentStatusUpdate')->name('orders.payment-status');
@@ -201,8 +205,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'App\Http\Co
             Route::get('footer', 'FooterController@index')->name('footer.index');
             Route::post('footer/store', 'FooterController@store')->name('footer.store');
 
-            Route::get('about','AboutController@index')->name('about.index');
-            Route::put('about','AboutController@update')->name('about.update');
+            Route::get('about', 'AboutController@index')->name('about.index');
+            Route::put('about', 'AboutController@update')->name('about.update');
 
             Route::resource('faq', 'FAQController')->except('show');
         });
@@ -210,9 +214,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'App\Http\Co
         Route::put('charges/update', 'IncomeChargeController@update')->name('charges.update');
     });
 
-
-    Route::post('/kyc-method/mass-destroy','KycMethodController@massDestroy')->name('kyc-method.mass-destroy');
-    Route::resource('kyc-method','KycMethodController')->except('destroy');
+    Route::post('/kyc-method/mass-destroy', 'KycMethodController@massDestroy')->name('kyc-method.mass-destroy');
+    Route::resource('kyc-method', 'KycMethodController')->except('destroy');
 
     Route::post('kyc-requests/destroy/mass',  'KycRequestController@destroyMass')->name('kyc-requests.destroy.mass');
     Route::post('users/kyc-verified/{user}', 'KycRequestController@kycVerified')->name('kyc-requests.kyc-verified');
@@ -264,6 +267,4 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'App\Http\Co
     Route::get('/site-settings', 'SitesettingsController@index')->name('site-settings');
     Route::post('/site-settings-update/{type}', 'SitesettingsController@update')->name('site-settings.update');
     Route::resource('cron', 'CronController');
-
 });
-

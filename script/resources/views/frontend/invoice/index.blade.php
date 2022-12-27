@@ -10,7 +10,7 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header">
-                                <h4>{{ __("items Information") }}</h4>
+                                <h4>{{ __("Payment Information") }}</h4>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -33,7 +33,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                
+
                                 <div class="table-responsive">
                                     <table class="table table-bordered mb-3">
                                         <tbody>
@@ -110,35 +110,14 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text text-future">{{ $invoice->currency->symbol  }}</span>
                                             </div>
-                                            <input class="form-control" type="number" name="amount" value="{{ round($amount, 2, PHP_ROUND_HALF_ODD) }}" @if($amount) readonly @endif>
+                                            <input class="form-control" type="number" name="amount" value="{{ number_format($amount, 2) }}" step="any" min="0.1" @if($amount > 0) readonly @endif>
                                         </div>
                                     </div>
 
-                                    @if(!$invoice->is_paid)
-                                        <div class="row align-items-center">
-                                            @foreach($gateways as $gateway)
-                                                <div class="col-md-4 my-5 my-sm-1">
-                                                    <div class="custom-control shadow-sm custom-radio image-checkbox">
-                                                        <input type="radio" name="gateway" id="{{ str($gateway->name)->slug('_') }}" value="{{ $gateway->id }}" class="custom-control-input">
-                                                        <label class="custom-control-label d-flex align-items-center" for="{{ str($gateway->name)->slug('_') }}">
-                                                            <img src="{{ $gateway->logo }}" alt="#" class="img-fluid">
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-
-                                        <button class="btn btn-dark mt-2">
-                                            {{ __("Pay Now") }}
-                                        </button>
-                                    @else
-                                        <div class="text-center">
-                                            <span class="badge badge-success">
-                                                <i class="fas fa-check-circle"></i>
-                                                {{ __('Paid') }}
-                                            </span>
-                                        </div>
-                                    @endif
+                                    @include('payment.gatewayList', [
+                                        'is_paid' => $invoice->IsPaid,
+                                        'gateways' => $gateways
+                                    ])
                                 </div>
                             </div>
                         </form>

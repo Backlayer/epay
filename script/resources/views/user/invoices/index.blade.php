@@ -44,9 +44,9 @@
             @if($invoices->count() > 0)
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card">
+                        <div class="card h-100">
                             <div class="card-body">
-                                <div class="table-responsive">
+                                <div class="table-responsive h-100">
                                     <table class="table align-items-center table-flush">
                                         <thead class="thead-light">
                                         <tr>
@@ -56,7 +56,7 @@
                                             <th>{{ __('Discount') }}</th>
                                             <th>{{ __('Tax') }}</th>
                                             <th>{{ __('Total') }}</th>
-                                            <th>{{ __('Is Paid') }}</th>
+                                            <th>{{ __('Payment Status') }}</th>
                                             <th>{{ __('Due Date') }}</th>
                                             <th>{{ __("Created At") }}</th>
                                             <th>{{ __("Action") }}</th>
@@ -71,13 +71,7 @@
                                                 <td>{{ __(':percentage %', ['percentage' => $invoice->discount]) }}</td>
                                                 <td>{{ __(':percentage %', ['percentage' => $invoice->tax]) }}</td>
                                                 <td>{{ currency_format($invoice->total, currency: $invoice->currency) }}</td>
-                                                <td>
-                                                    @if($invoice->is_paid)
-                                                        <span class="badge badge-pill badge-success"><i class="fas fa-check"></i> {{ __('Paid') }}</span>
-                                                    @else
-                                                        <span class="badge badge-pill badge-danger"><i class="fas fa-spinner"></i> {{ __('Unpaid') }}</span>
-                                                    @endif
-                                                </td>
+                                                <td>{!! $invoice->PaymentStatus !!}</td>
                                                 <td>{{ formatted_date($invoice->due_date) }}</td>
                                                 <td>{{ formatted_date($invoice->created_at) }}</td>
                                                 <td class="text-right">
@@ -86,22 +80,30 @@
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                            <a class="dropdown-item" href="{{ route('user.invoices.edit', $invoice->id) }}">
-                                                                <i class="fas fa-edit"></i>
+                                                            @if ($invoice->status_paid === '0')
+                                                            <a class="dropdown-item d-flex" href="{{ route('user.invoices.edit', $invoice->id) }}">
+                                                                <i class="fas fa-edit fa-fw"></i>
                                                                 {{ __("Edit") }}
                                                             </a>
-                                                            <a class="dropdown-item confirm-action"
+                                                            <a class="dropdown-item d-flex confirm-action"
                                                                href="#"
                                                                data-icon="fas fa-trash"
                                                                data-action="{{ route('user.invoices.destroy', $invoice->id) }}"
                                                                data-method="DELETE"
                                                             >
-                                                                <i class="fas fa-trash"></i>
+                                                                <i class="fas fa-trash fa-fw"></i>
                                                                 {{ __("Delete") }}
                                                             </a>
+                                                            @else
+                                                            <a class="dropdown-item d-flex" href="{{ route('user.invoices.show', $invoice->id) }}">
+                                                                <i class="fas fa-book fa-fw"></i>
+                                                                {{ __("View") }}
+                                                            </a>
+                                                            @endif
+
                                                             <input type="hidden" id="clip{{ $loop->index }}" value="{{ route('frontend.invoice.index', $invoice->uuid) }}">
-                                                            <button class="dropdown-item" data-clipboard-target="#clip{{ $loop->index }}">
-                                                                <i class="fas fa-clipboard" ></i>
+                                                            <button class="dropdown-item d-flex" data-clipboard-target="#clip{{ $loop->index }}">
+                                                                <i class="fas fa-clipboard fa-fw" ></i>
                                                                 {{ __('Copy to Clipboard') }}
                                                             </button>
                                                         </div>

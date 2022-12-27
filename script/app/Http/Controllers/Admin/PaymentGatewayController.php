@@ -6,10 +6,13 @@ use App\Models\Currency;
 use App\Models\Gateway;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Storage;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class PaymentGatewayController extends Controller
 {
+    public $types = ['text', 'number', 'email', 'tel', 'textarea', 'file', 'date'];
+
     public function __construct()
     {
         $this->middleware('permission:gateways-create')->only('create', 'store');
@@ -27,8 +30,9 @@ class PaymentGatewayController extends Controller
     public function create()
     {
         $currencies = Currency::whereStatus(1)->get();
+        $types = $this->types;
 
-        return view('admin.gateway.create', compact('currencies'));
+        return view('admin.gateway.create', compact('currencies', 'types'));
     }
 
     public function store(Request $request)
@@ -40,12 +44,14 @@ class PaymentGatewayController extends Controller
             'currency' => 'required|exists:currencies,id',
             'min_amount' => ['required', 'numeric', 'min:0'],
             'max_amount' => ['required', 'numeric', 'min:0', 'gte:min_amount'],
+            'fields' => ['required', 'array'],
+            'fields.*.label' => ['required', 'string'],
+            'fields.*.type' => ['required', 'string', Rule::in($this->types)],
         ]);
 
         $gateway = new Gateway();
 
         if ($request->hasFile('logo')) {
-
             $image = $request->file('logo');
             $path = 'uploads/' . strtolower(env('APP_NAME')) . date('/y/m/');
             $name = uniqid() . date('dmy') . time() . "." . strtolower($image->getClientOriginalExtension());
@@ -62,16 +68,22 @@ class PaymentGatewayController extends Controller
         $gateway->image_accept = $request->image_accept;
         $gateway->status = $request->status;
         $gateway->data = $request->instruction;
+        $gateway->fields = $request->fields;
         $gateway->save();
 
-        return response()->json('Successfully Created!');
+        return response()->json([
+            'message' => __('Successfully Created'),
+            'redirect' => route('admin.payment-gateways.index')
+        ]);
     }
 
     public function edit($id)
     {
         $gateway = Gateway::findOrFail($id);
         $currencies = Currency::whereStatus(1)->get();
-        return view('admin.gateway.edit', compact('gateway', 'currencies'));
+        $types = $this->types;
+
+        return view('admin.gateway.edit', compact('gateway', 'currencies', 'types'));
     }
 
     public function update(Request $request, $id)
@@ -84,6 +96,9 @@ class PaymentGatewayController extends Controller
             'currency' => 'required|exists:currencies,id',
             'min_amount' => ['required', 'numeric', 'min:0'],
             'max_amount' => ['required', 'numeric', 'min:0', 'gte:min_amount'],
+            'fields' => ['required', 'array'],
+            'fields.*.label' => ['required', 'string'],
+            'fields.*.type' => ['required', 'string', Rule::in($this->types)],
         ]);
 
         $gateway = Gateway::findOrFail($id);
@@ -124,9 +139,13 @@ class PaymentGatewayController extends Controller
         $gateway->status = $request->status;
         $gateway->image_accept = $request->image_accept;
         $gateway->min_amount = $request->min_amount;
-        $gateway->max_amount = $request->max_amount;      
+        $gateway->max_amount = $request->max_amount;
+        $gateway->fields = $request->fields;
         $gateway->save();
 
-        return response()->json('Successfully Updated!');
+        return response()->json([
+            'message' => __('Successfully Successfully'),
+            'redirect' => route('admin.payment-gateways.index')
+        ]);
     }
 }

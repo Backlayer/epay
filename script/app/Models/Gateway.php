@@ -12,6 +12,10 @@ class Gateway extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'fields' => 'json'
+    ];
+
     public function currency(): BelongsTo
     {
         return $this->belongsTo(Currency::class);

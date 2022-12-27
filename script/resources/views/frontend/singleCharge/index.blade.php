@@ -58,26 +58,14 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text text-future">{{ $singleCharge->user->currency->symbol  }}</span>
                                         </div>
-                                        <input class="form-control" type="number" name="amount" value="{{ round($singleCharge->amount, 2, PHP_ROUND_HALF_ODD) }}" step="any" @if($singleCharge->amount > 0) readonly @endif>
+                                        <input class="form-control" type="number" name="amount" value="{{ number_format($singleCharge->amount, 2) }}" step="any" min="0.1" @if($singleCharge->amount > 0) readonly @endif>
                                     </div>
                                 </div>
 
-                                <div class="row align-items-center">
-                                    @foreach($gateways as $gateway)
-                                        <div class="col-md-4">
-                                            <div class="custom-control custom-radio image-checkbox">
-                                                <input type="radio" name="gateway" id="{{ str($gateway->name)->slug('_') }}" value="{{ $gateway->id }}" class="custom-control-input">
-                                                <label class="custom-control-label" for="{{ str($gateway->name)->slug('_') }}">
-                                                    <img src="{{ $gateway->logo }}" alt="#" class="img-fluid">
-                                                </label>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-
-                                <button class="btn btn-dark">
-                                    {{ __("Pay Now") }}
-                                </button>
+                                @include('payment.gatewayList', [
+                                    'is_paid' => $singleCharge->IsPaid,
+                                    'gateways' => $gateways
+                                ])
                             </div>
                         </div>
                     </form>

@@ -4,7 +4,7 @@ function getSubtotal(el) {
     let $parent = $(el).closest('.row');
     let $amount = $parent.find('#amount').val() ?? 0;
     let $quantity = $parent.find('#quantity').val() ?? 0;
-    $parent.find('#subtotal').val(parseInt($amount) * parseInt($quantity))
+    $parent.find('#subtotal').val(parseFloat($amount) * parseInt($quantity))
 }
 
 $(document).ready(function () {
@@ -17,19 +17,19 @@ $(document).ready(function () {
             'amount': null
         },
         show: function () {
-            if(item <= 9){
+            if (item <= 9) {
                 item++
                 $(this).slideDown().prepend('<hr>');
                 $(this).find('#quantity').attr('type', 'number');
                 $(this).find('#amount').attr('type', 'number');
                 $(this).find('#item_number span').html(item)
-            }else{
+            } else {
                 Notify('error', null, 'Item Limit Exceed')
             }
         },
         hide: function (deleteElement) {
             $.confirm({
-                title:"Heads Up!",
+                title: "Heads Up!",
                 icon: 'fas fa-trash',
                 theme: 'modern',
                 closeIcon: true,

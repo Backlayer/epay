@@ -52,7 +52,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="card-body overflow-auto repeaters" data-repeater-list="fields" style="max-height: 588px; height: 588px">
+                    <div class="card-body overflow-auto repeaters h-100" data-repeater-list="fields">
                         <div class="form-group" data-repeater-item>
                             <div class="input-group">
                                 <input type="text" name="label" class="form-control" placeholder="{{ __('Enter input label') }}" aria-label="" required>

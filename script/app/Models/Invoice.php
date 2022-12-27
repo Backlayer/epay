@@ -7,12 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
+use App\Helpers\HasPayment;
 
 class Invoice extends Model
 {
     use HasFactory;
+    use HasPayment;
 
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'fields' => 'json',
+        'data' => 'json',
+    ];
 
     public function owner(): BelongsTo
     {
@@ -29,11 +36,31 @@ class Invoice extends Model
         return $this->hasMany(InvoiceItem::class);
     }
 
+    public function gateway(): BelongsTo
+    {
+        return $this->belongsTo(Gateway::class);
+    }
+
+    public function getIsPaidAttribute()
+    {
+        return $this->checkIsPaid((object) $this->attributes);
+    }
+
+    public function getIsConfirmedAttribute()
+    {
+        return $this->checkConfirmed((object) $this->attributes);
+    }
+
+    public function getPaymentStatusAttribute()
+    {
+        return $this->paymentStatus($this->attributes['status_paid']);
+    }
+
     protected static function boot()
     {
         parent::boot();
 
-        static::creating(function (self $donation){
+        static::creating(function (self $donation) {
             $donation->uuid = Str::uuid()->toString();
         });
     }

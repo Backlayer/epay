@@ -109,7 +109,7 @@
                                     <tr>
                                         <th>{{ __("Title") }}</th>
                                         <th>{{ __("Amount") }}</th>
-                                        <th>{{ __("Status") }}</th>
+                                        <th>{{ __('Payment Status') }}</th>
                                         <th>{{ __('Link') }}</th>
                                         <th>{{ __("Created At") }}</th>
                                         <th>{{ __("Action") }}</th>
@@ -122,13 +122,7 @@
                                             <td class="budget">
                                                 {{ currency_format($charge->amount, 'icon', $charge->currency->symbol) }}
                                             </td>
-                                            <td>
-                                                @if($charge->status)
-                                                    <span class="badge badge-pill badge-success">{{ __("Active") }}</span>
-                                                @else
-                                                    <span class="badge badge-pill badge-warning">{{ __("Inactive") }}</span>
-                                                @endif
-                                            </td>
+                                            <td>{!! $charge->PaymentStatus !!}</td>
                                             <td>
                                                 <input type="hidden" id="clip{{ $loop->index }}" value="{{ route('frontend.single-charge.index', $charge->uuid) }}">
                                                 <span class="link" data-clipboard-target="#clip{{ $loop->index }}">
@@ -143,20 +137,9 @@
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                        <a class="dropdown-item confirm-action"
-                                                           href="#"
-                                                           data-action="{{ route('user.single-charges.disable', $charge->id) }}"
-                                                           data-icon="fas fa-ban"
-                                                        >
-                                                            <i class="fas fa-ban"></i>
-                                                            {{ __('Disable') }}
-                                                        </a>
-                                                        <a class="dropdown-item" href="{{ route('user.single-charges.show', $charge->id) }}">
-                                                            <i class="fas fa-exchange-alt"></i>
-                                                            {{ __("Transactions") }}
-                                                        </a>
+                                                        @if ($charge->lastOrder()?->status_paid === '0')
                                                         <a class="dropdown-item" href="{{ route('user.single-charges.edit', $charge->id) }}">
-                                                            <i class="fas fa-edit"></i>
+                                                            <i class="fas fa-edit fa-fw"></i>
                                                             {{ __("Edit") }}
                                                         </a>
                                                         <a class="dropdown-item confirm-action" href="#"
@@ -164,9 +147,15 @@
                                                            data-method="DELETE"
                                                            data-icon="fas fa-trash"
                                                         >
-                                                            <i class="fas fa-trash"></i>
+                                                            <i class="fas fa-trash fa-fw"></i>
                                                             {{ __("Delete") }}
                                                         </a>
+                                                        @else
+                                                        <a class="dropdown-item d-flex" href="{{ route('user.single-charges.show', $charge->id) }}">
+                                                            <i class="fas fa-book fa-fw"></i>
+                                                            {{ __("View") }}
+                                                        </a>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </td>
@@ -175,6 +164,7 @@
                                     </tbody>
                                 </table>
                             </div>
+
                             {{ $charges->links('vendor/pagination/bootstrap-5') }}
                         </div>
                     </div>

@@ -22,38 +22,39 @@ class DashboardController extends Controller
         return view('user.dashboard.index', compact('transactions', 'payouts'));
     }
 
-    function transactions(Request $request) {
+    function transactions(Request $request)
+    {
         $months = Transaction::whereUserId(auth()->id())
-                        ->whereYear('created_at', $request->year ?? date("Y"))
-                        ->selectRaw('month(created_at) month')
-                        ->groupBy('month')
-                        ->get()
-                        ->map(function ($q) {
-                            $data['month'] = Carbon::createFromFormat('m', $q->month)->format('F');
-                            return $data;
-                        });
+            ->whereYear('created_at', $request->year ?? date("Y"))
+            ->selectRaw('month(created_at) month')
+            ->groupBy('month')
+            ->get()
+            ->map(function ($q) {
+                $data['month'] = Carbon::createFromFormat('m', $q->month)->format('F');
+                return $data;
+            });
 
         $credit = Transaction::whereUserId(auth()->id())->where('amount', '>', 0)
-                    ->whereYear('created_at', $request->year ?? date("Y"))
-                    ->selectRaw('month(created_at) month, sum(amount) amount')
-                    ->groupBy('month')
-                    ->get()
-                    ->map(function ($q) {
-                        $data['month'] = Carbon::createFromFormat('m', $q->month)->format('F');
-                        $data['amount'] = number_format(max($q->amount, 0), 2);
-                        return $data;
-                    });
+            ->whereYear('created_at', $request->year ?? date("Y"))
+            ->selectRaw('month(created_at) month, sum(amount) amount')
+            ->groupBy('month')
+            ->get()
+            ->map(function ($q) {
+                $data['month'] = Carbon::createFromFormat('m', $q->month)->format('F');
+                $data['amount'] = number_format(max($q->amount, 0), 2);
+                return $data;
+            });
 
         $debit = Transaction::whereUserId(auth()->id())->where('amount', '<', 0)
-                    ->whereYear('created_at', $request->year ?? date("Y"))
-                    ->selectRaw('month(created_at) month, sum(amount) amount')
-                    ->groupBy('month')
-                    ->get()
-                    ->map(function ($q) {
-                        $data['month'] = Carbon::createFromFormat('m', $q->month)->format('F');
-                        $data['amount'] = number_format($q->amount, 2);
-                        return $data;
-                    });
+            ->whereYear('created_at', $request->year ?? date("Y"))
+            ->selectRaw('month(created_at) month, sum(amount) amount')
+            ->groupBy('month')
+            ->get()
+            ->map(function ($q) {
+                $data['month'] = Carbon::createFromFormat('m', $q->month)->format('F');
+                $data['amount'] = number_format($q->amount, 2);
+                return $data;
+            });
 
         return response()->json([
             'credit' => $credit,
@@ -69,7 +70,7 @@ class DashboardController extends Controller
             ->selectRaw('month(created_at) month, sum(amount) amount')
             ->groupBy('month')
             ->get()
-            ->map(function ($q) use($request) {
+            ->map(function ($q) use ($request) {
                 $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('d-m-Y');
                 $data['amount'] = number_format($q->amount, 2);
                 return $data;
@@ -83,15 +84,15 @@ class DashboardController extends Controller
     public function singleCharge(Request $request)
     {
         $singleCharge = SingleCharge::whereUserId(auth()->id())
-                    ->whereYear('created_at', '>=', Carbon::now()->subDays($request->day ?? 7))
-                    ->selectRaw('month(created_at) month, sum(amount) amount')
-                    ->groupBy('month')
-                    ->get()
-                    ->map(function ($q) use($request) {
-                        $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('d-m-Y');
-                        $data['amount'] = number_format($q->amount, 2);
-                        return $data;
-                    });
+            ->whereYear('created_at', '>=', Carbon::now()->subDays($request->day ?? 7))
+            ->selectRaw('month(created_at) month, sum(amount) amount')
+            ->groupBy('month')
+            ->get()
+            ->map(function ($q) use ($request) {
+                $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('d-m-Y');
+                $data['amount'] = number_format($q->amount, 2);
+                return $data;
+            });
 
         return response()->json([
             'singlecharge' => $singleCharge,
@@ -101,15 +102,15 @@ class DashboardController extends Controller
     public function donations(Request $request)
     {
         $donations = Donation::whereUserId(auth()->id())
-                    ->whereYear('created_at', '>=', Carbon::now()->subDays($request->day ?? 7))
-                    ->selectRaw('month(created_at) month, sum(amount) amount')
-                    ->groupBy('month')
-                    ->get()
-                    ->map(function ($q) use($request) {
-                        $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('d-m-Y');
-                        $data['amount'] = number_format($q->amount, 2);
-                        return $data;
-                    });
+            ->whereYear('created_at', '>=', Carbon::now()->subDays($request->day ?? 7))
+            ->selectRaw('month(created_at) month, sum(amount) amount')
+            ->groupBy('month')
+            ->get()
+            ->map(function ($q) use ($request) {
+                $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('d-m-Y');
+                $data['amount'] = number_format($q->amount, 2);
+                return $data;
+            });
 
         return response()->json([
             'donations' => $donations,
@@ -119,15 +120,15 @@ class DashboardController extends Controller
     public function plans(Request $request)
     {
         $plans = UserPlan::whereOwnerId(auth()->id())
-                ->whereYear('created_at', '>=', Carbon::now()->subDays($request->day ?? 7))
-                ->selectRaw('month(created_at) month, sum(amount) amount')
-                ->groupBy('month')
-                ->get()
-                ->map(function ($q) use($request) {
-                    $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('d-m-Y');
-                    $data['amount'] = number_format($q->amount, 2);
-                    return $data;
-                });
+            ->whereYear('created_at', '>=', Carbon::now()->subDays($request->day ?? 7))
+            ->selectRaw('month(created_at) month, sum(amount) amount')
+            ->groupBy('month')
+            ->get()
+            ->map(function ($q) use ($request) {
+                $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('d-m-Y');
+                $data['amount'] = number_format($q->amount, 2);
+                return $data;
+            });
 
         return response()->json([
             'plans' => $plans,
@@ -137,15 +138,15 @@ class DashboardController extends Controller
     public function qrPayments(Request $request)
     {
         $qrpayments = Qrpayment::whereSellerId(auth()->id())
-                    ->whereYear('created_at', '>=', Carbon::now()->subDays($request->day ?? 7))
-                    ->selectRaw('month(created_at) month, sum(amount) amount')
-                    ->groupBy('month')
-                    ->get()
-                    ->map(function ($q) use($request) {
-                        $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('d-m-Y');
-                        $data['amount'] = number_format($q->amount, 2);
-                        return $data;
-                    });
+            ->whereYear('created_at', '>=', Carbon::now()->subDays($request->day ?? 7))
+            ->selectRaw('month(created_at) month, sum(amount) amount')
+            ->groupBy('month')
+            ->get()
+            ->map(function ($q) use ($request) {
+                $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('d-m-Y');
+                $data['amount'] = number_format($q->amount, 2);
+                return $data;
+            });
 
         return response()->json([
             'qrpayments' => $qrpayments,

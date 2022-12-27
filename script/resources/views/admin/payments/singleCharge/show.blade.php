@@ -45,8 +45,9 @@
                                             <th>{{ __("From") }}</th>
                                             <th>{{ __("Amount") }}</th>
                                             <th>{{ __("Charge") }}</th>
-                                            <th>{{ __("Status") }}</th>
+                                            <th>{{ __('Payment Status') }}</th>
                                             <th>{{ __("Created At") }}</th>
+                                            <th>{{ __("Action") }}</th>
                                         </tr>
                                         </thead>
                                         <tbody class="list" style="min-height: 200px">
@@ -61,14 +62,13 @@
                                                 <td>
                                                     {{ currency_format($order->charge, 'icon', $order->currency->symbol) }}
                                                 </td>
-                                                <td>
-                                                    @if($order->status)
-                                                        <span class="badge badge-pill badge-success">{{ __("Success") }}</span>
-                                                    @else
-                                                        <span class="badge badge-pill badge-danger">{{ __("Failed") }}</span>
-                                                    @endif
-                                                </td>
+                                                <td>{!! $order->PaymentStatus !!}</td>
                                                 <td>{{ formatted_date($order->created_at) }}</td>
+                                                <td class="text-center">
+                                                    <a href="{{ route('admin.payments.single-charge.order', [$singleCharge->id, $order->id]) }}" class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                </td>
                                             </tr>
                                         @endforeach
                                         </tbody>

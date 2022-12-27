@@ -34,12 +34,11 @@ class Mercado
         $gateway = Gateway::findOrFail($array['gateway_id']);
         $amount = $array['pay_amount'];
 
-        if ($gateway->min_amount > $amount ){
+        if ($gateway->min_amount > $amount) {
             return redirect()->back()->with('error', __('The minimum transaction amount is :amount', ['amount' => currency_format($gateway->min_amount, currency: $gateway->currency)]));
-        }elseif($gateway->max_amount < $amount){
+        } elseif ($gateway->max_amount < $amount) {
             return redirect()->back()->with('error', __('The maximum transaction amount is :amount', ['amount' => currency_format($gateway->max_amount, currency: $gateway->currency)]));
         }
-
         $currency = $array['currency'];
         $email = $array['email'];
         $amount = $array['pay_amount'];
@@ -62,6 +61,7 @@ class Mercado
         $data['name'] = $name;
         $data['email'] = $email;
         $data['currency'] = $currency;
+        $data['payment_type'] = $array['payment_type'];
 
 
         if ($test_mode == 0) {
@@ -84,9 +84,9 @@ class Mercado
             $payer->email = $email;
             $payer->date_created = Carbon::now();
 
-            if (Session::get('without_auth')){
+            if (Session::get('without_auth')) {
                 $url = route('mercadopago.status');
-            }else{
+            } else {
                 $url = route('user.mercadopago.status');
             }
 
@@ -114,7 +114,6 @@ class Mercado
             return request()->expectsJson() ?
                 $redirectUrl :
                 redirect($redirectUrl);
-
         } catch (Throwable $th) {
             Session::flash('error', $th->getMessage());
             return request()->expectsJson() ?
@@ -142,6 +141,7 @@ class Mercado
             $data['charge'] = $info['charge'];
             $data['status'] = $response['status'] == 'pending' ? 2 : 1;
             $data['payment_status'] = $response['status'] == 'pending' ? 2 : 1;
+            $data['payment_type'] = $info['payment_type'];
 
 
             Session::forget('mercadopago_credentials');
