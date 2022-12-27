@@ -95,7 +95,8 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "process-timeout": 1000
     },
     "minimum-stability": "dev",
     "prefer-stable": true
