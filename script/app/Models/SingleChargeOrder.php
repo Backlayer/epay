@@ -42,6 +42,11 @@ class SingleChargeOrder extends Model
         return $this->belongsTo(Currency::class);
     }
 
+    public function getIsPaidAttribute()
+    {
+        return $this->checkIsPaid((object) $this->attributes);
+    }
+
     public function getPaymentStatusAttribute()
     {
         return $this->paymentStatus($this->status_paid ?? '0');
