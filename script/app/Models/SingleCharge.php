@@ -39,22 +39,22 @@ class SingleCharge extends Model
 
     public function lastOrder()
     {
-        return $this->orders()->latest()->first();
+        return $this->orders()?->latest()?->first();
     }
 
     public function getIsConfirmedAttribute()
     {
-        return $this->checkConfirmed($this->orders()->latest()->first());
+        return $this->checkConfirmed($this->lastOrder());
     }
 
     public function getIsPaidAttribute()
     {
-        return $this->checkIsPaid($this->orders()->latest()->first());
+        return $this->checkIsPaid($this->lastOrder());
     }
 
     public function getPaymentStatusAttribute()
     {
-        return $this->paymentStatus($this->orders()->latest()->first()->status_paid ?? '0');
+        return $this->paymentStatus($this->lastOrder()?->status_paid ?? '0');
     }
 
     /* public function getAttribute($key): mixed

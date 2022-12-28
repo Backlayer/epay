@@ -27,6 +27,7 @@ Route::group([
     Route::get('received-request/', 'RequestMoneyController@receivedRequest')->name('received-request.index');
 
     // Invoices
+    Route::resource('invoices', 'InvoiceController');
     Route::get('invoices/{invoice}', 'InvoiceController@show')->name('invoices.show');
     Route::get('invoices/{invoice}/edit', 'InvoiceController@edit')->name('invoices.edit');
     Route::post('invoices/{invoice}/send', 'InvoiceController@send')->name('invoices.send');
@@ -80,10 +81,10 @@ Route::group([
     Route::get('transactions/{type?}', 'TransactionsController@index')->name('transactions.index');
     Route::get('subscription/{subscription}', 'SubscriptionController@show')->name('subscription.show');
     Route::post('subscription/{subscription}/auto-renew', 'SubscriptionController@autoRenew')->name('subscription.auto-renew');
+
     Route::resource('kyc-verifications', 'KycVerificationController')->withoutMiddleware('kyc');
     Route::resource('plans', 'PlanController');
     Route::resource('charges', 'ChargeController');
-    Route::resource('invoices', 'InvoiceController');
     Route::resource('supports', 'SupportController');
     Route::resource('transfers', 'TransferController');
     Route::resource('donations', 'DonationController');
@@ -104,6 +105,7 @@ Route::group([
     Route::resource('request-money', 'RequestMoneyController')->only('index', 'store', 'update');
 
     Route::get('store-products/{store}', [PhysicalProductController::class, 'storeProducts'])->name('store-products');
+
     // Payment
     Route::group(['prefix' => 'payment', 'as' => 'payment.'], function () {
         Route::get('success', [PaymentController::class, 'success'])->name('success');

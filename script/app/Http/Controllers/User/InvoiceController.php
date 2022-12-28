@@ -27,6 +27,7 @@ class InvoiceController extends Controller
     public function create()
     {
         $charge = get_option('charges')['invoice_charge'] ?? ['rate' => 0, 'type' => 'percentage'];
+
         return view('user.invoices.create', compact('charge'));
     }
 

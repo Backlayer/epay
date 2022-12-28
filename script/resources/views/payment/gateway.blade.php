@@ -62,7 +62,7 @@
                                 <form action="{{ route($formRoute, [$source->uuid, $gateway->id]) }}" method="post" role="form" class="form-light form" enctype="multipart/form-data">
                                     @csrf
 
-                                    @if(count($gateway->fields) || !Auth::check() || $gateway->phone_required == 1 || $gateway->image_accept == 1)
+                                    @if(isset($gateway->fields) && count($gateway->fields) || !Auth::check() || $gateway->phone_required == 1 || $gateway->image_accept == 1)
                                         <h6 class="h2 d-inline-block mb-0">{{ __('Enter your payment details below') }}</h6>
                                         <small class="text-mute text-danger d-block">{{ __('These data must be completed after making your payment') }}</small>
 
@@ -121,7 +121,7 @@
                                             </div>
                                         @endif
 
-                                        @if(count($gateway->fields))
+                                        @if(isset($gateway->fields) && count($gateway->fields))
                                             @foreach($gateway->fields as $index => $field)
                                                 @if($field['type'] == 'textarea')
                                                     <div class="form-group">
