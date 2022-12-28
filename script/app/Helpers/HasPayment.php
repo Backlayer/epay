@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use App\Helpers\HasUploader;
+use Throwable;
 
 trait HasPayment
 {
@@ -101,12 +102,20 @@ trait HasPayment
 
     private function checkIsPaid($payment)
     {
-        return $payment->status_paid !== '0';
+        try {
+            return $payment->status_paid !== '0';
+        } catch (Throwable $exception) {
+            return false;
+        }
     }
 
     private function checkConfirmed($payment)
     {
-        return $payment->status_paid === '2';
+        try {
+            return $payment->status_paid === '2';
+        } catch (Throwable $exception) {
+            return false;
+        }
     }
 
     private function paymentStatus($status)
