@@ -89,7 +89,7 @@ class DashboardController extends Controller
             ->groupBy('month')
             ->get()
             ->map(function ($q) use ($request) {
-                $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('d-m-Y');
+                $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('Y-m-d');
                 $data['amount'] = number_format($q->amount, 2);
                 return $data;
             });

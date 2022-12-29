@@ -1,47 +1,47 @@
 "use strict";
 
 $(document).ready(function () {
-    getChartData();
-    getOrderData();
     getSingleChargeData();
-    getDonationsData();
-    getPlanData();
-    getQrPaymentData();
+    // getChartData();
+    // getOrderData();
+    // getDonationsData();
+    // getPlanData();
+    // getQrPaymentData();
 });
 
-$('#current-year').on('change', function() {
+$('#current-year').on('change', function () {
     let year = $(this).val();
     getChartData(year)
 })
 
-$('#order-perfomace').on('change', function() {
-    let day = $(this).val();
-    getOrderData(day)
-})
-
-$('#single-charge-perfomace').on('change', function() {
+$('#single-charge-perfomace').on('change', function () {
     let day = $(this).val();
     getSingleChargeData(day)
 })
 
-$('#donations-perfomace').on('change', function() {
+$('#order-perfomace').on('change', function () {
+    let day = $(this).val();
+    getOrderData(day)
+})
+
+$('#donations-perfomace').on('change', function () {
     let day = $(this).val();
     getDonationsData(day)
 })
 
-$('#plans-perfomace').on('change', function() {
+$('#plans-perfomace').on('change', function () {
     let day = $(this).val();
     getPlanData(day)
 })
 
-$('#qr-payments-perfomace').on('change', function() {
+$('#qr-payments-perfomace').on('change', function () {
     let day = $(this).val();
     getQrPaymentData(day)
 })
 
-
 function getChartData(year = null) {
-    let chart_url = $("#get-chart-data").val();
+    const chart_url = $("#get-chart-data").val();
+
     $.ajax({
         url: chart_url,
         type: "get",
@@ -71,7 +71,8 @@ function getChartData(year = null) {
 }
 
 function getOrderData(day = null) {
-    let chart_url = $("#get-order-data").val();
+    const chart_url = $("#get-order-data").val();
+
     $.ajax({
         url: chart_url,
         type: "get",
@@ -90,7 +91,8 @@ function getOrderData(day = null) {
 }
 
 function getSingleChargeData(day = null) {
-    let chart_url = $("#get-single-charge-data").val();
+    const chart_url = $("#get-single-charge-data").val()
+
     $.ajax({
         url: chart_url,
         type: "get",
@@ -98,13 +100,22 @@ function getSingleChargeData(day = null) {
             day
         },
     }).done(function (res) {
-        let singleChargeMonths = [];
-        let singleChargeAmount = [];
+        const singleChargeMonths = []
+        const singleChargeAmount = []
+
         $.each(res.singlecharge, function (index, value) {
-            singleChargeMonths.push(value.month);
-            singleChargeAmount.push(value.amount);
+            if (value.month.indexOf('-') > -1) {
+                const date = new Date(value.month)
+
+                singleChargeMonths.push(date.toLocaleDateString())
+            } else {
+                singleChargeMonths.push(value.month)
+            }
+
+            singleChargeAmount.push(value.amount)
         });
-        singleCharge(singleChargeMonths, singleChargeAmount);
+
+        singleCharge(singleChargeMonths, singleChargeAmount)
     });
 }
 
@@ -165,13 +176,13 @@ function getQrPaymentData(day = null) {
     });
 }
 
-var ctx = document.getElementById("myChart").getContext("2d");
 function dashboardChart(months, credit, debit) {
+    var ctx = document.getElementById("myChart").getContext("2d");
     new Chart(ctx, {
         type: "line",
         data: {
-                labels: months,
-                datasets: [{
+            labels: months,
+            datasets: [{
                 label: 'Credit',
                 data: credit,
                 borderWidth: 2,
@@ -190,7 +201,7 @@ function dashboardChart(months, credit, debit) {
                 backgroundColor: 'rgba(254,86,83,.7)',
                 borderWidth: 0,
                 borderColor: 'transparent',
-                pointBorderWidth: 0 ,
+                pointBorderWidth: 0,
                 pointRadius: 3.5,
                 pointBackgroundColor: 'transparent',
                 pointHoverBackgroundColor: 'rgba(254,86,83,.8)',
@@ -229,13 +240,13 @@ function dashboardChart(months, credit, debit) {
     });
 }
 
-var orderCtx = document.getElementById("orderChart").getContext("2d");
 function orderChart(months, amount) {
+    var orderCtx = document.getElementById("orderChart").getContext("2d");
     new Chart(orderCtx, {
         type: "line",
         data: {
-                labels: months,
-                datasets: [{
+            labels: months,
+            datasets: [{
                 label: 'Total order',
                 data: amount,
                 borderWidth: 2,
@@ -281,36 +292,35 @@ function orderChart(months, amount) {
     });
 }
 
-var singleChargeCtx = document.getElementById("singleCharge").getContext("2d");
 function singleCharge(months, amount) {
+    var singleChargeCtx = document.getElementById("singleCharge").getContext("2d");
+
     new Chart(singleChargeCtx, {
         type: "line",
         data: {
-                labels: months,
-                datasets: [{
+            labels: months,
+            datasets: [{
                 label: 'Single charge',
                 data: amount,
+                backgroundColor: 'rgba(63,82,227,.8)',
                 borderWidth: 2,
-                backgroundColor: 'rgba(106, 172, 196,.8)',
-                borderWidth: 0,
-                borderColor: 'transparent',
-                pointBorderWidth: 0,
+                borderColor: 'rgba(63,82,227,.8)',
                 pointRadius: 3.5,
-                pointBackgroundColor: 'transparent',
+                pointBorderWidth: 0,
+                pointBackgroundColor: 'rgba(63,82,227,.8)',
                 pointHoverBackgroundColor: 'rgba(63,82,227,.8)',
             }]
         },
         options: {
             legend: {
-                display: false,
+                display: true,
             },
             scales: {
                 yAxes: [
                     {
                         gridLines: {
-                            // display: false,
-                            drawBorder: false,
-                            color: "#f2f2f2",
+                            drawBorder: true,
+                            color: 'rgba(106, 172, 196,.8)',
                         },
                         ticks: {
                             beginAtZero: true,
@@ -333,13 +343,13 @@ function singleCharge(months, amount) {
     });
 }
 
-var donationsCtx = document.getElementById("donationsChart").getContext("2d");
 function donationsChart(months, amount) {
+    var donationsCtx = document.getElementById("donationsChart").getContext("2d");
     new Chart(donationsCtx, {
         type: "line",
         data: {
-                labels: months,
-                datasets: [{
+            labels: months,
+            datasets: [{
                 label: 'Donations',
                 data: amount,
                 borderWidth: 2,
@@ -385,13 +395,13 @@ function donationsChart(months, amount) {
     });
 }
 
-var planCtx = document.getElementById("planChart").getContext("2d");
 function planChart(months, amount) {
+    var planCtx = document.getElementById("planChart").getContext("2d");
     new Chart(planCtx, {
         type: "line",
         data: {
-                labels: months,
-                datasets: [{
+            labels: months,
+            datasets: [{
                 label: 'Plans',
                 data: amount,
                 borderWidth: 2,
@@ -437,13 +447,13 @@ function planChart(months, amount) {
     });
 }
 
-var qrpaymentsCtx = document.getElementById("qrpayments").getContext("2d");
 function qrpayments(months, amount) {
+    var qrpaymentsCtx = document.getElementById("qrpayments").getContext("2d");
     new Chart(qrpaymentsCtx, {
         type: "line",
         data: {
-                labels: months,
-                datasets: [{
+            labels: months,
+            datasets: [{
                 label: 'Qr payments',
                 data: amount,
                 borderWidth: 2,
