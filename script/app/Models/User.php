@@ -16,7 +16,7 @@ use Str;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable,HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -105,9 +105,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         parent::boot();
 
-        static::creating(function (self $user){
-            $user->public_key = "PUBLIC-". Str::random(32);
-            $user->secret_key = "SECRET-". Str::random(32);
+        static::creating(function (self $user) {
+            $user->public_key = "PUBLIC-" . Str::random(32);
+            $user->secret_key = "SECRET-" . Str::random(32);
             $user->qr = Str::random(32);
         });
     }

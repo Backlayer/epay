@@ -8,6 +8,8 @@
         <th>{{ __("From") }}</th>
         <th>{{ __("Amount") }}</th>
         <th>{{ __("Charge") }}</th>
+        <th>{{ __('Payment Status') }}</th>
+        <th>{{ __("Paid At") }}</th>
         <th>{{ __("Created") }}</th>
     </tr>
     </thead>
@@ -21,6 +23,8 @@
             <td>{{ $transaction->name }}&nbsp;[{{ $transaction->email }}]</td>
             <td>{{ convert_money_direct($transaction->amount, $transaction->currency, user_currency(), true) }}</td>
             <td>{{ convert_money_direct($transaction->charge, $transaction->currency, user_currency(), true) }}</td>
+            <td>{!! $transaction->PaymentStatus !!}</td>
+            <td>{{ formatted_date($transaction->paid_at, 'd M, Y h:i A') }}</td>
             <td>{{ formatted_date($transaction->created_at, 'd M, Y h:i A') }}</td>
         </tr>
     @endforeach

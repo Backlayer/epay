@@ -89,7 +89,7 @@ class SingleChargeController extends Controller
             'amount' => $convertedAmount,
             'test_mode' => $gateway->test_mode,
             'charge' => $gateway->charge,
-            'pay_amount' => round($convertedAmount + $gateway->charge, 2),
+            'pay_amount' => round($convertedAmount + $gateway->charge, 2, PHP_ROUND_HALF_ODD),
             'gateway_id' => $gateway->id,
             'payment_type' => 'single_charge',
             'request_from' => 'merchant',

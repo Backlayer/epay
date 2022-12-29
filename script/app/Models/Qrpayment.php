@@ -5,16 +5,38 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Helpers\HasPayment;
 
 class Qrpayment extends Model
 {
     use HasFactory;
+    use HasPayment;
 
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'fields' => 'json',
+        'data' => 'json',
+    ];
 
     public function seller(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getIsPaidAttribute()
+    {
+        return $this->checkIsPaid((object) $this->attributes);
+    }
+
+    public function getIsConfirmedAttribute()
+    {
+        return $this->checkConfirmed((object) $this->attributes);
+    }
+
+    public function getPaymentStatusAttribute()
+    {
+        return $this->paymentStatus($this->status_paid ?? '0');
     }
 
     public static function boot()
