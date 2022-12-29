@@ -79,6 +79,7 @@
                             <th>{{ __('TRX') }}</th>
                             <th>{{ __('Amount') }}</th>
                             <th>{{ __('From') }}</th>
+                            <th>{{ __('Payment Status') }}</th>
                             <th>{{ __("Comment") }}</th>
                             <th>{{ __('Created') }}</th>
                         </tr>
@@ -94,6 +95,7 @@
                                 {{ $order->name }}<br>
                                 {{ $order->email }}
                             </td>
+                            <td>{!! $order->PaymentStatus !!}</td>
                             <td>{{ $order->comment }}</td>
                             <td>{{ formatted_date($order->created_at) }}</td>
                         </tr>
@@ -106,12 +108,13 @@
             </div>
         </div>
     </div>
+
     @push('modal')
     <div class="modal fade" id="qr-code" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header pb-0">
-                    <h3 class="mb-0 font-weight-bolder">{{ __('Add category') }}</h3>
+                    <h3 class="mb-0 font-weight-bolder">{{ __('Qr Payment') }}</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="{{ __("Close") }}">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -121,11 +124,11 @@
                         <div class="col text-center">
                             <div id="qrcode" class="mx-auto mb-3">
 
-                    </div>
+                            </div>
 
-                    <a href="" id="download-qr" class="custom-btn d-block btn-block mt-3 py-2 download-qr" download="{{ auth()->user()->name . '.png' }}">
-                        <i class="fas fa-download"></i> {{ __('Download') }}
-                    </a>
+                            <a href="" id="download-qr" class="custom-btn d-block btn-block mt-3 py-2 download-qr" download="{{ auth()->user()->name . '.png' }}">
+                                <i class="fas fa-download"></i> {{ __('Download') }}
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -133,6 +136,7 @@
         </div>
     </div>
     @endpush
+
     <input type="hidden" id="get-products-url" value="{{ route('user.get-payments') }}">
     <input type="hidden" id="qrUrl" value="{{ route('frontend.qr.index', auth()->user()->qr) }}">
     <input type="hidden" id="username" value="{{ auth()->user()->name }}">
@@ -143,7 +147,5 @@
     <script src="{{ asset('user/js/card-data.js') }}"></script>
     <script>
         getTotalProducts();
-
-       
     </script>
 @endpush

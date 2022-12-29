@@ -15,10 +15,21 @@ use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
+    private function getDateAmount($request, $q)
+    {
+        $data['month'] = $request->day == 365
+            ? Carbon::createFromFormat('m', $q->month)->format('F')
+            : Carbon::createFromFormat('m', $q->month)->format('Y-m-d');
+        $data['amount'] = number_format($q->amount, 2);
+
+        return $data;
+    }
+
     public function index()
     {
         $transactions = Transaction::whereUserId(auth()->id())->where('amount', '>', 0)->latest()->paginate();
         $payouts = Payout::whereUserId(auth()->id())->whereStatus('completed')->sum('amount');
+
         return view('user.dashboard.index', compact('transactions', 'payouts'));
     }
 
@@ -71,9 +82,7 @@ class DashboardController extends Controller
             ->groupBy('month')
             ->get()
             ->map(function ($q) use ($request) {
-                $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('d-m-Y');
-                $data['amount'] = number_format($q->amount, 2);
-                return $data;
+                return $this->getDateAmount($request, $q);
             });
 
         return response()->json([
@@ -89,9 +98,7 @@ class DashboardController extends Controller
             ->groupBy('month')
             ->get()
             ->map(function ($q) use ($request) {
-                $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('d-m-Y');
-                $data['amount'] = number_format($q->amount, 2);
-                return $data;
+                return $this->getDateAmount($request, $q);
             });
 
         return response()->json([
@@ -107,9 +114,7 @@ class DashboardController extends Controller
             ->groupBy('month')
             ->get()
             ->map(function ($q) use ($request) {
-                $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('d-m-Y');
-                $data['amount'] = number_format($q->amount, 2);
-                return $data;
+                return $this->getDateAmount($request, $q);
             });
 
         return response()->json([
@@ -125,9 +130,7 @@ class DashboardController extends Controller
             ->groupBy('month')
             ->get()
             ->map(function ($q) use ($request) {
-                $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('d-m-Y');
-                $data['amount'] = number_format($q->amount, 2);
-                return $data;
+                return $this->getDateAmount($request, $q);
             });
 
         return response()->json([
@@ -143,9 +146,7 @@ class DashboardController extends Controller
             ->groupBy('month')
             ->get()
             ->map(function ($q) use ($request) {
-                $data['month'] = $request->day == 365 ? Carbon::createFromFormat('m', $q->month)->format('F') : Carbon::createFromFormat('m', $q->month)->format('d-m-Y');
-                $data['amount'] = number_format($q->amount, 2);
-                return $data;
+                return $this->getDateAmount($request, $q);
             });
 
         return response()->json([

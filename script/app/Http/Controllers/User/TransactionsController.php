@@ -20,95 +20,95 @@ class TransactionsController extends Controller
     {
         $search = $request->get('search');
 
-        if(is_null($type)){
+        if (is_null($type)) {
             $transactions = Transaction::with('currency')->whereUserId(\Auth::id())
-                ->when(!is_null($search), function (Builder $builder) use ($search){
-                    $builder->where('name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('email', 'LIKE', '%'.$search.'%');
+                ->when(!is_null($search), function (Builder $builder) use ($search) {
+                    $builder->where('name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('email', 'LIKE', '%' . $search . '%');
                 })
                 ->latest()
                 ->paginate();
-        }elseif ($type == 'single-charge'){
+        } elseif ($type == 'single-charge') {
             $transactions =  SingleChargeOrder::whereUserId(\Auth::id())
-                ->when(!is_null($search), function (Builder $builder) use ($search){
-                    $builder->where('trx', 'LIKE', '%'.$search.'%')
-                        ->orWhere('name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('invoice_no', 'LIKE', '%'.$search.'%')
-                        ->orWhere('email', 'LIKE', '%'.$search.'%');
+                ->when(!is_null($search), function (Builder $builder) use ($search) {
+                    $builder->where('trx', 'LIKE', '%' . $search . '%')
+                        ->orWhere('name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('invoice_no', 'LIKE', '%' . $search . '%')
+                        ->orWhere('email', 'LIKE', '%' . $search . '%');
                 })
                 ->with('currency', 'singleCharge')
                 ->latest()
                 ->paginate();
-        }elseif ($type == 'donation'){
+        } elseif ($type == 'donation') {
             $transactions =  DonationOrder::whereUserId(\Auth::id())
-                ->when(!is_null($search), function (Builder $builder) use ($search){
-                    $builder->where('trx', 'LIKE', '%'.$search.'%')
-                        ->orWhere('name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('invoice_no', 'LIKE', '%'.$search.'%')
-                        ->orWhere('email', 'LIKE', '%'.$search.'%')
-                        ->orWhereHas('donor', function (Builder $builder) use ($search){
-                            $builder->where('name', 'LIKE', '%'.$search.'%')
-                                ->orWhere('email', 'LIKE', '%'.$search.'%');
+                ->when(!is_null($search), function (Builder $builder) use ($search) {
+                    $builder->where('trx', 'LIKE', '%' . $search . '%')
+                        ->orWhere('name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('invoice_no', 'LIKE', '%' . $search . '%')
+                        ->orWhere('email', 'LIKE', '%' . $search . '%')
+                        ->orWhereHas('donor', function (Builder $builder) use ($search) {
+                            $builder->where('name', 'LIKE', '%' . $search . '%')
+                                ->orWhere('email', 'LIKE', '%' . $search . '%');
                         });
                 })
                 ->with('currency', 'donation')
                 ->latest()
                 ->paginate();
-        }elseif ($type == 'qr-code'){
+        } elseif ($type == 'qr-code') {
             $transactions =  Qrpayment::whereSellerId(\Auth::id())
-                ->when(!is_null($search), function (Builder $builder) use ($search){
-                    $builder->where('trx', 'LIKE', '%'.$search.'%')
-                        ->orWhere('name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('invoice_no', 'LIKE', '%'.$search.'%')
-                        ->orWhere('email', 'LIKE', '%'.$search.'%');
+                ->when(!is_null($search), function (Builder $builder) use ($search) {
+                    $builder->where('trx', 'LIKE', '%' . $search . '%')
+                        ->orWhere('name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('invoice_no', 'LIKE', '%' . $search . '%')
+                        ->orWhere('email', 'LIKE', '%' . $search . '%');
                 })
                 ->with('seller')
                 ->latest()
                 ->paginate();
-        }elseif ($type == 'invoice'){
+        } elseif ($type == 'invoice') {
             $transactions =  Invoice::whereOwnerId(\Auth::id())
-                ->when(!is_null($search), function (Builder $builder) use ($search){
-                    $builder->where('trx', 'LIKE', '%'.$search.'%')
-                        ->orWhere('name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('invoice_no', 'LIKE', '%'.$search.'%')
-                        ->orWhere('email', 'LIKE', '%'.$search.'%');
+                ->when(!is_null($search), function (Builder $builder) use ($search) {
+                    $builder->where('trx', 'LIKE', '%' . $search . '%')
+                        ->orWhere('name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('invoice_no', 'LIKE', '%' . $search . '%')
+                        ->orWhere('email', 'LIKE', '%' . $search . '%');
                 })
                 ->with('currency')
                 ->latest()
                 ->paginate();
-        }elseif ($type == 'deposit'){
+        } elseif ($type == 'deposit') {
             $transactions = Deposit::whereUserId(\Auth::id())
-                ->when(!is_null($search), function (Builder $builder) use ($search){
-                    $builder->where('trx', 'LIKE', '%'.$search.'%');
+                ->when(!is_null($search), function (Builder $builder) use ($search) {
+                    $builder->where('trx', 'LIKE', '%' . $search . '%');
                 })
                 ->with('currency')
                 ->latest()
                 ->paginate();
-        }elseif ($type == 'website'){
+        } elseif ($type == 'website') {
             $transactions = WebOrder::whereUserId(\Auth::id())
-                ->when(!is_null($search), function (Builder $builder) use ($search){
-                    $builder->where('trx', 'LIKE', '%'.$search.'%')
-                        ->orWhereHas('website', function (Builder $builder) use ($search){
-                            $builder->where('merchant_name','LIKE', '%'.$search.'%');
+                ->when(!is_null($search), function (Builder $builder) use ($search) {
+                    $builder->where('trx', 'LIKE', '%' . $search . '%')
+                        ->orWhereHas('website', function (Builder $builder) use ($search) {
+                            $builder->where('merchant_name', 'LIKE', '%' . $search . '%');
                         });
                 })
                 ->with('website', 'currency')
                 ->latest()
                 ->paginate();
-        }elseif ($type == 'plan'){
+        } elseif ($type == 'plan') {
             $transactions = UserPlanSubscriber::whereSubscriberId(\Auth::id())
-                ->when(!is_null($search), function (Builder $builder) use ($search){
-                    $builder->whereHas('owner', function (Builder $builder) use ($search){
-                        $builder->where('name', 'LIKE', '%'.$search.'%')
-                            ->orWhere('email', 'LIKE', '%'.$search.'%')
-                            ->orWhere('username', 'LIKE', '%'.$search.'%')
-                            ->orWhere('phone', 'LIKE', '%'.$search.'%');
+                ->when(!is_null($search), function (Builder $builder) use ($search) {
+                    $builder->whereHas('owner', function (Builder $builder) use ($search) {
+                        $builder->where('name', 'LIKE', '%' . $search . '%')
+                            ->orWhere('email', 'LIKE', '%' . $search . '%')
+                            ->orWhere('username', 'LIKE', '%' . $search . '%')
+                            ->orWhere('phone', 'LIKE', '%' . $search . '%');
                     });
                 })
                 ->with('plan', 'owner', 'currency')
                 ->latest()
                 ->paginate();
-        }else{
+        } else {
             abort(404, __("Transaction type didn't match, Please check the transaction type."));
         }
 

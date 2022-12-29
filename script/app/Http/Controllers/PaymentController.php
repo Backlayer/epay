@@ -117,7 +117,7 @@ class PaymentController extends Controller
                     'amount' => -$convertToBuyerAmount,
                     'charge' => null,
                     'rate' => user_currency()->rate,
-                    'reason' => __('Payment sent to :name', ['name' => $singleCharge->user->business_name ?? $singleCharge->user->name]),
+                    'reason' => __('Single Charge Payment sent to :name', ['name' => $singleCharge->user->business_name ?? $singleCharge->user->name]),
                     'type' => 'debit'
                 ]);
             }
@@ -131,7 +131,7 @@ class PaymentController extends Controller
                 'amount' => $convertToOwnerAmount - $convertToOwnerCharge,
                 'charge' => $convertToOwnerCharge,
                 'rate' => $singleCharge->user->currency->rate,
-                'reason' => __('Payment received from :name', ['name' => $userInfo['name']]),
+                'reason' => __('Single Charge Payment received from :name', ['name' => $userInfo['name']]),
                 'type' => 'credit'
             ]);
 
@@ -464,14 +464,20 @@ class PaymentController extends Controller
             $convertToOwnerAmount = convert_money($convertToDefaultAmount, $user->currency, true);
             $convertToOwnerCharge = convert_money($totalCharge, $user->currency, true);
 
-            $qrPayment = Qrpayment::create([
+            Qrpayment::create([
+                "trx" => $paymentInfo['payment_id'],
                 "seller_id" => $user->id,
                 "gateway_id" => $gateway->id,
-                "trx" => $paymentInfo['payment_id'],
+                "currency_id" => $user->currency_id,
+                'charge' => $convertToOwnerCharge,
+                'rate' => $user->currency->rate,
                 "amount" => $originalAmount,
                 "name" => $userInfo['name'],
                 "email" =>  $userInfo['email'],
-                "comment" => 'asdf',
+                'paid_at' => now(),
+                "status_paid" => '1',
+                'fields' => $paymentInfo['fields'],
+                'data' => $paymentInfo['data'],
             ]);
 
             // Add Income to Author Profile
@@ -493,7 +499,7 @@ class PaymentController extends Controller
                     'amount' => - ($convertToBuyerAmount),
                     'charge' => $convertToBuyerCharge,
                     'rate' => user_currency()->rate,
-                    'reason' => __('Payment sent to :name', ['name' => $user->business_name ?? $user->name]),
+                    'reason' => __('Qr Payment sent to :name', ['name' => $user->business_name ?? $user->name]),
                     'type' => 'debit'
                 ]);
             }
@@ -502,18 +508,19 @@ class PaymentController extends Controller
             Transaction::create([
                 'name' => $userInfo['name'],
                 'email' => $userInfo['email'],
-                'user_id' => $user->user_id,
+                'user_id' => $user->id,
                 'currency_id' => $user->currency_id,
                 'amount' => $convertToOwnerAmount - $convertToOwnerCharge,
                 'charge' => $convertToOwnerCharge,
                 'rate' => $user->currency->rate,
-                'reason' => __('Payment received from :name', ['name' => $userInfo['name']]),
+                'reason' => __('Qr Payment received from :name', ['name' => $userInfo['name']]),
                 'type' => 'credit'
             ]);
 
             DB::commit();
 
             $this->clearSessions();
+
             if (Auth::check()) {
                 return to_route('user.transactions.index', 'qr-code')->with('success', __('Payment Successfully Completed'));
             } else {

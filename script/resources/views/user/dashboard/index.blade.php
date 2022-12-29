@@ -117,6 +117,8 @@
 
     @include('user.dashboard.charts.single-charge')
 
+    @include('user.dashboard.charts.qr-payments')
+
     <!--
     @include('user.dashboard.charts.debit-credit')
 
@@ -125,8 +127,6 @@
     @include('user.dashboard.charts.donation')
 
     @include('user.dashboard.charts.plans')
-
-    @include('user.dashboard.charts.qr-payments')
     -->
 
     <input type="hidden" id="get-chart-data" value="{{ route('user.dashboard.chart') }}">
@@ -141,5 +141,5 @@
     <script src="{{ asset('admin/plugins/clipboard-js/clipboard.min.js') }}"></script>
     <script src="{{ asset('user/vendor/jvectormap-next/jquery-jvectormap.min.js') }}"></script>
     <script src="{{ asset('user/js/vendor/jvectormap/jquery-jvectormap-world-mill.js') }}"></script>
-    <script src="{{ asset('user/js/chart/dashboard.js') }}"></script>
+    <script src="{{ asset('user/js/chart/dashboard.js?v5') }}"></script>
 @endpush
