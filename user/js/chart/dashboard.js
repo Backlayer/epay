@@ -2,11 +2,11 @@
 
 $(document).ready(function () {
     getSingleChargeData();
+    getQrPaymentData();
     // getChartData();
     // getOrderData();
     // getDonationsData();
     // getPlanData();
-    // getQrPaymentData();
 });
 
 $('#current-year').on('change', function () {
@@ -158,7 +158,8 @@ function getPlanData(day = null) {
 }
 
 function getQrPaymentData(day = null) {
-    let chart_url = $("#get-plans-data").val();
+    const chart_url = $("#get-qr-payments-data").val()
+
     $.ajax({
         url: chart_url,
         type: "get",
@@ -166,15 +167,64 @@ function getQrPaymentData(day = null) {
             day
         },
     }).done(function (res) {
-        let qrpaymentsMonths = [];
-        let qrpaymentsAmount = [];
+        const qrpaymentsMonths = []
+        const qrpaymentsAmount = []
+
         $.each(res.qrpayments, function (index, value) {
-            qrpaymentsMonths.push(value.month);
+            if (value.month.indexOf('-') > -1) {
+                const date = new Date(value.month)
+
+                qrpaymentsMonths.push(date.toLocaleDateString())
+            } else {
+                qrpaymentsMonths.push(value.month)
+            }
+
             qrpaymentsAmount.push(value.amount);
-        });
+        })
+
         qrpayments(qrpaymentsMonths, qrpaymentsAmount);
     });
 }
+
+const legend = {
+    display: true
+}
+
+const xAxes = [
+    {
+        gridLines: {
+            display: true,
+            tickMarkLength: 10,
+        },
+    },
+]
+
+const yAxes = [
+    {
+        gridLines: {
+            drawBorder: true,
+            color: 'rgba(106, 172, 196,.8)',
+        },
+        ticks: {
+            beginAtZero: true,
+            callback: function (value, index, values) {
+                return $('#currency').val() + parseFloat(value).toFixed(2);
+            },
+        },
+    },
+]
+
+const datasets = (label, data, color) => ({
+    label,
+    data,
+    backgroundColor: color,
+    borderWidth: 2,
+    borderColor: color,
+    pointRadius: 3.5,
+    pointBorderWidth: 0,
+    pointBackgroundColor: color,
+    pointHoverBackgroundColor: color,
+})
 
 function dashboardChart(months, credit, debit) {
     var ctx = document.getElementById("myChart").getContext("2d");
@@ -208,33 +258,10 @@ function dashboardChart(months, credit, debit) {
             }]
         },
         options: {
-            legend: {
-                display: false,
-            },
+            legend,
             scales: {
-                yAxes: [
-                    {
-                        gridLines: {
-                            // display: false,
-                            drawBorder: false,
-                            color: "#f2f2f2",
-                        },
-                        ticks: {
-                            beginAtZero: true,
-                            callback: function (value, index, values) {
-                                return $('#currency').val() + parseFloat(value).toFixed(2);
-                            },
-                        },
-                    },
-                ],
-                xAxes: [
-                    {
-                        gridLines: {
-                            display: false,
-                            tickMarkLength: 10,
-                        },
-                    },
-                ],
+                yAxes,
+                xAxes
             },
         },
     });
@@ -260,84 +287,29 @@ function orderChart(months, amount) {
             }]
         },
         options: {
-            legend: {
-                display: false,
-            },
+            legend,
             scales: {
-                yAxes: [
-                    {
-                        gridLines: {
-                            display: false,
-                            drawBorder: false,
-                            color: "#f2f2f2",
-                        },
-                        ticks: {
-                            beginAtZero: true,
-                            callback: function (value, index, values) {
-                                return $('#currency').val() + parseFloat(value).toFixed(2);
-                            },
-                        },
-                    },
-                ],
-                xAxes: [
-                    {
-                        gridLines: {
-                            display: false,
-                            tickMarkLength: 10,
-                        },
-                    },
-                ],
+                yAxes,
+                xAxes
             },
         },
     });
 }
 
 function singleCharge(months, amount) {
-    var singleChargeCtx = document.getElementById("singleCharge").getContext("2d");
+    const singleChargeCtx = document.getElementById("singleCharge").getContext("2d");
 
     new Chart(singleChargeCtx, {
         type: "line",
         data: {
             labels: months,
-            datasets: [{
-                label: 'Single charge',
-                data: amount,
-                backgroundColor: 'rgba(63,82,227,.8)',
-                borderWidth: 2,
-                borderColor: 'rgba(63,82,227,.8)',
-                pointRadius: 3.5,
-                pointBorderWidth: 0,
-                pointBackgroundColor: 'rgba(63,82,227,.8)',
-                pointHoverBackgroundColor: 'rgba(63,82,227,.8)',
-            }]
+            datasets: [datasets('Single charge', amount, 'rgba(63,82,227,.8)')]
         },
         options: {
-            legend: {
-                display: true,
-            },
+            legend,
             scales: {
-                yAxes: [
-                    {
-                        gridLines: {
-                            drawBorder: true,
-                            color: 'rgba(106, 172, 196,.8)',
-                        },
-                        ticks: {
-                            beginAtZero: true,
-                            callback: function (value, index, values) {
-                                return $('#currency').val() + parseFloat(value).toFixed(2);
-                            },
-                        },
-                    },
-                ],
-                xAxes: [
-                    {
-                        gridLines: {
-                            display: false,
-                            tickMarkLength: 10,
-                        },
-                    },
-                ],
+                yAxes,
+                xAxes
             },
         },
     });
@@ -363,33 +335,10 @@ function donationsChart(months, amount) {
             }]
         },
         options: {
-            legend: {
-                display: false,
-            },
+            legend,
             scales: {
-                yAxes: [
-                    {
-                        gridLines: {
-                            // display: false,
-                            drawBorder: false,
-                            color: "#f2f2f2",
-                        },
-                        ticks: {
-                            beginAtZero: true,
-                            callback: function (value, index, values) {
-                                return $('#currency').val() + parseFloat(value).toFixed(2);
-                            },
-                        },
-                    },
-                ],
-                xAxes: [
-                    {
-                        gridLines: {
-                            display: false,
-                            tickMarkLength: 10,
-                        },
-                    },
-                ],
+                yAxes,
+                xAxes
             },
         },
     });
@@ -415,98 +364,45 @@ function planChart(months, amount) {
             }]
         },
         options: {
-            legend: {
-                display: false,
-            },
+            legend,
             scales: {
-                yAxes: [
-                    {
-                        gridLines: {
-                            // display: false,
-                            drawBorder: false,
-                            color: "#f2f2f2",
-                        },
-                        ticks: {
-                            beginAtZero: true,
-                            callback: function (value, index, values) {
-                                return $('#currency').val() + parseFloat(value).toFixed(2);
-                            },
-                        },
-                    },
-                ],
-                xAxes: [
-                    {
-                        gridLines: {
-                            display: false,
-                            tickMarkLength: 10,
-                        },
-                    },
-                ],
+                yAxes,
+                xAxes
             },
         },
     });
 }
 
 function qrpayments(months, amount) {
-    var qrpaymentsCtx = document.getElementById("qrpayments").getContext("2d");
+    const qrpaymentsCtx = document.getElementById("qrpayments").getContext("2d");
+
     new Chart(qrpaymentsCtx, {
         type: "line",
         data: {
             labels: months,
-            datasets: [{
-                label: 'Qr payments',
-                data: amount,
-                borderWidth: 2,
-                backgroundColor: 'rgba(254,86,83,.8)',
-                borderWidth: 0,
-                borderColor: 'transparent',
-                pointBorderWidth: 0,
-                pointRadius: 3.5,
-                pointBackgroundColor: 'transparent',
-                pointHoverBackgroundColor: 'rgba(63,82,227,.8)',
-            }]
+            datasets: [datasets('Qr payments', amount, 'rgba(223, 104, 7, 0.8)')]
         },
         options: {
-            legend: {
-                display: false,
-            },
+            legend,
             scales: {
-                yAxes: [
-                    {
-                        gridLines: {
-                            drawBorder: false,
-                            color: "#f2f2f2",
-                        },
-                        ticks: {
-                            beginAtZero: true,
-                            callback: function (value, index, values) {
-                                return $('#currency').val() + parseFloat(value).toFixed(2);
-                            },
-                        },
-                    },
-                ],
-                xAxes: [
-                    {
-                        gridLines: {
-                            display: false,
-                            tickMarkLength: 10,
-                        },
-                    },
-                ],
+                yAxes,
+                xAxes
             },
         },
     });
 }
 
-var qr = QRCode.generatePNG(document.getElementById('qrUrl').value, {
+const qr = QRCode.generatePNG(document.getElementById('qrUrl').value, {
     ecclevel: "M",
     format: "html",
     margin: 4,
     modulesize: 8
 });
 
-var img = document.createElement("img");
+const img = document.createElement("img");
+
 img.src = qr;
+
 document.getElementById('qrcode').appendChild(img);
 
 //For download

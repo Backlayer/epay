@@ -2,6 +2,20 @@
     $logo = get_option('logo_setting');
 
     $primaryMenu = [
+        'supports' => [
+            'ruleActive' => Route::is('user.supports.index'),
+            'route' => route('user.supports.index'),
+            'classIcon' => 'fas fa-flag-usa text-default',
+            'title' => __('Support'),
+            'enable' => true
+        ],
+        'transactions' => [
+            'ruleActive' => Route::is('user.transactions.index'),
+            'route' => route('user.transactions.index'),
+            'classIcon' => 'fas fa-money-check-alt text-green',
+            'title' => __('Transactions'),
+            'enable' => true
+        ],
         'deposit' => [
             'ruleActive' => Route::is('user.deposits.index'),
             'route' => route('user.deposits.index'),
@@ -16,33 +30,12 @@
             'title' => __('Transfer Money'),
             'enable' => false
         ],
-        'qr-payments' => [
-            'ruleActive' => Route::is('user.qr-payments.index'),
-            'route' => route('user.qr-payments.index'),
-            'classIcon' => 'fas fa-qrcode text-info',
-            'title' => __('Qr Payments'),
-            'enable' => false
-        ],
-        'supports' => [
-            'ruleActive' => Route::is('user.supports.index'),
-            'route' => route('user.supports.index'),
-            'classIcon' => 'fas fa-flag-usa text-default',
-            'title' => __('Support'),
-            'enable' => true
-        ],
         'subscribers' => [
             'ruleActive' => Route::is('user.subscribers.index'),
             'route' => route('user.subscribers.index'),
             'classIcon' => 'fa fa-user text-primary',
             'title' => __('Subscribers'),
             'enable' => false
-        ],
-        'transactions' => [
-            'ruleActive' => Route::is('user.transactions.index'),
-            'route' => route('user.transactions.index'),
-            'classIcon' => 'fas fa-money-check-alt text-green',
-            'title' => __('Transactions'),
-            'enable' => true
         ],
         'payouts' => [
             'ruleActive' => Route::is('user.payouts.index'),
@@ -122,6 +115,13 @@
             'route' => route('user.single-charges.index'),
             'classIcon' => 'fas fa-link text-primary',
             'title' => __('Single Charge'),
+            'enable' => true
+        ],
+        'qr-payments' => [
+            'ruleActive' => Route::is('user.qr-payments.index'),
+            'route' => route('user.qr-payments.index'),
+            'classIcon' => 'fas fa-qrcode text-info',
+            'title' => __('Qr Payments'),
             'enable' => true
         ],
         'donations' => [
