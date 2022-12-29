@@ -29,8 +29,6 @@ class InvoiceController extends Controller
 
     public function index(Invoice $invoice)
     {
-        abort_if($invoice->isPaid, 403, __('Transaction Already Paid'));
-
         $this->clearSessions();
 
         $gateways = Gateway::whereStatus(1)

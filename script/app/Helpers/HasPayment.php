@@ -27,7 +27,7 @@ trait HasPayment
             ],
             'comment' => ['nullable', 'string', 'max:255'],
             'screenshot' => ['nullable', 'image', 'max:2048'], // 2MB
-            'fields' => ['required', 'array'],
+            'fields' => ['nullable', 'array'],
         ]);
     }
 
@@ -79,21 +79,23 @@ trait HasPayment
     {
         $dataFields = [];
 
-        foreach ($gateway->fields ?? [] as $index => $item) {
-            if ($item['type'] == 'file') {
-                /*$request->validate([
+        if (isset($gateway->fields)) {
+            foreach ($gateway->fields ?? [] as $index => $item) {
+                if ($item['type'] == 'file') {
+                    /*$request->validate([
                     'fields.' . $item['label'] => ['required', 'mimes:jpg,jpeg,png.pdf', 'max:2048'], // 2MB
                 ]);*/
+                }
             }
-        }
 
-        foreach ($request->fields as $key => $value) {
-            $field = $request->fields[$key];
+            foreach ($request->fields as $key => $value) {
+                $field = $request->fields[$key];
 
-            if (is_file($field)) {
-                $dataFields[$key] = $this->upload($request, 'fields.' . $key);
-            } else {
-                $dataFields[$key] = $field;
+                if (is_file($field)) {
+                    $dataFields[$key] = $this->upload($request, 'fields.' . $key);
+                } else {
+                    $dataFields[$key] = $field;
+                }
             }
         }
 
