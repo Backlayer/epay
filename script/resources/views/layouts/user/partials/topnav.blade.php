@@ -1,7 +1,6 @@
 <nav class="navbar navbar-top navbar-expand navbar-light bg-secondary border-bottom">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
             <!-- Navbar links -->
             <ul class="navbar-nav align-items-center ml-md-auto">
                 <li class="nav-item d-xl-none">
@@ -41,10 +40,10 @@
                             <i class="ni ni-lock-circle-open"></i>
                             <span>{{ __('Kyc Verification') }}</span>
                         </a>
-                        <a href="{{ route('user.api-keys.index') }}" class="dropdown-item">
+                        <!--<a href="{{ route('user.api-keys.index') }}" class="dropdown-item">
                             <i class="ni ni-settings-gear-65"></i>
                             <span>{{ __("API Keys") }}</span>
-                        </a>
+                        </a>-->
                         <a href="{{ route('user.supports.index') }}" class="dropdown-item">
                             <i class="fas fa-cog"></i>
                             <span>{{ __('Support') }}</span>
