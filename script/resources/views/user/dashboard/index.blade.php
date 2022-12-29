@@ -5,7 +5,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-8">
-            <div class="card shadow">
+            <!--<div class="card shadow">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
@@ -41,12 +41,13 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
             @if ($transactions->count() > 0)
-
             <div class="card mt-4">
                 <div class="table-responsive py-3 ">
                     <table class="table table-flush" id="table">
+                        <caption></caption>
+
                         <thead class="thead-light">
                             <tr>
                                 <th>{{ __('S/N') }}</th>
@@ -114,17 +115,19 @@
         </div>
     </div>
 
+    @include('user.dashboard.charts.single-charge')
+
+    <!--
     @include('user.dashboard.charts.debit-credit')
 
     @include('user.dashboard.charts.order')
-
-    @include('user.dashboard.charts.single-charge')
 
     @include('user.dashboard.charts.donation')
 
     @include('user.dashboard.charts.plans')
 
     @include('user.dashboard.charts.qr-payments')
+    -->
 
     <input type="hidden" id="get-chart-data" value="{{ route('user.dashboard.chart') }}">
     <input type="hidden" id="qrUrl" value="{{ route('frontend.qr.index', auth()->user()->qr) }}">
