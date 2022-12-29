@@ -43,6 +43,8 @@
 
                 <div class="table-responsive px-4">
                     <table class="table table-bordered">
+                        <caption></caption>
+
                         <thead>
                             <tr>
                                 <th scope="col">{{ __('Description') }}</th>
@@ -65,6 +67,8 @@
                 <div class="w-100 d-flex justify-content-sm-center justify-content-md-center justify-content-lg-end">
                     <div class="p-4 w-50">
                         <table class="table table-borderless">
+                            <caption></caption>
+
                             <tbody>
                                 <tr>
                                     <th style="height:40px; width: 80px" class="text-right">
