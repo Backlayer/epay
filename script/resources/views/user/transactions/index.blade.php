@@ -17,11 +17,11 @@
                 <i class="fas fa-envelope"></i>
                 {{ __("Invoice") }}
             </a>
-            <a href="{{ route('user.transactions.index', 'website') }}" @class(["latter-space-0 nav-link d-inline-block", "active" => Request::is('user/transactions/website')])>
+            <!--<a href="{{ route('user.transactions.index', 'website') }}" @class(["latter-space-0 nav-link d-inline-block", "active" => Request::is('user/transactions/website')])>
                 <i class="fas fa-laptop"></i>
                 {{ __("Website") }}
             </a>
-            <!--<a href="{{ route('user.transactions.index', 'donation') }}" @class(["latter-space-0 nav-link d-inline-block", "active" => Request::is('user/transactions/donation')])>
+            <a href="{{ route('user.transactions.index', 'donation') }}" @class(["latter-space-0 nav-link d-inline-block", "active" => Request::is('user/transactions/donation')])>
                 <i class="fas fa-gift"></i>
                 {{ __("Donation") }}
             </a>
@@ -36,7 +36,7 @@
             <a href="{{ route('user.transactions.index', 'plan') }}" @class(["latter-space-0 nav-link d-inline-block", "active" => Request::is('user/transactions/plan')])>
                 <i class="fas fa-user"></i>
                 {{ __("Your Subscriptions") }}
-            </a>-->	            
+            </a>-->
         </div>
     </div>
 
