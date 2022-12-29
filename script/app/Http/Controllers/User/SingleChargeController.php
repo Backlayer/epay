@@ -55,21 +55,21 @@ class SingleChargeController extends Controller
 
     public function show(SingleCharge $singleCharge)
     {
-        abort_if($singleCharge->user_id !== Auth::id(), 404);
+        abort_if($singleCharge->user_id != Auth::id(), 404);
         $orders = $singleCharge->orders()->with('currency')->latest()->paginate();
         return view('user.single-charges.show', compact('singleCharge', 'orders'));
     }
 
     public function edit(SingleCharge $singleCharge)
     {
-        abort_if($singleCharge->user_id !== Auth::id(), 404);
+        abort_if($singleCharge->user_id != Auth::id(), 404);
         $charge = get_option('charges')['single_payment_charge'] ?? ['rate' => 4, 'type' => 'percentage'];
         return view('user.single-charges.edit', compact('singleCharge', 'charge'));
     }
 
     public function update(Request $request, SingleCharge $singleCharge)
     {
-        abort_if($singleCharge->user_id !== Auth::id(), 404);
+        abort_if($singleCharge->user_id != Auth::id(), 404);
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'amount' => ['nullable', 'numeric'],
@@ -95,8 +95,8 @@ class SingleChargeController extends Controller
 
     public function destroy(SingleCharge $singleCharge)
     {
-        abort_if($singleCharge->user_id !== Auth::id(), 404);
-        if ($singleCharge->orders()->count() > 0){
+        abort_if($singleCharge->user_id != Auth::id(), 404);
+        if ($singleCharge->orders()->count() > 0) {
             return response()->json([
                 'message' => __('You are not allowed to delete. Because it has :number orders', ['number' => $singleCharge->orders()->count()])
             ], 403);
