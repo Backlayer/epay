@@ -60,17 +60,12 @@
                             <input type="text" class="form-control" id="rate" readonly>
                             </div>
                         </div>
-                        @if($gateway->is_auto == 1)
                         <div class="form-group row mb-4">
-                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3 required" for="test_mode">{{ __('Sandbox Mode') }}</label>
-                            <div class="col-sm-12 col-md-7">
-                                <select class="form-control selectric" name="test_mode" id="test_mode">
-                                    <option value="1" {{ $gateway->test_mode == 1 ? 'selected' : '' }}>{{ __('Enable') }}</option>
-                                    <option value="0" {{ $gateway->test_mode == 0 ? 'selected' : '' }}>{{ __('Disable') }}</option>
-                                </select>
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="is_auto">{{ __('Auto Approved') }}</label>
+                            <div class="col-sm-12 col-md-7 d-flex align-items-center">
+                                <input class="form-check-input gateways" name="is_auto" type="checkbox" value="1" id="is_auto">
                             </div>
                         </div>
-                        @endif
                         <div class="form-group row mb-4">
                             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3 required" for="min_amount">{{ __("Minimum Amount") }}</label>
                             <div class="col-sm-12 col-md-7">
@@ -108,14 +103,13 @@
                                 </select>
                             </div>
                         </div>
-                        @if($gateway->is_auto == 0)
                         <div class="form-group row mb-4">
-                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3 required" for="payment_instruction">{{ __('Payment Instruction') }}</label>
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="instructions">{{ __('Payment Instruction') }}</label>
                             <div class="col-sm-12 col-md-7">
-                                <textarea class="form-control" name="payment_instruction" id="payment_instruction" required>{{ $gateway->data }}</textarea>
+                                <textarea class="summernote" name="instructions" id="instructions">{{ html_entity_decode($gateway->instructions) }}</textarea>
                             </div>
                         </div>
-                        @else
+                        @if($gateway->is_auto == 1)
                             @php $info = json_decode($gateway->data) @endphp
                             @foreach ($info ?? [] as $key => $cred)
                             <div class="form-group row mb-4">
@@ -146,17 +140,32 @@
                         </div>
                     </div>
                     <div class="card-body overflow-auto repeaters" data-repeater-list="fields" style="max-height: 588px; height: 588px">
+                        <div class="form-group">
+                            <div class="input-group row mx-0">
+                                <h5 class="col-4 col-form-label">{{ __('Label') }}</h5>
+                                <h5 class="col-4 col-form-label">{{ __('Type') }}</h5>
+                                <h5 class="col-2 col-form-label">{{ __('Is Required?') }}</h5>
+                                <h5 class="col-2 col-form-label">{{ __('Action') }}</h5>
+                            </div>
+                        </div>
+
                         @if($gateway->fields > 0)
                             @foreach($gateway->fields as $field)
                                 <div class="form-group" data-repeater-item>
-                                    <div class="input-group">
-                                        <input type="text" name="label" class="form-control" value="{{ $field['label'] }}" placeholder="{{ __('Enter input label') }}" aria-label="" required>
-                                        <select name="type" class="form-control" aria-label="" required>
+                                    <div class="input-group row mx-0">
+                                        <input type="text" name="label" class="form-control col-4" value="{{ $field['label'] }}" placeholder="{{ __('Enter input label') }}" aria-label="" required>
+
+                                        <select name="type" class="form-control col-4" aria-label="" required>
                                             @foreach($types as $type)
                                                 <option value="{{ $type }}" @selected($field['type'] == $type)>{{ ucwords($type) }}</option>
                                             @endforeach
                                         </select>
-                                        <div class="input-group-append">
+
+                                        <div class="form-check col-2 d-flex align-items-center justify-content-center">
+                                            <input class="form-check-input gateways" name="isRequired" type="checkbox" value="true" id="checkDefault" {{ isset($field['isRequired']) && $field['isRequired'] ? 'checked' : '' }}>
+                                        </div>
+
+                                        <div class="input-group-append col-2">
                                             <button type="button" class="btn btn-danger" data-repeater-delete>
                                                 <i class="fas fa-times-circle"></i>
                                             </button>
@@ -166,14 +175,20 @@
                             @endforeach
                         @else
                             <div class="form-group" data-repeater-item>
-                                <div class="input-group">
-                                    <input type="text" name="label" class="form-control" placeholder="{{ __('Enter input label') }}" aria-label="" required>
-                                    <select name="type" class="form-control" aria-label="" required>
+                                <div class="input-group row mx-0">
+                                    <input type="text" name="label" class="form-control col-4" placeholder="{{ __('Enter input label') }}" aria-label="" required>
+
+                                    <select name="type" class="form-control col-4" aria-label="" required>
                                         @foreach($types as $type)
                                             <option value="{{ $type }}">{{ ucwords($type) }}</option>
                                         @endforeach
                                     </select>
-                                    <div class="input-group-append">
+
+                                    <div class="form-check col-2 d-flex align-items-center justify-content-center">
+                                        <input class="form-check-input gateways" name="isRequired" type="checkbox" value="true" id="checkDefault">
+                                    </div>
+
+                                    <div class="input-group-append col-2">
                                         <button type="button" class="btn btn-danger" data-repeater-delete>
                                             <i class="fas fa-times-circle"></i>
                                         </button>
@@ -186,16 +201,25 @@
             </div>
         </div>
     </form>
-
 @endsection
 
+
+@push('css')
+    <link rel="stylesheet" href="{{ asset('admin/plugins/summernote/summernote-bs4.css') }}">
+@endpush
+
 @push('script')
+    <script src="{{ asset('admin/plugins/summernote/summernote.js') }}"></script>
+    <script src="{{ asset('admin/plugins/summernote/summernote-bs4.js') }}"></script>
     <script src="{{ asset('admin/plugins/jqueryrepeater/jquery.repeater.min.js') }}"></script>
     <script src="{{ asset('admin/pages/gateway.js') }}"></script>
     <script>
         "use strict";
-        $('#currency').val({{$gateway->currency_id}})
+
+        $('#currency').val({{$gateway->currency_id}});
+
         setText();
+
         $('#currency').on('change', function(){
             setText()
         });
