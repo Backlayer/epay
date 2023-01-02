@@ -59,6 +59,12 @@
                                     </tbody>
                                 </table>
 
+                                @if ($gateway->instructions)
+                                <div class="card-body">
+                                    {!! $gateway->instructions !!}
+                                </div>
+                                @endif
+
                                 <form action="{{ route($formRoute, [$source->uuid, $gateway->id]) }}" method="post" role="form" class="form-light form" enctype="multipart/form-data">
                                     @csrf
 
@@ -123,19 +129,29 @@
 
                                         @if(isset($gateway->fields) && count($gateway->fields))
                                             @foreach($gateway->fields as $index => $field)
+                                                @php
+                                                    $required = isset($field['isRequired']) && $field['isRequired']
+                                                        ? 'required'
+                                                        : '';
+                                                @endphp
+
                                                 @if($field['type'] == 'textarea')
                                                     <div class="form-group">
-                                                        <label for="fields_{{ $loop->index }}" class="required">{{ $field['label'] }}</label>
+                                                        <label for="fields_{{ $loop->index }}" class="{{ $required }}">
+                                                            {{ $field['label'] }}
+                                                        </label>
                                                         <textarea
                                                             name="fields[{{ $field['label'] }}]"
                                                             id="fields_{{ $loop->index }}"
                                                             class="form-control h-25"
-                                                            required
+                                                            {{ $required }}
                                                         ></textarea>
                                                     </div>
                                                 @else
                                                     <div class="form-group">
-                                                        <label for="fields_{{ $loop->index }}" class="required">{{ $field['label'] }}</label>
+                                                        <label for="fields_{{ $loop->index }}" class="{{ $required }}">
+                                                            {{ $field['label'] }}
+                                                        </label>
                                                         <input
                                                             type="{{ $field['type'] }}"
                                                             name="fields[{{ $field['label'] }}]"
@@ -144,7 +160,14 @@
                                                             @if($field['type'] == 'file')
                                                                 accept=".jpg,.jpeg,.png,.pdf"
                                                             @endif
-                                                            required />
+                                                            {{ $required }}
+                                                        />
+
+                                                        @if($field['type'] == 'tel')
+                                                            <small class="form-text text-danger">
+                                                                {{ __('The phone number must contain the country code: Example: +584145551212') }}
+                                                            </small>
+                                                        @endif.
                                                     </div>
                                                 @endif
                                             @endforeach
@@ -163,3 +186,12 @@
             </div>
         </div>
 @endsection
+
+@push('css')
+    <style>
+        label.required::after {
+            content: '*';
+            color: var(--danger);
+        }
+    </style>
+@endpush
