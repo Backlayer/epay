@@ -13,6 +13,21 @@ class PaymentGatewayController extends Controller
 {
     public $types = ['text', 'number', 'email', 'tel', 'textarea', 'file', 'date'];
 
+    private function mapFields($request)
+    {
+        $fields = [];
+
+        foreach ($request->fields as $key => $value) {
+            $fields[] = [
+                'label' => $value['label'],
+                'type' => $value['type'],
+                'isRequired' => isset($value['isRequired'][0]),
+            ];
+        }
+
+        return $fields;
+    }
+
     public function __construct()
     {
         $this->middleware('permission:gateways-create')->only('create', 'store');
@@ -47,6 +62,7 @@ class PaymentGatewayController extends Controller
             'fields' => ['required', 'array'],
             'fields.*.label' => ['required', 'string'],
             'fields.*.type' => ['required', 'string', Rule::in($this->types)],
+            'instructions' => ['nullable', 'string'],
         ]);
 
         $gateway = new Gateway();
@@ -64,11 +80,12 @@ class PaymentGatewayController extends Controller
         $gateway->name = $request->name;
         $gateway->charge = $request->charge;
         $gateway->namespace = 'App\Lib\CustomGateway';
-        $gateway->is_auto = 0;
+        $gateway->is_auto = $request->is_auto ?? 0;
         $gateway->image_accept = $request->image_accept;
         $gateway->status = $request->status;
         $gateway->data = $request->instruction;
-        $gateway->fields = $request->fields;
+        $gateway->fields = $this->mapFields($request);
+        $gateway->instructions = $request->instructions;
         $gateway->save();
 
         return response()->json([
@@ -99,26 +116,18 @@ class PaymentGatewayController extends Controller
             'fields' => ['required', 'array'],
             'fields.*.label' => ['required', 'string'],
             'fields.*.type' => ['required', 'string', Rule::in($this->types)],
+            'instructions' => ['nullable', 'string'],
         ]);
 
         $gateway = Gateway::findOrFail($id);
 
-        if ($gateway->is_auto == 0) {
-            $request->validate([
-                'payment_instruction' => 'required',
-            ]);
-            $gateway->data = $request->payment_instruction;
-        } else {
-            $gateway->data = $request->data ? json_encode($request->data) : '';
-        }
         if ($request->hasFile('logo')) {
             if (!empty($gateway->logo)) {
                 $file = $gateway->logo;
                 $arr = explode('uploads', $file);
-                if (count($arr ?? []) != 0) {
-                    if (isset($arr[1])) {
-                        Storage::disk(env('STORAGE_TYPE'))->delete('uploads' . $arr[1]);
-                    }
+
+                if (count($arr ?? []) != 0 && isset($arr[1])) {
+                    Storage::disk(env('STORAGE_TYPE'))->delete('uploads' . $arr[1]);
                 }
             }
 
@@ -140,7 +149,14 @@ class PaymentGatewayController extends Controller
         $gateway->image_accept = $request->image_accept;
         $gateway->min_amount = $request->min_amount;
         $gateway->max_amount = $request->max_amount;
-        $gateway->fields = $request->fields;
+        $gateway->is_auto = $request->is_auto ?? 0;
+        $gateway->fields = $this->mapFields($request);
+        $gateway->instructions = $request->instructions;
+
+        if ($request->is_auto == 1) {
+            $gateway->data = $request->data ? json_encode($request->data) : '';
+        }
+
         $gateway->save();
 
         return response()->json([

@@ -1016,5 +1016,7 @@
     "Payment Status": "Payment Status",
     "Paid by Client": "Paid by Client",
     "Payment Details": "Payment Details",
-    "View Document": "View Document"
+    "View Document": "View Document",
+    "Is Required?": "Is Required?",
+    "Auto Approved": "Auto Approved"
 }
