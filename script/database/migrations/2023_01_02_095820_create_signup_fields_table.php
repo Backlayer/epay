@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('label');
             $table->string('type');
+            $table->json('data')->nullable()->comment('Used for select, radio or checkbox fields');
             $table->boolean('isRequired')->default(false);
             $table->boolean('isActive')->default(false);
 

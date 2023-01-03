@@ -1018,5 +1018,12 @@
     "Payment Details": "Payment Details",
     "View Document": "View Document",
     "Is Required?": "Is Required?",
-    "Auto Approved": "Auto Approved"
+    "Is Active?": "Is Active?",
+    "Auto Approved": "Auto Approved",
+    "Fields for Signup": "Fields for Signup",
+    "Create Fields for Signup": "Create Fields for Signup",
+    "Edit Fields for Signup": "Edit Fields for Signup",
+    "Fields for Signup created successfully": "Fields for Signup created successfully",
+    "Fields for Signup updated successfully": "Fields for Signup updated successfully",
+    "Field for Signup successfully removed": "Field for Signup successfully removed"
 }
