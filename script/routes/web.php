@@ -267,4 +267,6 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'App\Http\Co
     Route::get('/site-settings', 'SitesettingsController@index')->name('site-settings');
     Route::post('/site-settings-update/{type}', 'SitesettingsController@update')->name('site-settings.update');
     Route::resource('cron', 'CronController');
+
+    Route::resource('signup-fields', 'SignupFieldsController')->except('show');
 });

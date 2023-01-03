@@ -61,6 +61,7 @@ class PermissionSeeder extends Seeder
                 'gateways' => 'c,r,u,d',
                 'roles' => 'c,r,u,d',
                 'roles-assign' => 'r,c',
+                'signup-fields' => 'c,r,u,d',
             ],
             'Manager' => [
                 'dashboard' => 'r',
@@ -96,7 +97,7 @@ class PermissionSeeder extends Seeder
             ]);
             $permissions = [];
 
-            $this->command->info('Creating Role '. strtoupper($key));
+            $this->command->info('Creating Role ' . strtoupper($key));
 
             // Reading role permission modules
             foreach ($modules as $module => $value) {
@@ -110,7 +111,7 @@ class PermissionSeeder extends Seeder
                         'guard_name' => 'web'
                     ])->id;
 
-                    $this->command->info('Creating Permission to '.$permissionValue.' for '. $module);
+                    $this->command->info('Creating Permission to ' . $permissionValue . ' for ' . $module);
                 }
             }
 
@@ -122,10 +123,10 @@ class PermissionSeeder extends Seeder
                 // Create default user for each role
                 $user = User::create([
                     'name' => ucwords(str_replace('_', ' ', $key)),
-                    'email' => str($key)->remove(' ')->lower().'@'.str($key)->remove(' ')->lower().'.com',
+                    'email' => str($key)->remove(' ')->lower() . '@' . str($key)->remove(' ')->lower() . '.com',
                     'username' => str($key)->remove(' ')->lower(),
                     'password' => bcrypt('rootadmin'),
-                    'avatar' => 'https://avatars.dicebear.com/api/adventurer/'.str($key)->slug().'.svg',
+                    'avatar' => 'https://avatars.dicebear.com/api/adventurer/' . str($key)->slug() . '.svg',
                     'email_verified_at' => now(),
                     'kyc_verified_at' => now(),
                     'role' => 'admin'
@@ -135,7 +136,8 @@ class PermissionSeeder extends Seeder
         }
     }
 
-    private function permissionMap(){
+    private function permissionMap()
+    {
         return collect([
             'c' => 'create',
             'r' => 'read',

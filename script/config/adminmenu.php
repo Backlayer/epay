@@ -19,7 +19,6 @@ return [
         "patterns" => ["admin/customers*"],
         "can" => ['customers-read']
     ],
-
     [
         "title" => "Promotional Email",
         "icon" => "fas fa-envelope",
@@ -139,7 +138,6 @@ return [
         "patterns" => ["admin/banks*"],
         "can" => ['banks-read'],
     ],
-
     [
         "title" => "Manage Orders",
         "icon" => "fas fa-th-list",
@@ -223,7 +221,6 @@ return [
         "patterns" => ["admin/kyc-requests*"],
         "can" => ['kyc-requests-read'],
     ],
-
     ["header" => "Website Management", "can" => ['website-read', 'website-update'],],
     [
         "title" => "Media",
@@ -298,7 +295,7 @@ return [
         "patterns" => ['admin/settings', 'admin/language/*', 'admin/menu/*'],
         "can" => ['settings-read', 'languages-read', 'menus-read', 'seo-read', 'system-settings-read', 'cron-settings', /*'taxes-read',*/ 'gateways-read', 'roles-read', 'roles-assign'],
         "submenu" => [
-             [
+            [
                 "title" => "Logo",
                 "route" => "admin.settings.website.logo.index",
                 "patterns" => ["admin/settings/website/logo/index"],
@@ -375,6 +372,12 @@ return [
                 "route" => "admin.assign-role.index",
                 "patterns" => ["admin/assign-role*"],
                 "can" => ['roles-assign-read'],
+            ],
+            [
+                "title" => "Signup Fields",
+                "route" => "admin.signup-fields.index",
+                "patterns" => ["admin/signup-fields*"],
+                "can" => ['signup-fields-read'],
             ],
         ]
     ],
