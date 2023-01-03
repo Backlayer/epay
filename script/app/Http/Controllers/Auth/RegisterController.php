@@ -47,14 +47,14 @@ class RegisterController extends Controller
     {
         $dataFields = [];
 
-        if (isset($this->signupFields->data)) {
+        if (isset($this->signupFields) && count($this->signupFields) > 0) {
             foreach ($request->fields as $key => $value) {
                 $field = $request->fields[$key];
 
                 if (is_file($field)) {
                     $dataFields[$key] = $this->upload($request, 'fields.' . $key);
                 } else {
-                    $dataFields[$key] = $field;
+                    $dataFields[$key] = json_decode($field, true);
                 }
             }
         }
@@ -69,7 +69,8 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->signupFields = SignupFields::where('isActive', true)->get();
+        $this->signupFields = SignupFields::where('isActive', true)
+            ->get(['id', 'label', 'type', 'data', 'isRequired']);
 
         $this->middleware('guest');
     }
@@ -103,11 +104,6 @@ class RegisterController extends Controller
      */
     protected function create(Request $request)
     {
-        dd([
-            'data' => $this->getFields($request),
-            'fields' => json_decode($this->signupFields, true)
-        ]);
-
         return User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -118,8 +114,8 @@ class RegisterController extends Controller
             'meta' => [
                 "business_name" => $request->business_name
             ],
-            'data' => $this->getFields($request),
-            'fields' => json_decode($this->signupFields, true)
+            'data' => $this->getFields($request) ?? null,
+            'fields' => $this->signupFields ?? null
         ]);
     }
 
