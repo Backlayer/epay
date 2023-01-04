@@ -1,5 +1,5 @@
 @extends('layouts.backend.app', [
-    'prev' => route('admin.customers.index')
+    'prev' => route('admin.users.index')
 ])
 
 @section('title', __('User Profile'))
@@ -15,7 +15,7 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <div class="icon icon-shape bg-white text-dark rounded-circle shadow">
-                                        <img src="{{ avatar() }}" alt="" class="rounded-circle" width="50">
+                                        <img src="{{ avatar($user) }}" alt="" class="rounded-circle" width="50">
                                     </div>
                                 </div>
 
@@ -76,6 +76,18 @@
                                 @else
                                     {{ __('Not verified') }}
                                 @endif
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="font-weight-bolder">{{ __('Public Key') }}</div>
+                            <div class="font-weight-light">
+                                {{ $user->public_key }}
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="font-weight-bolder">{{ __('Secret key') }}</div>
+                            <div class="font-weight-light">
+                                {{ $user->secret_key }}
                             </div>
                         </li>
                     </ul>
