@@ -78,18 +78,6 @@
                                 @endif
                             </div>
                         </li>
-                        <li class="list-group-item">
-                            <div class="font-weight-bolder">{{ __('Public Key') }}</div>
-                            <div class="font-weight-light">
-                                {{ $user->public_key }}
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="font-weight-bolder">{{ __('Secret key') }}</div>
-                            <div class="font-weight-light">
-                                {{ $user->secret_key }}
-                            </div>
-                        </li>
                     </ul>
                 </div>
             </div>
