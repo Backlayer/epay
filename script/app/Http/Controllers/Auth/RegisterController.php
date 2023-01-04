@@ -69,9 +69,6 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->signupFields = SignupFields::where('isActive', true)
-            ->get(['id', 'label', 'type', 'data', 'isRequired']);
-
         $this->middleware('guest');
     }
 
@@ -104,11 +101,14 @@ class RegisterController extends Controller
      */
     protected function create(Request $request)
     {
+        $this->signupFields = SignupFields::where('isActive', true)
+            ->get(['id', 'label', 'type', 'data', 'isRequired']);
+
         return User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'username' => $this->usernameGenerate($request->email),
+            'username' => usernameGenerate($request->email),
             'password' => Hash::make($request->password),
             'currency_id' => $request->country,
             'meta' => [
@@ -137,19 +137,6 @@ class RegisterController extends Controller
                 'redirect' => route('user.set-bank.index')
             ], 201)
             : redirect()->route('user.set-bank.index');
-    }
-
-    public function usernameGenerate($email)
-    {
-        $explodeEmail = explode('@', $email);
-        $username = $explodeEmail[0];
-        $countUsername = User::where('username', $username)->count();
-
-        if ($countUsername > 0) {
-            $username = $username . $countUsername + 1;
-        }
-
-        return $username;
     }
 
     public function showRegistrationForm()

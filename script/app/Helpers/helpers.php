@@ -636,3 +636,27 @@ if (!function_exists('get_percentage_change')) {
         return ($decreaseValue / $newNumber) * 100;
     }
 }
+
+if (!function_exists('passwordGenerate')) {
+    function passwordGenerate($charsLength)
+    {
+        $data = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcefghijklmnopqrstuvwxyz.$#&*;-+:,?@';
+
+        return substr(str_shuffle($data), 0, $charsLength);
+    }
+}
+
+if (!function_exists('usernameGenerate')) {
+    function usernameGenerate($email)
+    {
+        $explodeEmail = explode('@', $email);
+        $username = $explodeEmail[0];
+        $countUsername = User::where('username', $username)->count();
+
+        if ($countUsername > 0) {
+            $username = $username . $countUsername + 1;
+        }
+
+        return $username;
+    }
+}
