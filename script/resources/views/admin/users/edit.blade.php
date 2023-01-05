@@ -30,9 +30,8 @@
 
 
                         <div class="form-group">
-                            <label for="password" class="optional">{{ __('Password') }}</label>
+                            <label for="password" class="required">{{ __('Password') }}</label>
                             <input type="password" name="password" id="password" class="form-control" min="8" placeholder="{{ __('Enter password') }}">
-                            <div class="text-small text-secondary">{{ __('If you do not want to change the password, leave it blank') }}</div>
                         </div>
 
                         <div class="form-group">

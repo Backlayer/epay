@@ -21,11 +21,11 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-         $users = User::whereRole('user')
-            ->when($request->get('src') !== null, function ($query) use($request){
-                $query->where('name', 'LIKE', '%'.$request->get('src').'%')
-                    ->orWhere('username', 'LIKE', '%'.$request->get('src').'%')
-                    ->orWhere('email', 'LIKE', '%'.$request->get('src').'%');
+        $users = User::whereRole('user')
+            ->when($request->get('src') !== null, function ($query) use ($request) {
+                $query->where('name', 'LIKE', '%' . $request->get('src') . '%')
+                    ->orWhere('username', 'LIKE', '%' . $request->get('src') . '%')
+                    ->orWhere('email', 'LIKE', '%' . $request->get('src') . '%');
             })
             ->latest()
             ->paginate(10);
@@ -74,10 +74,10 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-       $validated = $request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'string'],
-            'email' => ['required', 'email', 'unique:users,id,'.$user->id],
-            'password' => ['nullable', Password::default()],
+            'email' => ['required', 'email', 'unique:users,id,' . $user->id],
+            'password' => ['required', Password::default()],
             'status' => ['required'],
         ]);
 
