@@ -75,9 +75,10 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
+            'business_name' => ['required', 'string', 'max:255'],
             'name' => ['required', 'string'],
             'email' => ['required', 'email', 'unique:users,id,' . $user->id],
-            'password' => ['required', Password::default()],
+            'password' => ['nullable', Password::default()],
             'status' => ['required'],
         ]);
 
