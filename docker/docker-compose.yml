@@ -1,5 +1,5 @@
 version: "3.7"
-name: "epay-paynomy"
+#name: "epay-paynomy"
 services:
   app:
     build:
@@ -26,32 +26,35 @@ services:
     image: mysql:8.0.19
     container_name: epay-db
     restart: unless-stopped
-    tty: true
+    command: "--max_allowed_packet=4096M --default-authentication-plugin=mysql_native_password"    
     ports:
       - '${MYSQL_PORT:-3308}:3306'
     env_file:
       - ../script/.env
     environment:
-      MYSQL_ROOT_HOST: "%"
+      #MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
       MYSQL_DATABASE: '${DB_DATABASE}'
       MYSQL_USER: '${DB_USERNAME}'
       MYSQL_PASSWORD: '${DB_PASSWORD}'
     volumes:
-      - mysql_data:/var/lib/mysql
+      - ../data/mysql_data:/var/lib/mysql
+      - ../docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf   
     networks:
       - epay_network
 
   phpmyadmin:
     image: phpmyadmin
     container_name: epay-phpmyadmin
-    tty: true
+    restart: unless-stopped
+    #tty: true
     env_file:
       - ../script/.env    
     ports:
       - '${PHPMYADMIN_PORT:-5080}:80'
     environment:
       PMA_HOST: db
+      #PMA_ARBITRARY: 1      
     networks:
       - epay_network
     volumes:
@@ -76,14 +79,13 @@ services:
       - epay_network
     depends_on:
       - app
-      - db
 
 networks:
   epay_network:
     driver: bridge
 
 volumes:
-  mysql_data:
-    driver: local
+  #mysql_data:
+  #  driver: local
   phpmyadmin_data:
     driver: local
