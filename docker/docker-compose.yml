@@ -1,10 +1,10 @@
-version: "3.7"
-#name: "epay-paynomy"
+version: '3.7'
+name: 'epay-paynomy'
 services:
   app:
     build:
       context: ./
-      dockerfile: ./Dockerfile   
+      dockerfile: ./Dockerfile
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
@@ -26,7 +26,7 @@ services:
     image: mysql:8.0.19
     container_name: epay-db
     restart: unless-stopped
-    command: "--max_allowed_packet=4096M --default-authentication-plugin=mysql_native_password"    
+    command: '--max_allowed_packet=4096M --default-authentication-plugin=mysql_native_password'
     ports:
       - '${MYSQL_PORT:-3308}:3306'
     env_file:
@@ -38,8 +38,8 @@ services:
       MYSQL_USER: '${DB_USERNAME}'
       MYSQL_PASSWORD: '${DB_PASSWORD}'
     volumes:
-      - ../data/mysql_data:/var/lib/mysql
-      - ../docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf   
+      - ./data/mysql_data:/var/lib/mysql
+      - ./data/backups:/backups
     networks:
       - epay_network
 
@@ -49,12 +49,12 @@ services:
     restart: unless-stopped
     #tty: true
     env_file:
-      - ../script/.env    
+      - ../script/.env
     ports:
       - '${PHPMYADMIN_PORT:-5080}:80'
     environment:
       PMA_HOST: db
-      #PMA_ARBITRARY: 1      
+      #PMA_ARBITRARY: 1
     networks:
       - epay_network
     volumes:
@@ -68,9 +68,9 @@ services:
     restart: unless-stopped
     tty: true
     env_file:
-      - ../script/.env    
+      - ../script/.env
     ports:
-      - '${NGINX_PORT:-8000}:80'    
+      - '${NGINX_PORT:-8000}:80'
     volumes:
       - ../:/var/www
       - ./nginx/:/etc/nginx/conf.d/
