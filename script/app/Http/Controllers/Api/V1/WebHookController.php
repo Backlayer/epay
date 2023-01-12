@@ -27,7 +27,7 @@ class WebHookController extends Controller
             'business_name' => ['required', 'string', 'max:255'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phone' => ['required', new Phone],
+            'phone' => ['required'],
             'currency' => ['required', 'exists:currencies,id'],
         ]);
 
@@ -42,10 +42,14 @@ class WebHookController extends Controller
         $password = passwordGenerate(8);
         $redirect = route('login');
 
+        $validatePhone = new Phone();
+        $isValidPhone = $validatePhone->isPhone($request->phone);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'isValidPhone' => $isValidPhone,
             'username' => $username,
             'password' => Hash::make($password),
             'currency_id' => $request->currency,

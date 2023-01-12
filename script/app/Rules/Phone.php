@@ -35,7 +35,7 @@ class Phone implements Rule
      * @param  string  $value The phone number to check
      * @return boolean        is it correct format?
      */
-    protected function isPhone($value)
+    public function isPhone($value)
     {
         return $this->isE164($value);
         // return $this->isE123($value) || $this->isE164($value) || $this->isNANP($value) || $this->isDigits($value);
