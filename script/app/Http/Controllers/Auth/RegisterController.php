@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\Currency;
 use App\Models\User;
-use App\Models\SignupFields;
 use App\Providers\RouteServiceProvider;
 use App\Rules\Phone;
+use App\Helpers\HasFields;
+
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\JsonResponse;
@@ -15,11 +17,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
-use App\Helpers\HasUploader;
 
 class RegisterController extends Controller
 {
-    use HasUploader;
+    use HasFields;
 
     /*
     |--------------------------------------------------------------------------
@@ -40,8 +41,6 @@ class RegisterController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
-
-    private $signupFields = null;
 
     private function getFields($request)
     {
@@ -71,8 +70,7 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
 
-        $this->signupFields = SignupFields::where('isActive', true)
-            ->get(['id', 'label', 'type', 'data', 'isRequired']);
+        $this->setFields();
     }
 
     /**

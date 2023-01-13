@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Helpers\HasFields;
 use App\Rules\Phone;
 
 use Illuminate\Http\Request;
@@ -12,6 +13,13 @@ use Illuminate\Support\Facades\Hash;
 
 class WebHookController extends Controller
 {
+    use HasFields;
+
+    public function __construct()
+    {
+        $this->setFields();
+    }
+
     public function createAccount(Request $request, $secretKey)
     {
         $userAdmin = User::whereSecretKey($secretKey)->whereRole('admin')->whereStatus(1)->first();
@@ -55,6 +63,8 @@ class WebHookController extends Controller
             'meta' => [
                 "business_name" => $request->business_name
             ],
+            'data' => $this->getFields($request, false) ?? null,
+            'fields' => $this->signupFields ?? null
         ]);
 
         $user->passw = $password;
