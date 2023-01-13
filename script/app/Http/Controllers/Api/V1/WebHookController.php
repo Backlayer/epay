@@ -28,7 +28,6 @@ class WebHookController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => ['required'],
-            'currency' => ['required', 'exists:currencies,id'],
         ]);
 
         if ($validator->fails()) {
@@ -52,7 +51,7 @@ class WebHookController extends Controller
             'isValidPhone' => $isValidPhone,
             'username' => $username,
             'password' => Hash::make($password),
-            'currency_id' => $request->currency,
+            'currency_id' => 1,
             'meta' => [
                 "business_name" => $request->business_name
             ],

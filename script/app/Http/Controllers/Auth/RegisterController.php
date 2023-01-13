@@ -70,6 +70,9 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+
+        $this->signupFields = SignupFields::where('isActive', true)
+            ->get(['id', 'label', 'type', 'data', 'isRequired']);
     }
 
     /**
@@ -85,7 +88,6 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => ['required', new Phone],
-            'country' => ['required', 'exists:currencies,id'],
             'password' => ['required', Password::default()],
             'agree' => ['accepted'],
         ], [
@@ -101,16 +103,13 @@ class RegisterController extends Controller
      */
     protected function create(Request $request)
     {
-        $this->signupFields = SignupFields::where('isActive', true)
-            ->get(['id', 'label', 'type', 'data', 'isRequired']);
-
         return User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'username' => usernameGenerate($request->email),
             'password' => Hash::make($request->password),
-            'currency_id' => $request->country,
+            'currency_id' => 1,
             'meta' => [
                 "business_name" => $request->business_name
             ],
@@ -141,12 +140,12 @@ class RegisterController extends Controller
 
     public function showRegistrationForm()
     {
-        $currencies = Currency::whereStatus(1)
+        $countries = Currency::whereStatus(1)
             ->groupBy('country_name')
             ->pluck('country_name', 'id');
 
         $signupFields = $this->signupFields;
 
-        return view('auth.register', compact('currencies', 'signupFields'));
+        return view('auth.register', compact('countries', 'signupFields'));
     }
 }
