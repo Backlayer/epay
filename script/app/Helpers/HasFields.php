@@ -39,7 +39,7 @@ trait HasFields
                 if (is_file($field)) {
                     $dataFields[$key] = $this->upload($request, 'fields.' . $key);
                 } else {
-                    $dataFields[$key] = json_decode($field, true);
+                    $dataFields[$key] = $field;
                 }
             }
         }

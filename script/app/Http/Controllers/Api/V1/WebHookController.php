@@ -10,6 +10,7 @@ use App\Rules\Phone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 
 class WebHookController extends Controller
 {
@@ -68,6 +69,8 @@ class WebHookController extends Controller
         ]);
 
         $user->passw = $password;
+
+        event(new Registered($user));
 
         return response()->json([
             'message' => __('Registration Successful'),

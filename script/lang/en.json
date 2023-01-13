@@ -1024,5 +1024,8 @@
     "Edit Fields for Signup": "Edit Fields for Signup",
     "Fields for Signup created successfully": "Fields for Signup created successfully",
     "Fields for Signup updated successfully": "Fields for Signup updated successfully",
-    "Field for Signup successfully removed": "Field for Signup successfully removed"
+    "Field for Signup successfully removed": "Field for Signup successfully removed",
+    "Your credentials are:": "Your credentials are:",
+    "Keep in mind that you should not share this data and you must keep it in a safe place, you are responsible for its use.": "Keep in mind that you should not share this data and you must keep it in a safe place, you are responsible for its use.",
+    "If you're having trouble clicking the \"Verify Email Address\" button, copy and paste the URL below into your web browser": "If you're having trouble clicking the \"Verify Email Address\" button, copy and paste the URL below into your web browser"
 }
