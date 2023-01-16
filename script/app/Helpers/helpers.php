@@ -663,7 +663,7 @@ if (!function_exists('usernameGenerate')) {
 
 function sortField($fields, $bySort)
 {
-    usort($fields, fn ($a, $b) => $a[$bySort] > $b[$bySort]);
+    usort($fields, fn ($a, $b) => @$a[$bySort] && $a[$bySort] > $b[$bySort]);
 
     return $fields;
 }

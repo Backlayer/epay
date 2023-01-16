@@ -1,5 +1,5 @@
 @extends('layouts.backend.app', [
-    'prev' => route('admin.users.index')
+    'prev' => route('admin.users.index'),
 ])
 
 @section('title', __('User Profile'))
@@ -30,7 +30,6 @@
                             <div class="font-weight-bolder">{{ __('Account ID') }}</div>
                             <div class="font-weight-light">{{ $user->id }}</div>
                         </li>
-
                         <li class="list-group-item">
                             <div class="font-weight-bolder">{{ __('Username') }}</div>
                             <div class="font-weight-light"><span>@</span>{{ $user->username }}</div>
@@ -49,11 +48,10 @@
                                 {{ convert_money_direct($user->wallet, $user->currency, default_currency(), true) }}
                             </div>
                         </li>
-
                         <li class="list-group-item">
                             <div class="font-weight-bolder">{{ __('Account Status') }}</div>
                             <div class="font-weight-light">
-                                @if($user->status == 1)
+                                @if ($user->status == 1)
                                     <span class="badge badge-primary">{{ __('Active') }}</span>
                                 @elseif($user->status == 0)
                                     <span class="badge badge-warning">{{ __('Inactive') }}</span>
@@ -71,7 +69,7 @@
                         <li class="list-group-item">
                             <div class="font-weight-bolder">{{ __('Kyc Verified At') }}</div>
                             <div class="font-weight-light">
-                                @if($user->kyc_verified_at)
+                                @if ($user->kyc_verified_at)
                                     {{ formatted_date($user->email_verified_at) }}
                                 @else
                                     {{ __('Not verified') }}
@@ -142,7 +140,8 @@
 
 @section('modal')
     <!-- Modal -->
-    <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="sendEmailModalTitle" aria-hidden="true">
+    <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="sendEmailModalTitle"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -151,17 +150,19 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('admin.customers.send-email', $user->id) }}" method="POST" class="ajaxform_with_reset">
+                <form action="{{ route('admin.customers.send-email', $user->id) }}" method="POST"
+                    class="ajaxform_with_reset">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="subject" class="required">{{ __('Subject') }}</label>
-                            <input type="text" name="subject" id="subject" class="form-control" placeholder="{{ __('Enter email subject') }}" required>
+                            <input type="text" name="subject" id="subject" class="form-control"
+                                placeholder="{{ __('Enter email subject') }}" required>
                         </div>
 
                         <div class="form-group">
                             <label for="message" class="required">{{ __('Message') }}</label>
-                            <textarea name="message" id="message" class="summernote" placeholder="{{ __('Enter message') }}" ></textarea>
+                            <textarea name="message" id="message" class="summernote" placeholder="{{ __('Enter message') }}"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">

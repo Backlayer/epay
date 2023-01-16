@@ -30,79 +30,22 @@
                 <div id="phoneNumberHelp" class="form-text text-danger">
                     {{ __('The phone number must contain the country code: Example: +584145551212') }}</div>
             </div>
-        </div>
 
-        <!--
-                            <div class="mb-20">
-                            <label for="country" class="col-form-label">{{ __('Country') }}</label>
-                            <select class="form-control focus-input100" name="country" id="country" required>
-                                @foreach ($countries as $id => $country)
+            <!--
+            <div class="mb-20">
+            <label for="country" class="col-form-label">{{ __('Country') }}</label>
+            <select class="form-control focus-input100" name="country" id="country" required>
+                @foreach ($countries as $id => $country)
     <option value="{{ $id }}">{{ $country }}</option>
     @endforeach
-                            </select>
-                        </div>
-                        -->
-
-        @if (isset($signupFields) && count($signupFields))
-            <div class="row">
-                @foreach ($signupFields as $index => $field)
-                    @php
-                        $required = isset($field['isRequired']) && $field['isRequired'] == '1' ? 'required' : '';
-                    @endphp
-
-                    <div class="col-md-6 mb-20">
-                        <label for="fields_{{ $loop->index }}" class="col-form-label {{ $required }}">
-                            {{ $field['label'] }}
-                        </label>
-
-                        @if ($field['type'] == 'textarea')
-                            <textarea name="fields[{{ $field['label'] }}]" id="fields_{{ $loop->index }}" class="form-control focus-input100"
-                                {{ $required }}></textarea>
-                        @elseif($field['type'] == 'radio')
-                            @foreach ($field['data'] as $index2 => $option)
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="fields[{{ $field['label'] }}]"
-                                        id="option[{{ $option['label'] }}]" value="{{ $option['value'] }}"
-                                        {{ $required }}>
-                                    <label class="form-check-label" for="option[{{ $option['label'] }}]">
-                                        {{ $option['label'] }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        @elseif($field['type'] == 'checkbox')
-                            @foreach ($field['data'] as $index2 => $option)
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="option[{{ $option['label'] }}]"
-                                        id="option[{{ $option['label'] }}]" value="{{ $option['value'] }}"
-                                        {{ $required }}>
-                                    <label class="form-check-label" for="option[{{ $option['label'] }}]">
-                                        {{ $option['label'] }}
-                                    </label>
-                                </div>
-                            @endforeach
-                        @elseif($field['type'] == 'select')
-                            <select class="form-control focus-input100" name="fields[{{ $field['label'] }}]"
-                                id="fields_{{ $loop->index }}" {{ $required }}>
-                                @foreach ($field['data'] as $index2 => $option)
-                                    <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
-                                @endforeach
-                            </select>
-                        @else
-                            <input type="{{ $field['type'] }}" name="fields[{{ $field['label'] }}]"
-                                id="fields_{{ $loop->index }}" class="form-control focus-input100"
-                                @if ($field['type'] == 'file') accept=".jpg,.jpeg,.png,.pdf" @endif
-                                {{ $required }} />
-
-                            @if ($field['type'] == 'tel')
-                                <small class="form-text text-danger">
-                                    {{ __('The phone number must contain the country code: Example: +584145551212') }}
-                                </small>
-                            @endif
-                        @endif
-                    </div>
-                @endforeach
+            </select>
             </div>
-        @endif
+            -->
+
+            @include('auth.signup_fields', [
+                'signupFields' => $signupFields,
+            ])
+        </div>
 
         <div class="mb-40">
             <label for="password" class="col-form-label">{{ __('Password') }}</label>
