@@ -660,3 +660,10 @@ if (!function_exists('usernameGenerate')) {
         return $username;
     }
 }
+
+function sortField($fields, $bySort)
+{
+    usort($fields, fn ($a, $b) => $a[$bySort] > $b[$bySort]);
+
+    return $fields;
+}

@@ -20,6 +20,7 @@ class SignupFields extends Model
         'label',
         'type',
         'data',
+        'order',
         'isRequired',
         'isActive',
     ];

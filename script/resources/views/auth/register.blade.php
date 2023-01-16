@@ -33,15 +33,15 @@
         </div>
 
         <!--
-                    <div class="mb-20">
-                    <label for="country" class="col-form-label">{{ __('Country') }}</label>
-                    <select class="form-control focus-input100" name="country" id="country" required>
-                        @foreach ($countries as $id => $country)
+                            <div class="mb-20">
+                            <label for="country" class="col-form-label">{{ __('Country') }}</label>
+                            <select class="form-control focus-input100" name="country" id="country" required>
+                                @foreach ($countries as $id => $country)
     <option value="{{ $id }}">{{ $country }}</option>
     @endforeach
-                    </select>
-                </div>
-                -->
+                            </select>
+                        </div>
+                        -->
 
         @if (isset($signupFields) && count($signupFields))
             <div class="row">
@@ -141,7 +141,7 @@
 
 @push('script')
     <script>
-        $('label.required').prop('title', '{{ __('
-                        Required ') }}')
+        $('label.required')
+            .prop('title', '{{ __('Required') }}')
     </script>
 @endpush
