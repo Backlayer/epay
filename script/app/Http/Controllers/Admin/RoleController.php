@@ -29,7 +29,7 @@ class RoleController extends Controller
     {
         $groups = [];
         foreach (Permission::all() as $index => $permission) {
-            $groups[ucwords(str($permission->name)->remove(['-create','-read','-update','-delete'])->replace('-', ' '))][] = $permission;
+            $groups[ucwords(str($permission->name)->remove(['-create', '-read', '-update', '-delete'])->replace('-', ' '))][] = $permission;
         }
 
         return view('admin.roles.create', compact('groups'));
@@ -39,11 +39,11 @@ class RoleController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'unique:roles,name'],
-            'permissions' => ['required','array'],
+            'permissions' => ['required', 'array'],
             'permissions.*' => ['required', 'exists:permissions,id']
         ]);
 
-        \DB::transaction(function ()use ($request){
+        \DB::transaction(function () use ($request) {
             $role = Role::create([
                 'name' => $request->input('name')
             ]);
@@ -63,7 +63,7 @@ class RoleController extends Controller
         $role->load('permissions');
         $groups = [];
         foreach (Permission::all() as $index => $permission) {
-            $groups[ucwords(str($permission->name)->remove(['-', 'create','read','update','delete']))][] = $permission;
+            $groups[ucwords(str($permission->name)->remove(['-', 'create', 'read', 'update', 'delete']))][] = $permission;
         }
 
         return view('admin.roles.edit', compact('role', 'groups'));
@@ -74,7 +74,7 @@ class RoleController extends Controller
         abort_if($role->name == "Super Admin", 403, __("You are not allowed to mess with Super Admin"));
         $request->validate([
             'name' => ['required', 'string', Rule::unique('roles')->ignore($role->id)],
-            'permissions' => ['required','array'],
+            'permissions' => ['required', 'array'],
             'permissions.*' => ['required', 'exists:permissions,id']
         ]);
 

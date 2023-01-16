@@ -12,15 +12,13 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="form-group row mb-4">
-                            <label
-                            class="col-form-label text-md-right col-12 col-md-3 col-lg-3 required" for="name">{{ __('Name') }}</label>
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3 required" for="name">{{ __('Name') }}</label>
                             <div class="col-sm-12 col-md-7">
                                 <input type="text" class="form-control" name="name" id="name" required>
                             </div>
                         </div>
                         <div class="form-group row mb-4">
-                            <label
-                            class="col-form-label text-md-right col-12 col-md-3 col-lg-3 required" for="logo">{{ __('Logo') }}</label>
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3 required" for="logo">{{ __('Logo') }}</label>
                             <div class="col-sm-12 col-md-7">
                                 <input type="file" id="logo" class="form-control" name="logo" accept="image/*" required>
                             </div>
@@ -41,17 +39,21 @@
                             </div>
                         </div>
                         <div class="form-group row mb-4">
-                            <label
-                                class="col-form-label text-md-right col-12 col-md-3 col-lg-3">{{ __('Code') }}</label>
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">{{ __('Code') }}</label>
                             <div class="col-sm-12 col-md-7">
                                 <input type="text" class="form-control" id="code" readonly>
                             </div>
                         </div>
                         <div class="form-group row mb-4">
-                            <label
-                                class="col-form-label text-md-right col-12 col-md-3 col-lg-3">{{ __('Rate') }}</label>
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">{{ __('Rate') }}</label>
                             <div class="col-sm-12 col-md-7">
                                 <input type="text" class="form-control" id="rate" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-4">
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="is_auto">{{ __('Auto Approved') }}</label>
+                            <div class="col-sm-12 col-md-7 d-flex align-items-center">
+                                <input class="form-check-input gateways" name="is_auto" type="checkbox" value="1" id="is_auto">
                             </div>
                         </div>
                         <div class="form-group row mb-4">
@@ -77,15 +79,13 @@
                             </div>
                         </div>
                         <div class="form-group row mb-4">
-                            <label
-                            class="col-form-label text-md-right col-12 col-md-3 col-lg-3 required" for="charge">{{ __('Charge') }}</label>
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3 required" for="charge">{{ __('Charge') }}</label>
                             <div class="col-sm-12 col-md-7">
                                 <input type="number" step="any" class="form-control" name="charge" id="charge" value="0" required>
                             </div>
                         </div>
                         <div class="form-group row mb-4">
-                            <label
-                            class="col-form-label text-md-right col-12 col-md-3 col-lg-3 required" for="status">{{ __('Status') }}</label>
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3 required" for="status">{{ __('Status') }}</label>
                             <div class="col-sm-12 col-md-7">
                                 <select class="form-control selectric" name="status" id="status">
                                     <option value="1">{{ __('Active') }}</option>
@@ -93,12 +93,10 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="form-group row mb-4">
-                            <label
-                            class="col-form-label text-md-right col-12 col-md-3 col-lg-3 required" for="instruction">{{ __('Payment Instruction') }}</label>
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3" for="instructions">{{ __('Payment Instruction') }}</label>
                             <div class="col-sm-12 col-md-7">
-                                <textarea class="form-control" name="instruction" id="instruction" required></textarea>
+                                <textarea class="summernote" name="instructions" id="instructions"></textarea>
                             </div>
                         </div>
                         <div class="form-group row mb-4">
@@ -114,6 +112,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4>{{ __('Document Fields') }}</h4>
+
                         <div class="card-header-action">
                             <button type="button" class="btn btn-primary" data-repeater-create>
                                 <i class="fas fa-plus-circle"></i>
@@ -121,15 +120,30 @@
                         </div>
                     </div>
                     <div class="card-body overflow-auto repeaters h-100" data-repeater-list="fields">
+                        <div class="form-group">
+                            <div class="input-group row mx-0">
+                                <h5 class="col-4 col-form-label">{{ __('Label') }}</h5>
+                                <h5 class="col-4 col-form-label">{{ __('Type') }}</h5>
+                                <h5 class="col-2 col-form-label">{{ __('Is Required?') }}</h5>
+                                <h5 class="col-2 col-form-label">{{ __('Action') }}</h5>
+                            </div>
+                        </div>
+
                         <div class="form-group" data-repeater-item>
-                            <div class="input-group">
-                                <input type="text" name="label" class="form-control" placeholder="{{ __('Enter input label') }}" aria-label="" required>
-                                <select name="type" class="form-control" required>
+                            <div class="input-group row mx-0">
+                                <input type="text" name="label" class="form-control col-4" placeholder="{{ __('Enter input label') }}" aria-label="" required>
+
+                                <select name="type" class="form-control col-4" required>
                                     @foreach($types as $type)
                                         <option value="{{ $type }}">{{ ucwords($type) }}</option>
                                     @endforeach
                                 </select>
-                                <div class="input-group-append">
+
+                                <div class="form-check col-2 d-flex align-items-center justify-content-center">
+                                    <input class="form-check-input gateways" name="isRequired" type="checkbox" value="true" id="checkDefault">
+                                </div>
+
+                                <div class="input-group-append col-2">
                                     <button type="button" class="btn btn-danger" data-repeater-delete>
                                         <i class="fas fa-times-circle"></i>
                                     </button>
@@ -143,7 +157,13 @@
     </form>
 @endsection
 
+@push('css')
+    <link rel="stylesheet" href="{{ asset('admin/plugins/summernote/summernote-bs4.css') }}">
+@endpush
+
 @push('script')
+    <script src="{{ asset('admin/plugins/summernote/summernote.js') }}"></script>
+    <script src="{{ asset('admin/plugins/summernote/summernote-bs4.js') }}"></script>
     <script src="{{ asset('admin/plugins/jqueryrepeater/jquery.repeater.min.js') }}"></script>
     <script src="{{ asset('admin/pages/gateway.js') }}"></script>
     <script>

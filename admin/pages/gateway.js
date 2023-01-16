@@ -5,7 +5,8 @@ $(document).ready(function () {
         initEmpty: true,
         defaultValues: {
             'label': '',
-            'type': 'text'
+            'type': 'text',
+            'isRequired': false
         },
         show: function () {
             $(this).slideDown();

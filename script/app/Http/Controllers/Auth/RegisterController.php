@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\Currency;
-use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
 use App\Rules\Phone;
+use App\Helpers\HasFields;
+
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\JsonResponse;
@@ -17,6 +20,8 @@ use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
 {
+    use HasFields;
+
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -37,6 +42,25 @@ class RegisterController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+    private function getFields($request)
+    {
+        $dataFields = [];
+
+        if (isset($this->signupFields) && count($this->signupFields) > 0) {
+            foreach ($request->fields as $key => $value) {
+                $field = $request->fields[$key];
+
+                if (is_file($field)) {
+                    $dataFields[$key] = $this->upload($request, 'fields.' . $key);
+                } else {
+                    $dataFields[$key] = json_decode($field, true);
+                }
+            }
+        }
+
+        return $dataFields;
+    }
+
     /**
      * Create a new controller instance.
      *
@@ -45,6 +69,8 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+
+        $this->setFields();
     }
 
     /**
@@ -60,9 +86,8 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => ['required', new Phone],
-            'country' => ['required', 'exists:currencies,id'],
             'password' => ['required', Password::default()],
-            'agree' => ['accepted']
+            'agree' => ['accepted'],
         ], [
             'agree.accepted' => __('You have to must agree with our terms & conditions')
         ]);
@@ -71,21 +96,23 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param  Request  $request
      * @return \App\Models\User
      */
-    protected function create(array $data)
+    protected function create(Request $request)
     {
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'username' => $this->usernameGenerate($data['email']),
-            'password' => Hash::make($data['password']),
-            'currency_id' => $data['country'],
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'username' => usernameGenerate($request->email),
+            'password' => Hash::make($request->password),
+            'currency_id' => 1,
             'meta' => [
-                "business_name" => $data['business_name']
-            ]
+                "business_name" => $request->business_name
+            ],
+            'data' => $this->getFields($request) ?? null,
+            'fields' => $this->signupFields ?? null
         ]);
     }
 
@@ -93,7 +120,7 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
 
-        event(new Registered($user = $this->create($request->all())));
+        event(new Registered($user = $this->create($request)));
 
         $this->guard()->login($user);
 
@@ -107,26 +134,16 @@ class RegisterController extends Controller
                 'redirect' => route('user.set-bank.index')
             ], 201)
             : redirect()->route('user.set-bank.index');
-
-    }
-
-    public function usernameGenerate($email)
-    {
-        $explodeEmail = explode('@', $email);
-        $username = $explodeEmail[0];
-        $count_username = User::where('username', $username)->count();
-        if ($count_username > 0) {
-            $username = $username . $count_username + 1;
-        }
-
-        return $username;
     }
 
     public function showRegistrationForm()
     {
-        $currencies = Currency::whereStatus(1)
+        $countries = Currency::whereStatus(1)
             ->groupBy('country_name')
             ->pluck('country_name', 'id');
-        return view('auth.register', compact('currencies'));
+
+        $signupFields = $this->signupFields;
+
+        return view('auth.register', compact('countries', 'signupFields'));
     }
 }

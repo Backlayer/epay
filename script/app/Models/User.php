@@ -28,12 +28,15 @@ class User extends Authenticatable implements MustVerifyEmail
         'avatar',
         'username',
         'phone',
+        'isValidPhone',
         'email',
         'currency_id',
         'role',
         'wallet',
         'status',
         'meta',
+        'fields',
+        'data',
         'public_key',
         'secret_key',
         'qr',
@@ -52,7 +55,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'last_login_at' => 'datetime',
         'kyc_verified_at' => 'datetime',
-        'meta' => 'json'
+        'meta' => 'json',
+        'fields' => 'json',
+        'data' => 'json',
     ];
 
     public function currency(): BelongsTo

@@ -509,7 +509,6 @@
     "Secret Key": "Secret Key",
     "Secret key copied to clipboard": "Secret key copied to clipboard",
     "Generate New Keys": "Generate New Keys",
-    "Secret key": "Secret key",
     "Categories": "Categories",
     "Categories list": "Categories list",
     "Add new category": "Add new category",
@@ -1016,5 +1015,17 @@
     "Payment Status": "Payment Status",
     "Paid by Client": "Paid by Client",
     "Payment Details": "Payment Details",
-    "View Document": "View Document"
+    "View Document": "View Document",
+    "Is Required?": "Is Required?",
+    "Is Active?": "Is Active?",
+    "Auto Approved": "Auto Approved",
+    "Fields for Signup": "Fields for Signup",
+    "Create Fields for Signup": "Create Fields for Signup",
+    "Edit Fields for Signup": "Edit Fields for Signup",
+    "Fields for Signup created successfully": "Fields for Signup created successfully",
+    "Fields for Signup updated successfully": "Fields for Signup updated successfully",
+    "Field for Signup successfully removed": "Field for Signup successfully removed",
+    "Your credentials are:": "Your credentials are:",
+    "Keep in mind that you should not share this data and you must keep it in a safe place, you are responsible for its use.": "Keep in mind that you should not share this data and you must keep it in a safe place, you are responsible for its use.",
+    "If you're having trouble clicking the \"Verify Email Address\" button, copy and paste the URL below into your web browser": "If you're having trouble clicking the \"Verify Email Address\" button, copy and paste the URL below into your web browser"
 }

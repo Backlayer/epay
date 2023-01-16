@@ -15,6 +15,7 @@
         "barryvdh/laravel-debugbar": "3.7",
         "barryvdh/laravel-dompdf": "2.0",
         "bumbummen99/shoppingcart": "4.2",
+        "doctrine/dbal": "^3.5",
         "guzzlehttp/guzzle": "7.2",
         "intervention/image": "2.7",
         "jeroendesloovere/vcard": "1.7",

@@ -25,7 +25,7 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/css/components.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/custom.css?v2') }}">
 </head>
 
 <body>
@@ -74,7 +74,6 @@
 <script src="{{ asset('admin/plugins/toastifyjs/toastify.js') }}"></script>
 <script src="{{ asset('plugins/custom/Notify.js') }}"></script>
 <script src="{{ asset('plugins/clipboard-js/clipboard.min.js') }}"></script>
-
 
 @yield('script')
 @stack('script')

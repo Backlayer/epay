@@ -1,5 +1,5 @@
 @extends('layouts.backend.app', [
-    'prev' => route('admin.customers.index')
+    'prev' => route('admin.users.index')
 ])
 
 @section('title', __('User Profile'))
@@ -15,7 +15,7 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     <div class="icon icon-shape bg-white text-dark rounded-circle shadow">
-                                        <img src="{{ avatar() }}" alt="" class="rounded-circle" width="50">
+                                        <img src="{{ avatar($user) }}" alt="" class="rounded-circle" width="50">
                                     </div>
                                 </div>
 

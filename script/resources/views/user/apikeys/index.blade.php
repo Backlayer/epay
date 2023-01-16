@@ -38,7 +38,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text text-xs text-uppercase">{{ __("Secret Key") }}</span>
                                     </div>
-                                    <input type="text" name="secret_key" class="form-control" placeholder="{{ __("Secret key") }}" value="{{ auth()->user()->secret_key }}" readonly>
+                                    <input type="text" name="secret_key" class="form-control" placeholder="{{ __("Secret Key") }}" value="{{ auth()->user()->secret_key }}" readonly>
                                     <div class="input-group-prepend">
                                         <span class="input-group-text clipboard-button" data-clipboard-text="{{ auth()->user()->secret_key }}" data-message="{{ __("Secret key copied to clipboard") }}">
                                             <i class="fas fa-copy"></i>

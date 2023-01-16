@@ -25,23 +25,24 @@
 
                         <div class="table-responsive">
                             <table class="table table-striped">
+                                <caption></caption>
                                 <thead>
-                                <tr class="text-center">
-                                    <th>{{ __('Photo') }}</th>
-                                    <th>{{ __('Name') }}</th>
-                                    <th>{{ __('Email') }}</th>
-                                    <th>{{ __('Total Amount') }}</th>
-                                    <th>{{ __('Status') }}</th>
-                                    <th>{{ __('Registered At')}}</th>
-                                    <th>{{ __('Action') }}</th>
-                                </tr>
+                                    <tr class="text-center">
+                                        <th>{{ __('Photo') }}</th>
+                                        <th>{{ __('Name') }}</th>
+                                        <th>{{ __('Email') }}</th>
+                                        <th>{{ __('Total Amount') }}</th>
+                                        <th>{{ __('Status') }}</th>
+                                        <th>{{ __('Registered At')}}</th>
+                                        <th>{{ __('Action') }}</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($users as $key => $user)
                                     <tr class="text-center">
                                         <td>
                                             <figure class="avatar mr-2">
-                                                <img src="{{ $user->avatar ? asset($user->avatar) : get_gravatar($user->email) }}" alt="{{ $user->name }}">
+                                                <img src="{{ avatar($user) }}" alt="{{ $user->name }}">
                                             </figure>
                                         </td>
                                         <td class="text-left">{{$user->name}}</td>

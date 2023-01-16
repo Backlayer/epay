@@ -18,8 +18,6 @@ class SingleChargeController extends Controller
 
     public function index(SingleCharge $singleCharge)
     {
-        abort_if($singleCharge->isPaid, 403, __('Transaction Already Paid'));
-
         $this->clearSessions();
 
         $gateways = Gateway::whereStatus(1)

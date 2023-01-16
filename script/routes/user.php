@@ -32,6 +32,7 @@ Route::group([
     Route::get('invoices/{invoice}/edit', 'InvoiceController@edit')->name('invoices.edit');
     Route::post('invoices/{invoice}/send', 'InvoiceController@send')->name('invoices.send');
 
+    Route::resource('single-charges', 'SingleChargeController');
     Route::post('single-charges/disable/{charge}', 'SingleChargeController@disable')->name('single-charges.disable');
 
     Route::post('donations/disable/{charge}', 'DonationController@disable')->name('donations.disable');
@@ -90,7 +91,6 @@ Route::group([
     Route::resource('donations', 'DonationController');
     Route::resource('subscribers', 'SubscriberController');
     Route::resource('storefronts', 'StoreFrontController');
-    Route::resource('single-charges', 'SingleChargeController');
     Route::resource('websites', 'WebsiteController');
     Route::resource('orders', 'OrderController')->only('index', 'show');
     Route::resource('qr-payments', 'QrPaymentController')->only('index');
