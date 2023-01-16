@@ -1,10 +1,13 @@
 @extends('layouts.backend.app', [
-    'prev' => route('admin.invoices.index')
+    'prev' => route('admin.invoices.index'),
 ])
 
 @section('title', __('Invoice'))
 
-<?php $quantity = 0; $invoice->loadSum('items', 'subtotal'); ?>
+<?php
+$quantity = 0;
+$invoice->loadSum('items', 'subtotal');
+?>
 
 @section('content')
     <div class="row justify-content-center">
@@ -18,13 +21,18 @@
                         </div>
                         <div class="d-flex flex-row align-self-start">
                             <ul>
-                                <li><span class="mr-2 font-weight-bold">{{ __('Trx') }}:</span> {{ $invoice->trx ?? 'N/A' }}</li>
-                                <li><span class="mr-2 font-weight-bold">{{ __('Status:') }}</span> {!! $invoice->PaymentStatus !!}</li>
-                                @if($invoice->isPaid)
-                                <li><span class="mr-2 font-weight-bold">{{ __('Paid At') }}:</span> {{ formatted_date($invoice->paid_at) }}</li>
+                                <li><span class="mr-2 font-weight-bold">{{ __('Trx') }}:</span>
+                                    {{ $invoice->trx ?? 'N/A' }}</li>
+                                <li><span class="mr-2 font-weight-bold">{{ __('Status:') }}</span> {!! $invoice->PaymentStatus !!}
+                                </li>
+                                @if ($invoice->isPaid)
+                                    <li><span class="mr-2 font-weight-bold">{{ __('Paid At') }}:</span>
+                                        {{ formatted_date($invoice->paid_at) }}</li>
                                 @endif
-                                <li><span class="mr-2 font-weight-bold">{{ __('Created At') }}:</span> {{ formatted_date($invoice->created_at)  }}</li>
-                                <li><span class="mr-2 font-weight-bold">{{ __('Due Date') }}:</span> {{ formatted_date($invoice->due_date) }}</li>
+                                <li><span class="mr-2 font-weight-bold">{{ __('Created At') }}:</span>
+                                    {{ formatted_date($invoice->created_at) }}</li>
+                                <li><span class="mr-2 font-weight-bold">{{ __('Due Date') }}:</span>
+                                    {{ formatted_date($invoice->due_date) }}</li>
                             </ul>
                         </div>
                     </div>
@@ -55,27 +63,27 @@
                         </thead>
                         <tbody>
                             <tr>
-                                @foreach($invoice->items as $item)
+                                @foreach ($invoice->items as $item)
                                     <td>{{ $item->name }}</td>
                                     <td>
-                                    {{ convert_money_direct($item->amount, $invoice->currency, default_currency(), true)}}
+                                        {{ convert_money_direct($item->amount, $invoice->currency, default_currency(), true) }}
                                     </td>
                                     <td>
-                                        {{$item->quantity}}
+                                        {{ $item->quantity }}
                                     </td>
                                     <td>
-                                        {{ convert_money_direct($invoice->items_sum_subtotal, $invoice->currency, default_currency(), true)}}
+                                        {{ convert_money_direct($invoice->items_sum_subtotal, $invoice->currency, default_currency(), true) }}
                                     </td>
                                 @endforeach
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                @if($invoice->note)
-                 <div class="d-flex px-4 align-items-center">
-                     <span class="font-weight-bold">{{ __('Notes') }}:</span>
-                     <span class="ml-2">{{ $invoice->note }}</span>
-                 </div>
+                @if ($invoice->note)
+                    <div class="d-flex px-4 align-items-center">
+                        <span class="font-weight-bold">{{ __('Notes') }}:</span>
+                        <span class="ml-2">{{ $invoice->note }}</span>
+                    </div>
                 @endif
                 <div class="w-100 d-flex justify-content-sm-center justify-content-md-center justify-content-lg-end">
                     <div class="p-4 w-50">
@@ -85,33 +93,39 @@
                                     <th style="height:40px; width: 80px" class="text-right">
                                         {{ __('Charge') }}:
                                     </th>
-                                    <td style="height:40px">{{ convert_money_direct($invoice->charge, $invoice->currency, default_currency(), true) }}</td>
+                                    <td style="height:40px">
+                                        {{ convert_money_direct($invoice->charge, $invoice->currency, default_currency(), true) }}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th style="height:40px" class="text-right">
                                         {{ __('Tax') }}:
                                     </th>
-                                    @if($invoice->tax)
-                                      <td style="height:40px">{{ __(":percentage %", ['percentage' => $invoice->tax]) }}</td>
+                                    @if ($invoice->tax)
+                                        <td style="height:40px">{{ __(':percentage %', ['percentage' => $invoice->tax]) }}
+                                        </td>
                                     @else
-                                      <td style="height:40px">{{ __(":percentage %", ['percentage' => 0]) }}</td>
+                                        <td style="height:40px">{{ __(':percentage %', ['percentage' => 0]) }}</td>
                                     @endif
                                 </tr>
                                 <tr>
                                     <th style="height:40px" class="text-right">
                                         {{ __('Discount') }}:
                                     </th>
-                                    @if($invoice->discount)
-                                        <td style="height:40px">{{ __(":percentage %", ['percentage' => $invoice->discount]) }}</td>
+                                    @if ($invoice->discount)
+                                        <td style="height:40px">
+                                            {{ __(':percentage %', ['percentage' => $invoice->discount]) }}</td>
                                     @else
-                                        <td style="height:40px">{{ __(":percentage %", ['percentage' => 0]) }}</td>
+                                        <td style="height:40px">{{ __(':percentage %', ['percentage' => 0]) }}</td>
                                     @endif
                                 </tr>
                                 <tr>
                                     <th style="height:40px" class="text-right">
                                         {{ __('Total') }}:
                                     </th>
-                                    <td style="height:40px">{{ convert_money_direct($invoice->total, $invoice->currency, default_currency(), true)}}</td>
+                                    <td style="height:40px">
+                                        {{ convert_money_direct($invoice->total, $invoice->currency, default_currency(), true) }}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -126,15 +140,16 @@
                 @endif
 
                 @if ($invoice->status_paid === '1')
-                <form action="{{ route('admin.invoices.confirm', $invoice->id) }}" method="post" class="ajaxform_instant_reload_after_confirm d-inline p-4">
-                    @csrf
+                    <form action="{{ route('admin.invoices.confirm', $invoice->id) }}" method="post"
+                        class="ajaxform_instant_reload_after_confirm d-inline p-4">
+                        @csrf
 
-                    <button class="btn btn-success float-right submit-button submit-btn">
-                        <i class="fas fa-check"></i>
+                        <button class="btn btn-success float-right submit-button submit-btn">
+                            <i class="fas fa-check"></i>
 
-                        {{ __('Confirm Payment') }}
-                    </button>
-                </form>
+                            {{ __('Confirm Payment') }}
+                        </button>
+                    </form>
                 @endif
             </div>
         </div>
