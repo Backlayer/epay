@@ -8,6 +8,7 @@
             'classIcon' => 'fas fa-money-check-alt text-green',
             'title' => __('Transactions'),
             'enable' => true,
+            'tooltip' => 'Summary of all transactions'
         ],
         'deposit' => [
             'ruleActive' => Route::is('user.deposits.index'),
@@ -15,6 +16,7 @@
             'classIcon' => 'fas fa-arrow-up text-info',
             'title' => __('Deposit'),
             'enable' => false,
+            'tooltip' => ''
         ],
         'transfers' => [
             'ruleActive' => Route::is('user.transfers.index') || Route::is('user.transfers.create'),
@@ -22,6 +24,7 @@
             'classIcon' => 'fas fa-random text-orange',
             'title' => __('Transfer Money'),
             'enable' => false,
+            'tooltip' => ''
         ],
         'subscribers' => [
             'ruleActive' => Route::is('user.subscribers.index'),
@@ -29,6 +32,7 @@
             'classIcon' => 'fa fa-user text-primary',
             'title' => __('Subscribers'),
             'enable' => false,
+            'tooltip' => ''
         ],
         'payouts' => [
             'ruleActive' => Route::is('user.payouts.index'),
@@ -36,6 +40,7 @@
             'classIcon' => 'fas fa-arrow-circle-down text-info',
             'title' => __('Payouts'),
             'enable' => true,
+            'tooltip' => 'Payouts and withdrawals'
         ],
         'charges' => [
             'ruleActive' => Route::is('user.charges.index'),
@@ -43,6 +48,7 @@
             'classIcon' => 'fas fa-comment-dollar text-red',
             'title' => __('Charges'),
             'enable' => true,
+            'tooltip' => 'Fees generated and paid for all transactions'
         ],
         'categories' => [
             'ruleActive' => Route::is('user.categories.index'),
@@ -50,6 +56,7 @@
             'classIcon' => 'fas fa-sitemap text-dark',
             'title' => __('Categories'),
             'enable' => false,
+            'tooltip' => ''
         ],
         'storefronts' => [
             'ruleActive' => Route::is('user.storefronts.index'),
@@ -57,6 +64,7 @@
             'classIcon' => 'fas fa-store-alt text-pink',
             'title' => __('Store front'),
             'enable' => false,
+            'tooltip' => ''
         ],
         'products' => [
             'ruleActive' => request()->is('*/digital-products') || request()->is('*/physical-products'),
@@ -64,6 +72,7 @@
             'classIcon' => 'fas fa-shopping-bag text-gray',
             'title' => __('Products'),
             'enable' => false,
+            'tooltip' => '',
             'children' => [
                 'physical-products' => [
                     'ruleActive' => request()->is('*/physical-products'),
@@ -85,6 +94,7 @@
             'classIcon' => 'fas fa-street-view',
             'title' => __('Shippings'),
             'enable' => false,
+            'tooltip' => ''
         ],
         'orders' => [
             'ruleActive' => Route::is('user.orders.index'),
@@ -92,6 +102,7 @@
             'classIcon' => 'fas fa-shopping-cart text-info',
             'title' => __('Orders'),
             'enable' => false,
+            'tooltip' => ''
         ],
         'request-money' => [
             'ruleActive' => Route::is('user.request-money.index'),
@@ -99,6 +110,7 @@
             'classIcon' => 'fas fa-handshake text-success',
             'title' => __('Request Money'),
             'enable' => true,
+            'tooltip' => 'Internal transfers between users'
         ],
         'single-charges' => [
             'ruleActive' => Route::is('user/single-charges*'),
@@ -106,6 +118,7 @@
             'classIcon' => 'fas fa-link text-primary',
             'title' => __('Single Charge'),
             'enable' => true,
+            'tooltip' => 'Generate a unique URL to make a payment'
         ],
         'qr-payments' => [
             'ruleActive' => Route::is('user.qr-payments.index'),
@@ -113,6 +126,7 @@
             'classIcon' => 'fas fa-qrcode text-info',
             'title' => __('Qr Payments'),
             'enable' => true,
+            'tooltip' => 'Receive payments through your QR code'
         ],
         'donations' => [
             'ruleActive' => Request::is('user/donations'),
@@ -120,6 +134,7 @@
             'classIcon' => 'fas fa-gift text-default',
             'title' => __('Donation'),
             'enable' => false,
+            'tooltip' => ''
         ],
         'invoices' => [
             'ruleActive' => Route::is('user.invoices.index'),
@@ -127,6 +142,7 @@
             'classIcon' => 'fas fa-envelope text-red',
             'title' => __('Invoice'),
             'enable' => true,
+            'tooltip' => 'Receive payments by sending invoices'
         ],
         'plans' => [
             'ruleActive' => Route::is('user.plans.index'),
@@ -134,6 +150,7 @@
             'classIcon' => 'fas fa-layer-group text-info',
             'title' => __('Plan'),
             'enable' => false,
+            'tooltip' => ''
         ],
         'websites' => [
             'ruleActive' => Route::is('user.websites.index'),
@@ -141,6 +158,7 @@
             'classIcon' => 'fas fa-laptop',
             'title' => __('Website Integration'),
             'enable' => false,
+            'tooltip' => ''
         ],
         'supports' => [
             'ruleActive' => Route::is('user.supports.index'),
@@ -148,6 +166,7 @@
             'classIcon' => 'fas fa-flag-usa text-default',
             'title' => __('Support'),
             'enable' => true,
+            'tooltip' => 'Open a ticket for a problem or concern'
         ],
     ];
 @endphp
@@ -183,15 +202,16 @@
         </div>
         <div class="navbar-inner">
             <!-- Collapse -->
-            <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+            <div class="collapse navbar-collapse mt-3" id="sidenav-collapse-main">
                 <!-- Nav items -->
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a @class(['nav-link', 'active' => Route::is('user.dashboard.index')])
                             href="{{ route('user.dashboard.index') }}">
                             <i class="fas fa-home text-primary"></i>
-                            <span
-                                class="nav-link-text">{{ __('Dashboard') }}</span>
+                            <span class="nav-link-text">
+                                {{ __('Dashboard') }}
+                            </span>
                         </a>
                     </li>
                 </ul>
@@ -203,10 +223,13 @@
                                 @if (@!isset($item['children']))
                                     <a @class(['nav-link', 'active' => $item['ruleActive']])
                                         href="{{ $item['route'] }}">
-                                        <i
-                                            class="{{ $item['classIcon'] }}"></i>
-                                        <span
-                                            class="nav-link-text">{{ $item['title'] }}</span>
+                                        <i class="{{ $item['classIcon'] }}"></i>
+                                        <span class="nav-link-text"
+                                            data-toggle="{{ $item['tooltip'] ? 'tooltip' : '' }}"
+                                            data-placement="left"
+                                            title="{{ $item['tooltip'] }}">
+                                            {{ $item['title'] }}
+                                        </span>
                                     </a>
                                 @else
                                     <a @class(['nav-link', 'active' => $item['ruleActive']])
@@ -216,8 +239,9 @@
                                         aria-controls="navbar-dashboards">
                                         <i
                                             class="{{ $item['classIcon'] }}"></i>
-                                        <span
-                                            class="nav-link-text">{{ $item['title'] }}</span>
+                                        <span class="nav-link-text">
+                                            {{ $item['title'] }}
+                                        </span>
                                     </a>
                                     <div class="{{ $item['ruleActive'] ? '' : 'collapse' }}"
                                         id="{{ $item['route'] }}">
@@ -243,3 +267,9 @@
         </div>
     </div>
 </nav>
+
+<style>
+    .tooltip {
+        left: 125px !important;
+    }
+</style>

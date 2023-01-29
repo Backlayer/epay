@@ -1029,5 +1029,13 @@
     "Keep in mind that you should not share this data and you must keep it in a safe place, you are responsible for its use.": "Keep in mind that you should not share this data and you must keep it in a safe place, you are responsible for its use.",
     "If you're having trouble clicking the \"Verify Email Address\" button, copy and paste the URL below into your web browser": "If you're having trouble clicking the \"Verify Email Address\" button, copy and paste the URL below into your web browser",
     "Verified": "Verified",
-    "Not Verified": "Not Verified"
+    "Not Verified": "Not Verified",
+    "Tooltips.Transactions": "Summary of all transactions",
+    "Tooltips.Payouts": "Payouts and withdrawals",
+    "Tooltips.Charges": "Fees generated and paid for all transactions",
+    "Tooltips.Request Money": "Internal transfers between users",
+    "Tooltips.Single Charge": "Generate a unique URL to make a payment",
+    "Tooltips.QR Payment": "Receive payments through your QR code",
+    "Tooltips.Invoice": "Receive payments by sending invoices",
+    "Tooltips.Support": "Open a ticket for a problem or concern"
 }
