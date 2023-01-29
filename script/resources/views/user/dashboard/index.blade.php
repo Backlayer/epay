@@ -1,11 +1,15 @@
 @extends('layouts.user.app')
 
-@section('title', __('Transactions Log'))
+@php
+    /**@section('title', __('Transactions Log'))*/
+@endphp
 
 @section('content')
     <div class="row">
         <div class="col-md-8">
-            <!--<div class="card shadow">
+            @php
+            /*
+            <div class="card shadow">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
@@ -41,7 +45,12 @@
                         </div>
                     </div>
                 </div>
-            </div>-->
+            </div>
+            */
+            @endphp
+
+            @php
+            /*
             @if ($transactions->count() > 0)
             <div class="card mt-4">
                 <div class="table-responsive py-3 ">
@@ -83,13 +92,13 @@
                 </div>
             </div>
             @endif
+            */
+            @endphp
         </div>
         <div class="col-md-4">
             <div class="row">
                 <div class="col text-center">
-                    <div id="qrcode" class="mx-auto mb-3">
-
-                    </div>
+                    <div id="qrcode" class="mx-auto mb-3"></div>
 
                     <a href="" id="download-qr" class="custom-btn d-block btn-block mt-3 py-2 download-qr" download="{{ auth()->user()->name . '.png' }}">
                         <i class="fas fa-download"></i> {{ __('Download') }}
