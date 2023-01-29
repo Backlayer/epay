@@ -19280,6 +19280,7 @@ a.btn-icon-only
 .main-content
 {
     position: relative;
+    width: calc(100% - 250px);
 }
 .main-content .navbar-top
 {

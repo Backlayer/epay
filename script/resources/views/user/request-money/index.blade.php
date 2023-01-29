@@ -8,9 +8,9 @@
 @endsection
 
 @section('actions')
-    <a class="btn btn-sm btn-neutral" href="{{ route('user.received-request.index') }}">
+    <!--a class="btn btn-sm btn-neutral" href="{{ route('user.received-request.index') }}">
         <i class="fas fa-arrow-alt-circle-down"></i> {{ __('Received List') }}
-    </a>
+    </-a-->
     <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#modal-formx">
         <i class="fa fa-plus" aria-hidden="true"></i>
         {{ __('Create Request') }}

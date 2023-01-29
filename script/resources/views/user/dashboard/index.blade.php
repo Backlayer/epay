@@ -1,10 +1,74 @@
 @extends('layouts.user.app')
 
-@php
-    /**@section('title', __('Transactions Log'))*/
-@endphp
-
 @section('content')
+    <div class="row">
+        <input type="hidden" id="get-transaction-url" value="{{ route('user.get-transaction') }}">
+
+        <div class="col-sm-4">
+            <div class="card card-stats">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <span class="h2 font-weight-bold mb-0 total-transactions">
+                                <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                            </span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                                <i class="ni ni-active-40"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-3 mb-0 text-sm">
+                        <h5 class="card-title text-uppercase text-muted mb-0">{{ __('Total Transactions') }}</h5>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card card-stats">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <span class="h2 font-weight-bold mb-0 credit-transactions">
+                                <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                            </span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                                <i class="ni ni-chart-pie-35"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-3 mb-0 text-sm">
+                        <h5 class="card-title text-uppercase text-muted mb-0">{{ __('Credit Transactions') }}</h5>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card card-stats">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <span class="h2 font-weight-bold mb-0 debit-transactions">
+                                <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                            </span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                                <i class="ni ni-money-coins"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-3 mb-0 text-sm">
+                        <h5 class="card-title text-uppercase text-muted mb-0">{{ __('Debit Transactions') }}</h5>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         @php
         /*
@@ -158,5 +222,9 @@
     <script src="{{ asset('admin/plugins/clipboard-js/clipboard.min.js') }}"></script>
     <script src="{{ asset('user/vendor/jvectormap-next/jquery-jvectormap.min.js') }}"></script>
     <script src="{{ asset('user/js/vendor/jvectormap/jquery-jvectormap-world-mill.js') }}"></script>
-    <script src="{{ asset('user/js/chart/dashboard.js?v=4') }}"></script>
+    <script src="{{ asset('user/js/chart/dashboard.js?v=6') }}"></script>
+    <script src="{{ asset('admin/js/admin.js') }}"></script>
+    <script>
+        getTotalTransactions()
+    </script>
 @endpush
