@@ -6,9 +6,9 @@
 
 @section('content')
     <div class="row">
+        @php
+        /*
         <div class="col-md-8">
-            @php
-            /*
             <div class="card shadow">
                 <div class="card-body">
                     <div class="row">
@@ -46,11 +46,7 @@
                     </div>
                 </div>
             </div>
-            */
-            @endphp
 
-            @php
-            /*
             @if ($transactions->count() > 0)
             <div class="card mt-4">
                 <div class="table-responsive py-3 ">
@@ -92,19 +88,44 @@
                 </div>
             </div>
             @endif
-            */
-            @endphp
         </div>
+        */
+        @endphp
+
+        <div class="col-md-8">
+            @include('user.dashboard.charts.single-charge')
+
+            @include('user.dashboard.charts.qr-payments')
+
+            <!--
+            @include('user.dashboard.charts.debit-credit')
+
+            @include('user.dashboard.charts.order')
+
+            @include('user.dashboard.charts.donation')
+
+            @include('user.dashboard.charts.plans')
+            -->
+        </div>
+
         <div class="col-md-4">
             <div class="row">
                 <div class="col text-center">
                     <div id="qrcode" class="mx-auto mb-3"></div>
+
+                    <p>
+                        All payments must be less than $1,000.00 <br />
+                        Higher payments will be refunded.
+                    </p>
 
                     <a href="" id="download-qr" class="custom-btn d-block btn-block mt-3 py-2 download-qr" download="{{ auth()->user()->name . '.png' }}">
                         <i class="fas fa-download"></i> {{ __('Download') }}
                     </a>
                 </div>
             </div>
+
+            @php
+            /*
             <hr>
             <div class="row mt-5">
                 <div class="col text-center">
@@ -121,22 +142,10 @@
                     <a href="{{ url('/user/payouts') }}" class="custom-btn d-block btn-block mt-3 py-2"><i class="fas fa-history"></i>  {{ __('All Payouts') }}</a>
                 </div>
             </div>
+            */
+            @endphp
         </div>
     </div>
-
-    @include('user.dashboard.charts.single-charge')
-
-    @include('user.dashboard.charts.qr-payments')
-
-    <!--
-    @include('user.dashboard.charts.debit-credit')
-
-    @include('user.dashboard.charts.order')
-
-    @include('user.dashboard.charts.donation')
-
-    @include('user.dashboard.charts.plans')
-    -->
 
     <input type="hidden" id="get-chart-data" value="{{ route('user.dashboard.chart') }}">
     <input type="hidden" id="qrUrl" value="{{ route('frontend.qr.index', auth()->user()->qr) }}">
