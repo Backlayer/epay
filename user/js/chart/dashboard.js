@@ -1,17 +1,17 @@
 "use strict";
 
 $(document).ready(function () {
-    getSingleChargeData();
-    getQrPaymentData();
-    // getChartData();
+    //getSingleChargeData();
+    //getQrPaymentData();
+    dashboardData();
     // getOrderData();
     // getDonationsData();
     // getPlanData();
 });
 
-$('#current-year').on('change', function () {
+$('#credit-debit-perfomace').on('change', function () {
     let year = $(this).val();
-    getChartData(year)
+    dashboardData(year)
 })
 
 $('#single-charge-perfomace').on('change', function () {
@@ -39,8 +39,12 @@ $('#qr-payments-perfomace').on('change', function () {
     getQrPaymentData(day)
 })
 
-function getChartData(year = null) {
-    const chart_url = $("#get-chart-data").val();
+function dashboardData(year = null) {
+    if (!year) {
+        year = $('#credit-debit-perfomace').find('option').first().val()
+    }
+
+    const chart_url = $("#get-dashboard-data").val();
 
     $.ajax({
         url: chart_url,
@@ -49,16 +53,19 @@ function getChartData(year = null) {
             year
         },
     }).done(function (res) {
-        var months = [];
-        var credit = [];
-        var debit = [];
+        const months = [];
+        const credit = [];
+        const debit = [];
+
         $.each(res.months, function (index, value) {
             months.push(value.month);
+
             if (value.month == res.credit[index]?.month) {
                 credit.push(res.credit[index].amount);
             } else {
                 credit.push(0);
             }
+
             if (value.month == res.debit[index]?.month) {
                 debit.push(Math.abs(res.debit[index].amount));
             } else {
@@ -227,35 +234,16 @@ const datasets = (label, data, color) => ({
 })
 
 function dashboardChart(months, credit, debit) {
-    var ctx = document.getElementById("myChart").getContext("2d");
-    new Chart(ctx, {
+    const dashboardCtx = document.getElementById("creditDebitChart").getContext("2d");
+
+    new Chart(dashboardCtx, {
         type: "line",
         data: {
             labels: months,
-            datasets: [{
-                label: 'Credit',
-                data: credit,
-                borderWidth: 2,
-                backgroundColor: 'rgba(63,82,227,.8)',
-                borderWidth: 0,
-                borderColor: 'transparent',
-                pointBorderWidth: 0,
-                pointRadius: 3.5,
-                pointBackgroundColor: 'transparent',
-                pointHoverBackgroundColor: 'rgba(63,82,227,.8)',
-            },
-            {
-                label: 'Debit',
-                data: debit,
-                borderWidth: 2,
-                backgroundColor: 'rgba(254,86,83,.7)',
-                borderWidth: 0,
-                borderColor: 'transparent',
-                pointBorderWidth: 0,
-                pointRadius: 3.5,
-                pointBackgroundColor: 'transparent',
-                pointHoverBackgroundColor: 'rgba(254,86,83,.8)',
-            }]
+            datasets: [
+                datasets('Credit', credit, 'rgba(63,82,227,.8)'),
+                datasets('Debit', debit, 'rgba(254,86,83,.7)'),
+            ]
         },
         options: {
             legend,

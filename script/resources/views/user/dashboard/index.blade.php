@@ -93,12 +93,12 @@
         @endphp
 
         <div class="col-md-8">
+            @include('user.dashboard.charts.debit-credit')
+
+            <!--
             @include('user.dashboard.charts.single-charge')
 
             @include('user.dashboard.charts.qr-payments')
-
-            <!--
-            @include('user.dashboard.charts.debit-credit')
 
             @include('user.dashboard.charts.order')
 
@@ -114,8 +114,7 @@
                     <div id="qrcode" class="mx-auto mb-3"></div>
 
                     <p>
-                        All payments must be less than $1,000.00 <br />
-                        Higher payments will be refunded.
+                        {!! __('QR.Dashboard.Displaimer') !!}
                     </p>
 
                     <a href="" id="download-qr" class="custom-btn d-block btn-block mt-3 py-2 download-qr" download="{{ auth()->user()->name . '.png' }}">
@@ -159,5 +158,5 @@
     <script src="{{ asset('admin/plugins/clipboard-js/clipboard.min.js') }}"></script>
     <script src="{{ asset('user/vendor/jvectormap-next/jquery-jvectormap.min.js') }}"></script>
     <script src="{{ asset('user/js/vendor/jvectormap/jquery-jvectormap-world-mill.js') }}"></script>
-    <script src="{{ asset('user/js/chart/dashboard.js?v5') }}"></script>
+    <script src="{{ asset('user/js/chart/dashboard.js?v=4') }}"></script>
 @endpush
