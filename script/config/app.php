@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Facade;
 
 return [
 
-    'version' => '6.1.1',
+    'version' => '6.1.3',
 
     /*
     |--------------------------------------------------------------------------
