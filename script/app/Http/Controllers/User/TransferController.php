@@ -159,7 +159,7 @@ class TransferController extends Controller
                     'message' => __('Transfer money accepted successfully.'),
                     'redirect' => route('user.transfers.index'),
                 ]);
-            } elseif ($request->type == 'cancle') {
+            } elseif ($request->type == 'cancel') {
 
                 $transfer->update([
                     'status' => 0

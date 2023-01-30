@@ -22,7 +22,7 @@ Route::group([
     Route::get('dashboard', 'DashboardController@index')->name('dashboard.index');
 
     // Money request
-    Route::get('request-money/cancel/{id}', 'RequestMoneyController@cancle')->name('request-money.cancel');
+    Route::get('request-money/cancel/{id}', 'RequestMoneyController@cancel')->name('request-money.cancel');
     Route::get('request-money/approved/{id}', 'RequestMoneyController@approved')->name('request-money.approved');
     Route::get('received-request/', 'RequestMoneyController@receivedRequest')->name('received-request.index');
 
