@@ -61,13 +61,13 @@ function dashboardData(year = null) {
             months.push(value.month);
 
             if (value.month == res.credit[index]?.month) {
-                credit.push(res.credit[index].amount);
+                credit.push(`${res.credit[index].amount}`.replace(',', ''));
             } else {
                 credit.push(0);
             }
 
             if (value.month == res.debit[index]?.month) {
-                debit.push(Math.abs(res.debit[index].amount));
+                debit.push(`${res.debit[index].amount}`.replace(',', ''));
             } else {
                 debit.push(0);
             }
@@ -234,6 +234,8 @@ const datasets = (label, data, color) => ({
 })
 
 function dashboardChart(months, credit, debit) {
+    console.log({months, credit, debit})
+
     const dashboardCtx = document.getElementById("creditDebitChart").getContext("2d");
 
     new Chart(dashboardCtx, {

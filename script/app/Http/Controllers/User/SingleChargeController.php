@@ -22,6 +22,7 @@ class SingleChargeController extends Controller
     public function create()
     {
         $charge = get_option('charges')['single_payment_charge'] ?? ['rate' => 0, 'type' => 'percentage'];
+
         return view('user.single-charges.create', compact('charge'));
     }
 

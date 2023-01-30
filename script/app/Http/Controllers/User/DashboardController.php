@@ -55,7 +55,7 @@ class DashboardController extends Controller
             ->get()
             ->map(function ($q) {
                 $data['month'] = Carbon::createFromFormat('m', $q->month)->format('F');
-                $data['amount'] = number_format(max($q->amount, 0), 2);
+                $data['amount'] = number_format($q->amount, 2);
                 return $data;
             });
 
