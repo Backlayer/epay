@@ -156,7 +156,7 @@
         */
         @endphp
 
-        <div class="col-md-8">
+        <div class="col-lg-8 col-md-12">
             @include('user.dashboard.charts.debit-credit')
 
             <!--
@@ -172,7 +172,7 @@
             -->
         </div>
 
-        <div class="col-md-4">
+        <div class="col-lg-4 col-md-12 mb-4">
             <div class="row">
                 <div class="col text-center">
                     <div id="qrcode" class="mx-auto mb-3"></div>
@@ -222,7 +222,7 @@
     <script src="{{ asset('admin/plugins/clipboard-js/clipboard.min.js') }}"></script>
     <script src="{{ asset('user/vendor/jvectormap-next/jquery-jvectormap.min.js') }}"></script>
     <script src="{{ asset('user/js/vendor/jvectormap/jquery-jvectormap-world-mill.js') }}"></script>
-    <script src="{{ asset('user/js/chart/dashboard.js?v=6') }}"></script>
+    <script src="{{ asset('user/js/chart/dashboard.js?v=' . config('app.version')) }}"></script>
     <script src="{{ asset('admin/js/admin.js') }}"></script>
     <script>
         getTotalTransactions()

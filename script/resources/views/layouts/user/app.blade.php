@@ -16,3 +16,23 @@
         </div>
     </div>
 @endsection
+
+@push('css')
+    <style>
+        @media (min-width: 767px) {
+            body {
+                display: flex !important;
+                justify-content: end !important;
+            }
+            .main-content {
+                width: 100% !important;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .main-content {
+                width: calc(100% - 250px) !important;
+            }
+        }
+    </style>
+@endpush

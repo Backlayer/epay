@@ -4,3 +4,5 @@ node_modules
 composer.lock
 package-lock.json
 error_log
+../uploads
+public/storage
