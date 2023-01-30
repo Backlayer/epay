@@ -1038,5 +1038,6 @@
     "Tooltips.QR Payment": "Receive payments through your QR code",
     "Tooltips.Invoice": "Receive payments by sending invoices",
     "Tooltips.Support": "Open a ticket for a problem or concern",
-    "QR.Dashboard.Displaimer": "All payments must be less than $1,000.00 <br />Higher payments will be refunded."
+    "QR.Dashboard.Displaimer": "All payments must be less than $1,000.00 <br />Higher payments will be refunded.",
+    "Payout sent to :name": "Payout sent to :name"
 }
