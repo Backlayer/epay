@@ -20,7 +20,7 @@ class PayoutController extends Controller
     {
         $userbanks = UserBank::with('bank')->whereUserId(auth()->id())->get();
         $payouts = Payout::latest()->whereUserId(auth()->id())
-                    ->when(request()->has('search'), function($q) {
+                    ->when(request()->has('search'), function ($q) {
                         $q->where('trx', 'like', '%' . request('search') . '%');
                     })
                     ->paginate();
@@ -44,10 +44,13 @@ class PayoutController extends Controller
 
         if ($user->wallet >= $request->amount) {
             $otp = rand();
+
             session()->put('payout_otp', $otp);
             session()->put('bank_id', $request->bank_id);
             session()->put('payout_amount', $request->amount);
+
             $total_charge = get_charge('withdraw_charge', $request->amount) + get_charge('transaction_charge', $request->amount);
+
             session()->put('payout_charge', $total_charge);
 
             $options = [
@@ -89,6 +92,7 @@ class PayoutController extends Controller
         $bank_id = session()->get('bank_id');
         $payout_otp = session()->get('payout_otp');
         $payout_amount = session()->get('payout_amount');
+
         if (!$payout_otp || !$payout_amount || !$bank_id) {
             return response()->json([
                 'message' => __('Not found.')
@@ -148,6 +152,7 @@ class PayoutController extends Controller
         $data['approved'] = Payout::whereUserId(auth()->id())->where('status', 'approved')->count();
         $data['rejected'] = Payout::whereUserId(auth()->id())->where('status', 'rejected')->count();
         $data['pending'] = Payout::whereUserId(auth()->id())->where('status', 'pending')->count();
+
         return response()->json($data);
     }
 }

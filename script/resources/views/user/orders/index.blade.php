@@ -156,7 +156,7 @@
                                         <i class="fas fa-check mr-1 text-success"></i>
                                         {{ __('Approved') }}
                                     </a>
-                                    <a class="dropdown-item confirm-action" data-action="{{ route('user.orders.update', [$order->id, 'type' => 'cancle']) }}" data-method="PUT" data-icon="fas fa-ban" href="#">
+                                    <a class="dropdown-item confirm-action" data-action="{{ route('user.orders.update', [$order->id, 'type' => 'cancel']) }}" data-method="PUT" data-icon="fas fa-ban" href="#">
                                         <i class="far fa-window-close mr-1 text-danger"></i>
                                         {{ __('Cancle') }}
                                     </a>

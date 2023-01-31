@@ -21,6 +21,10 @@
                 <i class="fas fa-arrow-down"></i>
                 {{ __("Qr Code") }}
             </a>
+            <a href="{{ route('user.transactions.index', 'request-money') }}" @class(["latter-space-0 nav-link d-inline-block", "active" => Request::is('user/transactions/request-money')])>
+                <i class="fas fa-handshake"></i>
+                {{ __("Request Money") }}
+            </a>
             <!--<a href="{{ route('user.transactions.index', 'website') }}" @class(["latter-space-0 nav-link d-inline-block", "active" => Request::is('user/transactions/website')])>
                 <i class="fas fa-laptop"></i>
                 {{ __("Website") }}
@@ -37,72 +41,6 @@
                 <i class="fas fa-user"></i>
                 {{ __("Your Subscriptions") }}
             </a>-->
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="card card-stats">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <span class="h2 font-weight-bold mb-0 total-transactions">
-                                <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
-                            </span>
-                        </div>
-                        <div class="col-auto">
-                            <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
-                                <i class="ni ni-active-40"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="mt-3 mb-0 text-sm">
-                        <h5 class="card-title text-uppercase text-muted mb-0">{{ __('Total Transactions') }}</h5>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="card card-stats">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <span class="h2 font-weight-bold mb-0 credit-transactions">
-                                <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
-                            </span>
-                        </div>
-                        <div class="col-auto">
-                            <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
-                                <i class="ni ni-chart-pie-35"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="mt-3 mb-0 text-sm">
-                        <h5 class="card-title text-uppercase text-muted mb-0">{{ __('Credit Transactions') }}</h5>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="card card-stats">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <span class="h2 font-weight-bold mb-0 debit-transactions">
-                                <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
-                            </span>
-                        </div>
-                        <div class="col-auto">
-                            <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
-                                <i class="ni ni-money-coins"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="mt-3 mb-0 text-sm">
-                        <h5 class="card-title text-uppercase text-muted mb-0">{{ __('Debit Transactions') }}</h5>
-                    </p>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -128,6 +66,8 @@
                     @include('user.transactions._donation')
                 @elseif($type == 'qr-code')
                     @include('user.transactions._qr_code')
+                @elseif($type == 'request-money')
+                    @include('user.transactions._request_money')
                 @elseif($type == 'invoice')
                     @include('user.transactions._invoice')
                 @elseif($type == 'deposit')
@@ -137,15 +77,9 @@
                 @elseif($type == 'plan')
                     @include('user.transactions._plan')
                 @endif
+
+                {{ $transactions->links('vendor/pagination/bootstrap-5') }}
             </div>
         </div>
     </div>
-    <input type="hidden" id="get-transaction-url" value="{{ route('user.get-transaction') }}">
 @endsection
-
-@push('script')
-    <script src="{{ asset('admin/js/admin.js') }}"></script>
-    <script>
-        getTotalTransactions()
-    </script>
-@endpush

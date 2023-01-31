@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Helpers\HasUid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +10,7 @@ use App\Helpers\HasPayment;
 
 class SingleCharge extends Model
 {
-    use HasFactory, HasUid;
+    use HasFactory;
     use HasPayment;
 
     protected $table = 'singlecharges';
