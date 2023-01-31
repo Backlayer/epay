@@ -21,16 +21,16 @@ class RequestMoneyController extends Controller
 
         $requests = Moneyrequest::with(['receiver', 'sender_currency', 'sender'])
             ->where('sender_id', auth()->id())
-            ->orWhere('receiver_id', auth()->id())
+            //->orWhere('receiver_id', auth()->id())
             ->when(!is_null($search), function (Builder $builder) use ($search) {
                 $builder->whereHas('sender', function (Builder $builder) use ($search) {
                     $builder->where('name', 'LIKE', '%' . $search . '%')
                         ->orWhere('email', 'LIKE', '%' . $search . '%');
-                })
-                    ->orWhereHas('receiver', function (Builder $builder) use ($search) {
+                });
+                    /*->orWhereHas('receiver', function (Builder $builder) use ($search) {
                         $builder->where('name', 'LIKE', '%' . $search . '%')
                             ->orWhere('email', 'LIKE', '%' . $search . '%');
-                    });
+                    });*/
             })
             ->latest()
             ->paginate();

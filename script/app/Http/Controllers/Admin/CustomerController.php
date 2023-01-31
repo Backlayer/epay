@@ -4,15 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\SendEmailToCustomer;
-use App\Models\Deposit;
+
 use App\Models\User;
 use App\Rules\Phone;
+use App\Helpers\HasFields;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class CustomerController extends Controller
 {
+    use HasFields;
+
     public function __construct()
     {
         $this->middleware('permission:customers-create')->only('create', 'store');
@@ -20,12 +24,13 @@ class CustomerController extends Controller
         $this->middleware('permission:customers-update')->only('edit', 'update');
         $this->middleware('permission:customers-delete')->only('edit', 'destroy');
     }
+
     public function index(Request $request)
     {
         $search = $request->get('src');
 
         $customers = User::whereRole('user')
-            ->when(!is_null($search), function (Builder $builder) use ($search){
+            ->when(!is_null($search), function (Builder $builder) use ($search) {
                 $builder->where('name', 'LIKE', '%'.$search.'%')
                     ->orWhere('username', 'LIKE', '%'.$search.'%')
                     ->orWhere('email', 'LIKE', '%'.$search.'%')
@@ -33,12 +38,14 @@ class CustomerController extends Controller
             })
             ->latest()
             ->paginate();
+
         return view('admin.customers.index', compact('customers'));
     }
 
     public function show(User $customer)
     {
         $customer->loadSum(['deposits', 'transactions'], 'amount');
+
         return view('admin.customers.show', compact('customer'));
     }
 
@@ -67,6 +74,7 @@ class CustomerController extends Controller
             'name' => $validated['name'],
             'phone' => $validated['phone'],
             'wallet' => $validated['wallet'],
+            'data' => $this->getFields($request) ?? null
         ]);
 
         return response()->json([
@@ -91,9 +99,9 @@ class CustomerController extends Controller
             'message' => ['required', 'string']
         ]);
 
-        if (config('system.queue.mail')){
+        if (config('system.queue.mail')) {
             Mail::to($user)->queue(new SendEmailToCustomer($request->subject, $request->message));
-        }else{
+        } else {
             Mail::to($user)->send(new SendEmailToCustomer($request->subject, $request->message));
         }
 
@@ -108,18 +116,21 @@ class CustomerController extends Controller
         $data['active'] = User::whereRole('user')->whereStatus(1)->count();
         $data['pause'] = User::whereRole('user')->whereStatus(2)->count();
         $data['suspand'] = User::whereRole('user')->whereStatus(0)->count();
+
         return response()->json($data);
     }
 
     public function Login(User $user)
     {
         auth()->login($user);
+
         if (auth()->check()) {
             return response()->json([
                 'message' => __("Login successfully."),
                 'redirect' => route('user.dashboard.index'),
             ]);
         }
+
         return response()->json([
             'message' => __("Something was wrong."),
         ], 404);

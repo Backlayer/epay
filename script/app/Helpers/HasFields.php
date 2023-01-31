@@ -16,6 +16,7 @@ trait HasFields
     public function setFields()
     {
         $this->signupFields = SignupFields::where('isActive', true)
+            ->orderBy('order', 'ASC')
             ->get(['id', 'label', 'type', 'data', 'isRequired']);
     }
 

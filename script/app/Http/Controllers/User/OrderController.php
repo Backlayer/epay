@@ -51,7 +51,7 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        if ($request->type == 'cancle') {
+        if ($request->type == 'cancel') {
             $order->status = 0;
         } else {
             $order->status = 2;

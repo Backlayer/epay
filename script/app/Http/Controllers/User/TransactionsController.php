@@ -11,6 +11,8 @@ use App\Models\SingleChargeOrder;
 use App\Models\Transaction;
 use App\Models\UserPlanSubscriber;
 use App\Models\WebOrder;
+use App\Models\Moneyrequest;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -24,6 +26,7 @@ class TransactionsController extends Controller
             $transactions = Transaction::with('currency')->whereUserId(\Auth::id())
                 ->when(!is_null($search), function (Builder $builder) use ($search) {
                     $builder->where('name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('invoice_no', 'LIKE', '%' . $search . '%')
                         ->orWhere('email', 'LIKE', '%' . $search . '%');
                 })
                 ->latest()
@@ -65,6 +68,17 @@ class TransactionsController extends Controller
                 ->with('seller')
                 ->latest()
                 ->paginate();
+        } elseif ($type == 'request-money') {
+            $transactions =  Moneyrequest::whereReceiverId(\Auth::id())
+                ->when(!is_null($search), function (Builder $builder) use ($search) {
+                    $builder->whereHas('sender', function (Builder $builder) use ($search) {
+                        $builder->where('name', 'LIKE', '%' . $search . '%')
+                            ->orWhere('email', 'LIKE', '%' . $search . '%');
+                    });
+                })
+                ->with('sender')
+                ->latest()
+                ->paginate();    
         } elseif ($type == 'invoice') {
             $transactions =  Invoice::whereOwnerId(\Auth::id())
                 ->when(!is_null($search), function (Builder $builder) use ($search) {

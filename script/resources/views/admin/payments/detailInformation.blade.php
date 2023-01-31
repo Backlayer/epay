@@ -8,7 +8,7 @@
     <div class="d-flex flex-column align-self-start col-9">
         <h5>{{ __('Payment Details') }}</h5>
 
-        @if(count($payment->fields))
+        @if($payment->fields && count($payment->fields))
         <div class="row">
             @foreach($payment->fields as $index => $field)
             <div class="col-6">

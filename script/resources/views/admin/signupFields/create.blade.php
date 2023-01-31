@@ -1,5 +1,5 @@
 @extends('layouts.backend.app', [
-    'prev' => url()->previous()
+    'prev' => url()->previous(),
 ])
 
 @section('title', __('Create Fields for Signup'))
@@ -13,17 +13,22 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="form-group col-6">
+                            <div class="form-group col-5">
                                 <label for="label" class="required">{{ __('Label') }}</label>
                                 <input type="text" name="label" class="form-control" required>
                             </div>
-                            <div class="form-group col-6">
+                            <div class="form-group col-5">
                                 <label for="type" class="required">{{ __('Type') }}</label>
                                 <select name="type" class="form-control" required>
-                                    @foreach($types as $type)
+                                    @foreach ($types as $type)
                                         <option value="{{ $type }}">{{ ucwords($type) }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                            <div class="form-group col-2">
+                                <label for="order" class="required">{{ __('Order') }}</label>
+                                <input type="number" name="order" class="form-control" required min="0"
+                                    value="0">
                             </div>
                             <div class="col-6 row">
                                 <div class="form-group col-6">

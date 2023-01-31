@@ -42,25 +42,6 @@ class RegisterController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
-    private function getFields($request)
-    {
-        $dataFields = [];
-
-        if (isset($this->signupFields) && count($this->signupFields) > 0) {
-            foreach ($request->fields as $key => $value) {
-                $field = $request->fields[$key];
-
-                if (is_file($field)) {
-                    $dataFields[$key] = $this->upload($request, 'fields.' . $key);
-                } else {
-                    $dataFields[$key] = json_decode($field, true);
-                }
-            }
-        }
-
-        return $dataFields;
-    }
-
     /**
      * Create a new controller instance.
      *
@@ -85,7 +66,7 @@ class RegisterController extends Controller
             'business_name' => ['required', 'string', 'max:255'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phone' => ['required', new Phone],
+            'phone' => ['required', new Phone()],
             'password' => ['required', Password::default()],
             'agree' => ['accepted'],
         ], [

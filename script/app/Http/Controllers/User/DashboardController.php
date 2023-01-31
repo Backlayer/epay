@@ -35,8 +35,10 @@ class DashboardController extends Controller
 
     function transactions(Request $request)
     {
+        $year = $request->year ?? date("Y");
+
         $months = Transaction::whereUserId(auth()->id())
-            ->whereYear('created_at', $request->year ?? date("Y"))
+            ->whereYear('created_at', $year)
             ->selectRaw('month(created_at) month')
             ->groupBy('month')
             ->get()
@@ -45,19 +47,21 @@ class DashboardController extends Controller
                 return $data;
             });
 
-        $credit = Transaction::whereUserId(auth()->id())->where('amount', '>', 0)
-            ->whereYear('created_at', $request->year ?? date("Y"))
+        $credit = Transaction::whereUserId(auth()->id())
+            ->where('amount', '>', 0)
+            ->whereYear('created_at', $year)
             ->selectRaw('month(created_at) month, sum(amount) amount')
             ->groupBy('month')
             ->get()
             ->map(function ($q) {
                 $data['month'] = Carbon::createFromFormat('m', $q->month)->format('F');
-                $data['amount'] = number_format(max($q->amount, 0), 2);
+                $data['amount'] = number_format($q->amount, 2);
                 return $data;
             });
 
-        $debit = Transaction::whereUserId(auth()->id())->where('amount', '<', 0)
-            ->whereYear('created_at', $request->year ?? date("Y"))
+        $debit = Transaction::whereUserId(auth()->id())
+            ->where('amount', '<', 0)
+            ->whereYear('created_at', $year)
             ->selectRaw('month(created_at) month, sum(amount) amount')
             ->groupBy('month')
             ->get()

@@ -255,10 +255,6 @@ pre[class*=language-] {
     margin-left: auto;
 }
 
-.chartjs-render-monitor {
-    height: 350px !important;
-}
-
 .summernote-css .note-toolbar.card-header {
     display: inline-block;
 }
@@ -291,8 +287,8 @@ pre[class*=language-] {
 
 .chart-inner-div {
     position:absolute;
-    width:1000000px;
-    height:1000000px;
+    width:100%;
+    height:100%;
     left:0;
     top:0
 }
@@ -311,14 +307,30 @@ pre[class*=language-] {
 
 .chart-inner-div-2 {
     position:absolute;
-    width:200%;
-    height:200%;
+    width:100%;
+    height:100%;
     left:0;
     top:0
 }
 
 .chartjs-render-monitor {
     display: block;
-    height: 303px;
+    height: 372px;
     width: 576px;
+}
+
+@media (min-width: 767px) {
+    body {
+        display: flex !important;
+        justify-content: end !important;
+    }
+    .main-content {
+        width: 100% !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .main-content {
+        width: calc(100% - 250px) !important;
+    }
 }

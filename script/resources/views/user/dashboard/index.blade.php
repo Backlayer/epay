@@ -1,11 +1,79 @@
 @extends('layouts.user.app')
 
-@section('title', __('Transactions Log'))
-
 @section('content')
     <div class="row">
+        <input type="hidden" id="get-transaction-url" value="{{ route('user.get-transaction') }}">
+
+        <div class="col-sm-4">
+            <div class="card card-stats">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <span class="h2 font-weight-bold mb-0 total-transactions">
+                                <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                            </span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                                <i class="ni ni-active-40"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-3 mb-0 text-sm">
+                        <h5 class="card-title text-uppercase text-muted mb-0">{{ __('Total Transactions') }}</h5>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card card-stats">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <span class="h2 font-weight-bold mb-0 credit-transactions">
+                                <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                            </span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                                <i class="ni ni-chart-pie-35"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-3 mb-0 text-sm">
+                        <h5 class="card-title text-uppercase text-muted mb-0">{{ __('Credit Transactions') }}</h5>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card card-stats">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <span class="h2 font-weight-bold mb-0 debit-transactions">
+                                <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                            </span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                                <i class="ni ni-money-coins"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-3 mb-0 text-sm">
+                        <h5 class="card-title text-uppercase text-muted mb-0">{{ __('Debit Transactions') }}</h5>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        @php
+        /*
         <div class="col-md-8">
-            <!--<div class="card shadow">
+            <div class="card shadow">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
@@ -41,7 +109,8 @@
                         </div>
                     </div>
                 </div>
-            </div>-->
+            </div>
+
             @if ($transactions->count() > 0)
             <div class="card mt-4">
                 <div class="table-responsive py-3 ">
@@ -84,18 +153,42 @@
             </div>
             @endif
         </div>
-        <div class="col-md-4">
+        */
+        @endphp
+
+        <div class="col-lg-8 col-md-12">
+            @include('user.dashboard.charts.debit-credit')
+
+            <!--
+            @include('user.dashboard.charts.single-charge')
+
+            @include('user.dashboard.charts.qr-payments')
+
+            @include('user.dashboard.charts.order')
+
+            @include('user.dashboard.charts.donation')
+
+            @include('user.dashboard.charts.plans')
+            -->
+        </div>
+
+        <div class="col-lg-4 col-md-12 mb-4">
             <div class="row">
                 <div class="col text-center">
-                    <div id="qrcode" class="mx-auto mb-3">
+                    <div id="qrcode" class="mx-auto mb-3"></div>
 
-                    </div>
+                    <p>
+                        {!! __('QR.Dashboard.Displaimer') !!}
+                    </p>
 
                     <a href="" id="download-qr" class="custom-btn d-block btn-block mt-3 py-2 download-qr" download="{{ auth()->user()->name . '.png' }}">
                         <i class="fas fa-download"></i> {{ __('Download') }}
                     </a>
                 </div>
             </div>
+
+            @php
+            /*
             <hr>
             <div class="row mt-5">
                 <div class="col text-center">
@@ -112,22 +205,10 @@
                     <a href="{{ url('/user/payouts') }}" class="custom-btn d-block btn-block mt-3 py-2"><i class="fas fa-history"></i>  {{ __('All Payouts') }}</a>
                 </div>
             </div>
+            */
+            @endphp
         </div>
     </div>
-
-    @include('user.dashboard.charts.single-charge')
-
-    @include('user.dashboard.charts.qr-payments')
-
-    <!--
-    @include('user.dashboard.charts.debit-credit')
-
-    @include('user.dashboard.charts.order')
-
-    @include('user.dashboard.charts.donation')
-
-    @include('user.dashboard.charts.plans')
-    -->
 
     <input type="hidden" id="get-chart-data" value="{{ route('user.dashboard.chart') }}">
     <input type="hidden" id="qrUrl" value="{{ route('frontend.qr.index', auth()->user()->qr) }}">
@@ -141,5 +222,9 @@
     <script src="{{ asset('admin/plugins/clipboard-js/clipboard.min.js') }}"></script>
     <script src="{{ asset('user/vendor/jvectormap-next/jquery-jvectormap.min.js') }}"></script>
     <script src="{{ asset('user/js/vendor/jvectormap/jquery-jvectormap-world-mill.js') }}"></script>
-    <script src="{{ asset('user/js/chart/dashboard.js?v5') }}"></script>
+    <script src="{{ asset('user/js/chart/dashboard.js?v=' . config('app.version')) }}"></script>
+    <script src="{{ asset('admin/js/admin.js') }}"></script>
+    <script>
+        getTotalTransactions()
+    </script>
 @endpush

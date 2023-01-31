@@ -1,5 +1,5 @@
 @extends('layouts.backend.app', [
-    'prev' => route('admin.customers.index')
+    'prev' => route('admin.customers.index'),
 ])
 
 @section('title', __('Customer Profile'))
@@ -44,16 +44,27 @@
                             </div>
                         </li>
                         <li class="list-group-item">
+                            <div class="font-weight-bolder">{{ __('Phone number') }}</div>
+                            <div class="font-weight-light">
+                                {{ $customer->phone }}
+
+                                @if ($customer->isValidPhone)
+                                    <i class="fa fa-check text-success" title="{{ __('Verified') }}"></i>
+                                @else
+                                    <i class="fas fa-backspace text-danger" title="{{ __('Not Verified') }}"></i>
+                                @endif
+                            </div>
+                        </li>
+                        <li class="list-group-item">
                             <div class="font-weight-bolder">{{ __('Wallet') }}</div>
                             <div class="font-weight-light">
                                 {{ convert_money_direct($customer->wallet, $customer->currency, default_currency(), true) }}
                             </div>
                         </li>
-
                         <li class="list-group-item">
                             <div class="font-weight-bolder">{{ __('Account Status') }}</div>
                             <div class="font-weight-light">
-                                @if($customer->status == 1)
+                                @if ($customer->status == 1)
                                     <span class="badge badge-primary">{{ __('Active') }}</span>
                                 @elseif($customer->status == 0)
                                     <span class="badge badge-warning">{{ __('Inactive') }}</span>
@@ -71,7 +82,7 @@
                         <li class="list-group-item">
                             <div class="font-weight-bolder">{{ __('Kyc Verified At') }}</div>
                             <div class="font-weight-light">
-                                @if($customer->kyc_verified_at)
+                                @if ($customer->kyc_verified_at)
                                     {{ formatted_date($customer->email_verified_at) }}
                                 @else
                                     {{ __('Not verified') }}
@@ -136,13 +147,42 @@
                     </div>
                 </div>
             </div>
+
+            @if (@$customer->fields && count($customer->fields))
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h4 class="mx-auto">{{ __('Details') }}</h4>
+                        </div>
+                        <div class="row">
+                            @foreach (sortField($customer->fields, 'order') as $index => $field)
+                                @php
+                                    $value = @$customer->data[$field['label']];
+                                @endphp
+
+                                <div class="col-md-6 mb-20">
+                                    <label for="fields_{{ $loop->index }}" class="col-form-label">
+                                        {{ $field['label'] }}
+                                    </label>
+
+                                    <p class="field-control-static form-control focus-input100"
+                                        style="height: min-content; min-height: 42px">
+                                        {{ $value }}
+                                    </p>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 @endsection
 
 @section('modal')
     <!-- Modal -->
-    <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="sendEmailModalTitle" aria-hidden="true">
+    <div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="sendEmailModalTitle"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -151,17 +191,19 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('admin.customers.send-email', $customer->id) }}" method="POST" class="ajaxform_with_reset">
+                <form action="{{ route('admin.customers.send-email', $customer->id) }}" method="POST"
+                    class="ajaxform_with_reset">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="subject" class="required">{{ __('Subject') }}</label>
-                            <input type="text" name="subject" id="subject" class="form-control" placeholder="{{ __('Enter email subject') }}" required>
+                            <input type="text" name="subject" id="subject" class="form-control"
+                                placeholder="{{ __('Enter email subject') }}" required>
                         </div>
 
                         <div class="form-group">
                             <label for="message" class="required">{{ __('Message') }}</label>
-                            <textarea name="message" id="message" class="summernote" placeholder="{{ __('Enter message') }}" ></textarea>
+                            <textarea name="message" id="message" class="summernote" placeholder="{{ __('Enter message') }}"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">

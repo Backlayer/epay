@@ -209,7 +209,7 @@
                                                 <i class="fas fa-check mr-1"></i>
                                                 {{ __('Accept') }}
                                             </a>
-                                            <a class="dropdown-item confirm-action" data-action="{{ route('user.transfers.show', [$transfer->id, 'type' => 'cancle']) }}" data-method="GET" data-icon="fas fa-ban" href="#">
+                                            <a class="dropdown-item confirm-action" data-action="{{ route('user.transfers.show', [$transfer->id, 'type' => 'cancel']) }}" data-method="GET" data-icon="fas fa-ban" href="#">
                                                 <i class="fas fa-ban mr-1"></i>
                                                 {{ __('Cancel') }}
                                             </a>

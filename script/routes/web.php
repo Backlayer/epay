@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['verify' => true]);
 
+Route::get('/logout', 'App\Http\Controllers\Auth\LoginController@logout');
+
 Route::group(['as' => 'frontend.', 'namespace' => 'App\Http\Controllers\Frontend'], function () {
     Route::get('/lnk/{hash:string}', 'HomeController@shortLink')->name('home.shortLink');
     Route::get('/', 'HomeController@index')->name('home.index');

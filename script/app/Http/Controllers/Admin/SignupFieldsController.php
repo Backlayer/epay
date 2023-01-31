@@ -28,6 +28,7 @@ class SignupFieldsController extends Controller
         return [
             'label' => $request->label,
             'type' => $request->type,
+            'order' => $request->order,
             'data' => $data,
             'isRequired' => isset($request->isRequired[0]),
             'isActive' => isset($request->isActive[0]),
@@ -39,6 +40,7 @@ class SignupFieldsController extends Controller
         $request->validate([
             'label' => ['required', 'string'],
             'type' => ['required', 'string', Rule::in($this->types)],
+            'order' => ['required', 'numeric', 'min:0'],
         ]);
     }
 
@@ -54,7 +56,7 @@ class SignupFieldsController extends Controller
 
     public function index()
     {
-        $signupFields = SignupFields::paginate(10);
+        $signupFields = SignupFields::orderBy('order', 'ASC')->paginate(10);
 
         return view('admin.signupFields.index', compact('signupFields'));
     }

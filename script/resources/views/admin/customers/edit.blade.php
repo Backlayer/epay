@@ -1,5 +1,5 @@
 @extends('layouts.backend.app', [
-    'prev' => route('admin.customers.index')
+    'prev' => route('admin.customers.index'),
 ])
 
 @section('title', __('Edit Customer'))
@@ -12,41 +12,52 @@
                     <h4>{{ __('Edit Customer') }}</h4>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('admin.customers.update', $customer->id) }}" class="ajaxform_with_redirect">
+                    <form method="POST" action="{{ route('admin.customers.update', $customer->id) }}"
+                        class="ajaxform_with_redirect">
                         @csrf
                         @method('PUT')
-                        <div class="form-group">
-                            <label for="business_name" class="required">{{ __('Business Name') }}</label>
-                            <input type="text" name="business_name" id="business_name" class="form-control" value="{{ $customer->business_name }}"
-                                   placeholder="{{ __('Enter full name') }}" required>
-                        </div>
 
-                        <div class="form-group">
-                            <label for="name" class="required">{{ __('Name') }}</label>
-                            <input type="text" name="name" id="name" class="form-control" value="{{ $customer->name }}"
-                                   placeholder="{{ __('Enter full name') }}" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email" class="required">{{ __('Email') }}</label>
-                            <input type="email" id="email" class="form-control"
-                                   value="{{ $customer->email }}" disabled>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="phone">{{ __('Phone Number') }}</label>
-                            <input type="tel" name="phone" id="phone" class="form-control" value="{{ $customer->phone }}"
-                                   placeholder="{{ __('Enter phone number') }}">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="wallet">{{ __('Wallet') }}</label>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">{{ default_currency('symbol') }}</span>
-                                </div>
-                                <input type="number" class="form-control" name="wallet" placeholder="{{ __('Wallet Balance') }}" value="{{ $customer->wallet }}">
+                        <div class="row">
+                            <div class="col-md-6 mb-20 form-group">
+                                <label for="business_name" class="required">{{ __('Business Name') }}</label>
+                                <input type="text" name="business_name" id="business_name" class="form-control"
+                                    value="{{ $customer->business_name }}" placeholder="{{ __('Enter full name') }}"
+                                    required>
                             </div>
+
+                            <div class="col-md-6 mb-20 form-group">
+                                <label for="name" class="required">{{ __('Name') }}</label>
+                                <input type="text" name="name" id="name" class="form-control"
+                                    value="{{ $customer->name }}" placeholder="{{ __('Enter full name') }}" required>
+                            </div>
+
+                            <div class="col-md-6 mb-20 form-group">
+                                <label for="email" class="required">{{ __('Email') }}</label>
+                                <input type="email" id="email" class="form-control" value="{{ $customer->email }}"
+                                    disabled>
+                            </div>
+
+                            <div class="col-md-6 mb-20 form-group">
+                                <label for="phone" class="required">{{ __('Phone Number') }}</label>
+                                <input type="tel" name="phone" id="phone" class="form-control"
+                                    value="{{ $customer->phone }}" placeholder="{{ __('Enter phone number') }}" required>
+                            </div>
+
+                            <div class="col-md-6 mb-20 form-group">
+                                <label for="wallet">{{ __('Wallet') }}</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{{ default_currency('symbol') }}</span>
+                                    </div>
+                                    <input type="number" class="form-control" name="wallet"
+                                        placeholder="{{ __('Wallet Balance') }}" value="{{ $customer->wallet }}">
+                                </div>
+                            </div>
+
+                            @include('auth.signup_fields', [
+                                'signupFields' => sortField($customer->fields, 'order'),
+                                'data' => @$customer->data ?? [],
+                            ])
                         </div>
 
                         <div class="form-group">
