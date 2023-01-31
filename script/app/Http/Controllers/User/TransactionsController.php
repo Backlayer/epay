@@ -12,12 +12,15 @@ use App\Models\Transaction;
 use App\Models\UserPlanSubscriber;
 use App\Models\WebOrder;
 use App\Models\Moneyrequest;
+use App\Helpers\HasUploader;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class TransactionsController extends Controller
 {
+    use HasUploader;
+
     public function index(Request $request, $type = null)
     {
         $search = $request->get('search');
@@ -78,7 +81,7 @@ class TransactionsController extends Controller
                 })
                 ->with('sender')
                 ->latest()
-                ->paginate();    
+                ->paginate();
         } elseif ($type == 'invoice') {
             $transactions =  Invoice::whereOwnerId(\Auth::id())
                 ->when(!is_null($search), function (Builder $builder) use ($search) {
@@ -137,6 +140,22 @@ class TransactionsController extends Controller
         $data['total'] = Transaction::whereUserId(auth()->id())->count();
         $data['credit'] = Transaction::whereUserId(auth()->id())->whereType('credit')->count();
         $data['debit'] = Transaction::whereUserId(auth()->id())->whereType('debit')->count();
+
         return response()->json($data);
+    }
+
+    public function uploadFile(Request $request)
+    {
+        $source = [
+            'Invoice' => "App\Models\Invoice",
+            'Qrpayment' => "App\Models\Qrpayment",
+            'SingleChargeOrder' => "App\Models\SingleChargeOrder",
+        ][$request->type];
+
+        $record = $source::whereId($request->id)->first();
+        $record->invoice_file = $this->upload($request, 'invoice_file', $record->invoice_file);
+        $record->save();
+
+        return redirect()->back()->with('success', __('Invoice Uploaded'));
     }
 }

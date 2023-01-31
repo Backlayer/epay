@@ -13,14 +13,15 @@ class TransactionController extends Controller
     {
         $this->middleware('permission:transactions-read')->only('index', 'show');
     }
+
     public function index(Request $request)
     {
         $search = $request->get('search');
         $transactions = Transaction::with('currency', 'user')
-            ->when(!is_null($search), function (Builder $builder)use($search){
-                $builder->WhereHas('user', function (Builder $builder) use ($search){
-                    $builder->where('name', 'LIKE', '%'.$search.'%')
-                        ->orWhere('email', 'LIKE', '%'.$search.'%');
+            ->when(!is_null($search), function (Builder $builder) use ($search) {
+                $builder->WhereHas('user', function (Builder $builder) use ($search) {
+                    $builder->where('name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('email', 'LIKE', '%' . $search . '%');
                 });
             })
             ->latest()
@@ -39,7 +40,7 @@ class TransactionController extends Controller
         $data['total'] = Transaction::count();
         $data['credit'] = Transaction::whereType('credit')->count();
         $data['debit'] = Transaction::whereType('debit')->count();
+
         return response()->json($data);
     }
-
 }

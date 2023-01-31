@@ -1,41 +1,47 @@
 <table class="table table-flush" id="subscriber-table">
     <thead class="thead-light">
-    <tr>
-        <th>{{ __("S/N") }}</th>
-        <th>{{ __("Invoice No") }}</th>
-        <th>{{ __("TRX") }}</th>
-        <th>{{ __("From") }}</th>
-        <th>{{ __("Amount") }}</th>
-        <th>{{ __("Charge") }}</th>
-        <th>{{ __("Due Date") }}</th>
-        <th>{{ __('Payment Status') }}</th>
-        <th>{{ __("Paid At") }}</th>
-        <th>{{ __("Created") }}</th>
-    </tr>
+        <tr>
+            <th>{{ __('S/N') }}</th>
+            <th>{{ __('Invoice No') }}</th>
+            <th>{{ __('TRX') }}</th>
+            <th>{{ __('From') }}</th>
+            <th>{{ __('Amount') }}</th>
+            <th>{{ __('Charge') }}</th>
+            <th>{{ __('Due Date') }}</th>
+            <th>{{ __('Payment Status') }}</th>
+            <th>{{ __('Paid At') }}</th>
+            <th>{{ __('Created') }}</th>
+        </tr>
     </thead>
     <tbody>
-    @foreach($transactions as $transaction)
-        <tr>
-            <td>{{ $loop->index + 1 }}</td>
-            <td>{{ $transaction->invoice_no }}</td>
-            <td>{{ $transaction->trx }}</td>
-            <td>
-                @if($transaction->name)
-                    {{ $transaction->name }}&nbsp;[{{ $transaction->email }}]
-                @else
-                    {{ $transaction->customer_email }}
-                    @if($transaction->customer_phone)
-                    &nbsp;[{{ $transaction->customer_phone }}]
+        @foreach ($transactions as $transaction)
+            <tr>
+                <td>{{ $loop->index + 1 }}</td>
+                <td>
+                    <a href="#" class="view-invoice-file" data-typetx="Invoice" data-idtx="{{ $transaction->id }}"
+                        data-linkfiletx="{{ url($transaction->invoice_file) }}">
+                        {{ $transaction->invoice_no }}
+                    </a>
+                </td>
+                <td>{{ $transaction->trx }}</td>
+                <td>
+                    @if ($transaction->name)
+                        {{ $transaction->name }}&nbsp;[{{ $transaction->email }}]
+                    @else
+                        {{ $transaction->customer_email }}
+                        @if ($transaction->customer_phone)
+                            &nbsp;[{{ $transaction->customer_phone }}]
+                        @endif
                     @endif
-                @endif
-            </td>
-            <td>{{ convert_money_direct($transaction->total, $transaction->currency, user_currency(), true) }}</td>
-            <td>{{ convert_money_direct($transaction->charge, $transaction->currency, user_currency(), true) }}</td>
-            <td>{{ formatted_date($transaction->due_date, 'd M, Y') }}</td>
-            <td>{!! $transaction->PaymentStatus !!}</td>
-            <td>{{ formatted_date($transaction->paid_at, 'd M, Y h:i A') }}</td>
-            <td>{{ formatted_date($transaction->created_at, 'd M, Y h:i A') }}</td>
-        </tr>
-    @endforeach
+                </td>
+                <td>{{ convert_money_direct($transaction->total, $transaction->currency, user_currency(), true) }}</td>
+                <td>{{ convert_money_direct($transaction->charge, $transaction->currency, user_currency(), true) }}
+                </td>
+                <td>{{ formatted_date($transaction->due_date, 'd M, Y') }}</td>
+                <td>{!! $transaction->PaymentStatus !!}</td>
+                <td>{{ formatted_date($transaction->paid_at, 'd M, Y h:i A') }}</td>
+                <td>{{ formatted_date($transaction->created_at, 'd M, Y h:i A') }}</td>
+            </tr>
+        @endforeach
     </tbody>
 </table>

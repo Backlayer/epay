@@ -80,6 +80,8 @@ Route::group([
     Route::get('websites/test/{website}', 'WebsiteController@testTransactions')->name('websites.test-transactions');
 
     Route::get('transactions/{type?}', 'TransactionsController@index')->name('transactions.index');
+    Route::post('transactions', 'TransactionsController@uploadFile')->name('transactions.upload.file');
+
     Route::get('subscription/{subscription}', 'SubscriptionController@show')->name('subscription.show');
     Route::post('subscription/{subscription}/auto-renew', 'SubscriptionController@autoRenew')->name('subscription.auto-renew');
 
