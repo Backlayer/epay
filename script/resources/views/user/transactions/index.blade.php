@@ -21,6 +21,10 @@
                 <i class="fas fa-arrow-down"></i>
                 {{ __("Qr Code") }}
             </a>
+            <a href="{{ route('user.transactions.index', 'request-money') }}" @class(["latter-space-0 nav-link d-inline-block", "active" => Request::is('user/transactions/request-money')])>
+                <i class="fas fa-handshake"></i>
+                {{ __("Request Money") }}
+            </a>
             <!--<a href="{{ route('user.transactions.index', 'website') }}" @class(["latter-space-0 nav-link d-inline-block", "active" => Request::is('user/transactions/website')])>
                 <i class="fas fa-laptop"></i>
                 {{ __("Website") }}
@@ -62,6 +66,8 @@
                     @include('user.transactions._donation')
                 @elseif($type == 'qr-code')
                     @include('user.transactions._qr_code')
+                @elseif($type == 'request-money')
+                    @include('user.transactions._request_money')
                 @elseif($type == 'invoice')
                     @include('user.transactions._invoice')
                 @elseif($type == 'deposit')
@@ -71,6 +77,8 @@
                 @elseif($type == 'plan')
                     @include('user.transactions._plan')
                 @endif
+
+                {{ $transactions->links('vendor/pagination/bootstrap-5') }}
             </div>
         </div>
     </div>

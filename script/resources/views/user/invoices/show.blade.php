@@ -1,7 +1,7 @@
 @extends('layouts.user.blank')
 
 @section('body')
-    <div class="row justify-content-center align-items-center">
+    <div class="row justify-content-center align-items-start w-100">
         <div class="col-md-8">
             <div class="card mt-5">
                 <div class="card-body">

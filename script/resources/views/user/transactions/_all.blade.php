@@ -2,6 +2,7 @@
     <thead class="thead-light">
     <tr>
         <th>{{ __("S/N") }}</th>
+        <th>{{ __("Invoice No") }}</th>
         <th>{{ __("From") }}</th>
         <th>{{ __("Amount") }}</th>
         <th>{{ __("Charge") }}</th>
@@ -14,6 +15,7 @@
     @foreach($transactions as $transaction)
         <tr>
             <td>{{ $loop->index + 1 }}</td>
+            <td>{{ $transaction->invoice_no }}</td>
             <td>
                 {{ $transaction->name }}<br>
                 {{ $transaction->email }}

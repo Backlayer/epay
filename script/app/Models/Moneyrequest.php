@@ -26,6 +26,29 @@ class Moneyrequest extends Model
         'approved_currency_id',
     ];
 
+    private function paymentStatus($status)
+    {
+        $classBadge = 'badge badge-pill badge-';
+        $classIcon = 'fas fa-';
+
+        return [
+            '0' => "<span class=\"" . $classBadge . "danger\">
+                    <i class=\"" . $classIcon . "spinner\"></i> " . __('Rejected') . "
+                </span>",
+            '1' => "<span class=\"" . $classBadge . "success\">
+                    <i class=\"" . $classIcon . "spinner\"></i> " . __('Completed') . "
+                </span>",
+            '2' => "<span class=\"" . $classBadge . "info\">
+                    <i class=\"" . $classIcon . "check\"></i> " . __('Pending') . "
+                </span>"
+        ][$status];
+    }
+
+    public function getPaymentStatusAttribute()
+    {
+        return $this->paymentStatus($this->attributes['status']);
+    }
+
     public function receiver()
     {
         return $this->belongsTo(User::class);

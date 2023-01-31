@@ -196,8 +196,7 @@
                                                                 class="fas fa-spinner"></i>
                                                             {{ __('PENDING') }}
                                                         </span>
-                                                        @elseif
-                                                        ($request->status == 1)
+                                                        @elseif ($request->status == 1)
                                                         <span
                                                             class="badge badge-pill badge-success">
                                                             <i
