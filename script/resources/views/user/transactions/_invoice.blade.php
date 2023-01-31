@@ -4,7 +4,6 @@
         <th>{{ __("S/N") }}</th>
         <th>{{ __("Invoice No") }}</th>
         <th>{{ __("TRX") }}</th>
-        <th>{{ __("Item Name") }}</th>
         <th>{{ __("From") }}</th>
         <th>{{ __("Amount") }}</th>
         <th>{{ __("Charge") }}</th>
@@ -20,9 +19,17 @@
             <td>{{ $loop->index + 1 }}</td>
             <td>{{ $transaction->invoice_no }}</td>
             <td>{{ $transaction->trx }}</td>
-            <td>{{ $transaction->item_name }}</td>
-            <td>{{ $transaction->name }}&nbsp;[{{ $transaction->email }}]</td>
-            <td>{{ convert_money_direct(($transaction->amount * $transaction->quantity) - $transaction->charge, $transaction->currency, user_currency(), true) }}</td>
+            <td>
+                @if($transaction->name)
+                    {{ $transaction->name }}&nbsp;[{{ $transaction->email }}]
+                @else
+                    {{ $transaction->customer_email }}
+                    @if($transaction->customer_phone)
+                    &nbsp;[{{ $transaction->customer_phone }}]
+                    @endif
+                @endif
+            </td>
+            <td>{{ convert_money_direct($transaction->total, $transaction->currency, user_currency(), true) }}</td>
             <td>{{ convert_money_direct($transaction->charge, $transaction->currency, user_currency(), true) }}</td>
             <td>{{ formatted_date($transaction->due_date, 'd M, Y') }}</td>
             <td>{!! $transaction->PaymentStatus !!}</td>
