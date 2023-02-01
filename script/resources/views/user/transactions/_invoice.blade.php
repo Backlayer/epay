@@ -18,10 +18,8 @@
             <tr>
                 <td>{{ $loop->index + 1 }}</td>
                 <td>
-                    <a href="#" class="view-invoice-file" data-typetx="Invoice" data-idtx="{{ $transaction->id }}"
-                        data-linkfiletx="{{ url($transaction->invoice_file) }}">
-                        {{ $transaction->invoice_no }}
-                    </a>
+                    <x-link-upload-file type="Invoice" :id="$transaction->id" :file="$transaction->invoice_file"
+                        :invoice-num="$transaction->invoice_no" />
                 </td>
                 <td>{{ $transaction->trx }}</td>
                 <td>

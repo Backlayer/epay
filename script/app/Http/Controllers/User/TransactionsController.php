@@ -153,7 +153,10 @@ class TransactionsController extends Controller
         ][$request->type];
 
         $record = $source::whereId($request->id)->first();
-        $record->invoice_file = $this->upload($request, 'invoice_file', $record->invoice_file);
+        
+        $oldFile = $record->invoice_file ?? null;
+
+        $record->invoice_file = $this->upload($request, 'invoice_file', $oldFile);
         $record->save();
 
         return redirect()->back()->with('success', __('Invoice Uploaded'));

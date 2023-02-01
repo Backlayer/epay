@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('transactions', function ($table) {
+            $table->string('source_data')->nullable()->after('type');
+            $table->unsignedBigInteger('source_id')->nullable()->after('source_data');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('transactions', function ($table) {
+            $table->dropColumn('source_data');
+            $table->dropColumn('source_id');
+        });
+    }
+};

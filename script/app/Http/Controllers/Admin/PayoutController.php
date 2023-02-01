@@ -65,7 +65,9 @@ class PayoutController extends Controller
                         'charge' => $withdraw->charge,
                         'rate' => $user->currency->rate,
                         'reason' => __('Payout sent to :name', ['name' => $name]),
-                        'type' => 'debit'
+                        'type' => 'debit',
+                        'source_data' => 'Payout',
+                        'source_id' => $withdraw->id,
                     ]);
                 }
             }
@@ -95,7 +97,9 @@ class PayoutController extends Controller
                     'charge' => $withdraw->charge,
                     'rate' => $user->currency->rate,
                     'reason' => __('Payout sent to :name', ['name' => $name]),
-                    'type' => 'debit'
+                    'type' => 'debit',
+                    'source_data' => 'Payout',
+                    'source_id' => $withdraw->id,
                 ]);
             } else {
                 return response()->json([

@@ -58,13 +58,12 @@ class TransferController extends Controller
 
         if (Hash::check($request->password, auth()->user()->password)) {
             if (auth()->user()->wallet > $request->amount) {
-
                 $total_charge = get_charge('transfer_charge', $request->amount) + get_charge('transaction_charge', $request->amount);
 
                 \DB::beginTransaction();
+                
                 try {
-
-                    Transfer::create([
+                    $transfer = Transfer::create([
                         'user_id' => auth()->id(),
                         'email' => $request->email,
                         'amount' => $request->amount - $total_charge,
@@ -84,6 +83,8 @@ class TransferController extends Controller
                         'amount' => '-'.$request->amount - $total_charge,
                         'reason' => 'Transfer money',
                         'currency_id' => auth()->user()->currency_id,
+                        'source_data' => 'Transfer',
+                        'source_id' => $transfer->id,
                     ]);
 
                     $user = User::find(auth()->id());
@@ -109,9 +110,9 @@ class TransferController extends Controller
                         'message' => $request->is_beneficiary ? __("Transfer successful. Beneficiary created  successfully") : __("Transfer successful."),
                         'redirect' => route('user.transfers.index'),
                     ]);
-
                 } catch (Throwable $th) {
                     \DB::rollback();
+
                     return response()->json([
                         'message' => __('Something was wrong, Please contact with author.')
                     ]);
@@ -131,14 +132,18 @@ class TransferController extends Controller
     public function show(Request $request, Transfer $transfer)
     {
         \DB::beginTransaction();
+
         try {
             if ($request->type == 'accept') {
                 $transfer->update([
                     'status' => 2
                 ]);
+
                 $user = User::with('currency')->findOrFail(auth()->id());
                 $sender = User::with('currency')->findOrFail($transfer->user_id);
+                
                 $amount = str_replace(',','',number_format(convert_money($transfer->amount, $sender->currency) * $user->currency->rate, 2));
+                
                 $user->update([
                     'wallet' => $user->wallet + $amount
                 ]);
@@ -151,6 +156,8 @@ class TransferController extends Controller
                     'amount' => $amount,
                     'reason' => 'Transfer money received',
                     'currency_id' => auth()->user()->currency_id,
+                    'source_data' => 'Transfer',
+                    'source_id' => $transfer->id,
                 ]);
 
                 \DB::commit();
@@ -160,7 +167,6 @@ class TransferController extends Controller
                     'redirect' => route('user.transfers.index'),
                 ]);
             } elseif ($request->type == 'cancel') {
-
                 $transfer->update([
                     'status' => 0
                 ]);
@@ -177,6 +183,8 @@ class TransferController extends Controller
                     'amount' => $transfer->amount + $transfer->charge,
                     'reason' => 'Transfer money back',
                     'currency_id' => $user->currency_id,
+                    'source_data' => 'Transfer',
+                    'source_id' => $transfer->id,
                 ]);
 
                 \DB::commit();
@@ -186,9 +194,9 @@ class TransferController extends Controller
                     'redirect' => route('user.transfers.index'),
                 ]);
             }
-
         } catch (Throwable $th) {
             \DB::rollback();
+
             return response()->json([
                 'message' => __('Something was wrong, Please contact with author.'),
                 'redirect' => route('user.transfers.index'),
@@ -200,8 +208,10 @@ class TransferController extends Controller
     public function destroy(Transfer $transfer)
     {
         abort_if($transfer->user_id != auth()->id(), 404);
+
         $transfer->is_beneficiary = 0;
         $transfer->save();
+
         return response()->json([
             'message' => __('Beneficiary deleted successfully.'),
             'redirect' => route('user.transfers.index'),
@@ -215,6 +225,7 @@ class TransferController extends Controller
         $data['pending'] = Transfer::whereUserId(auth()->id())->whereStatus(1)->count();
         $data['refund'] = Transfer::whereUserId(auth()->id())->whereStatus(3)->count();
         $data['cancled'] = Transfer::whereUserId(auth()->id())->whereStatus(0)->count();
+        
         return response()->json($data);
     }
 }

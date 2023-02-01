@@ -158,6 +158,7 @@ class RequestMoneyController extends Controller
         $money_sender = User::findOrFail($request->receiver_id);
         $rq_sender_currency = Currency::findOrFail($request->request_currency_id);
         $rq_receiver_currency = Currency::findOrFail($request->approved_currency_id);
+
         $money_sender_amount = number_format(convert_money($request->amount, $rq_sender_currency) * $rq_receiver_currency->rate, 2);
         $money_sender_charge = number_format(convert_money($request->charge, $rq_sender_currency) * $rq_receiver_currency->rate, 2);
 
@@ -169,8 +170,8 @@ class RequestMoneyController extends Controller
         }
 
         \DB::beginTransaction();
+        
         try {
-
             $request->status = 1;
             $request->save();
 
@@ -187,6 +188,8 @@ class RequestMoneyController extends Controller
                 'type' => 'debit',
                 'reason' => 'Send money request',
                 'currency_id' => $money_sender->currency_id,
+                'source_data' => 'Moneyrequest',
+                'source_id' => $request->id,
             ]);
 
             $money_receiver = User::findOrFail($request->sender_id);
@@ -202,6 +205,8 @@ class RequestMoneyController extends Controller
                 'type' => 'credit',
                 'reason' => 'Received money request',
                 'currency_id' => $money_receiver->currency_id,
+                'source_data' => 'Moneyrequest',
+                'source_id' => $request->id,
             ]);
 
             \DB::commit();

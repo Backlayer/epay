@@ -49,22 +49,27 @@ class CheckoutController extends Controller
         SEOTools::jsonLd()->addImage(asset($logo));
 
         $shippings = Shipping::where('user_id', $store->user_id)->get();
+        
         return view('frontend.checkout.index', compact('store', 'shippings'));
     }
 
     public function create()
     {
         $store = Session::get('store');
+
         if (!$store) {
             return redirect('/');
         }
+
         $gateways = Gateway::with('currency')->whereStatus(1)->whereIsAuto(1)->get();
+
         return view('payment.create', compact('gateways'));
     }
 
     public function store(Request $request)
     {
         $store = Storefront::findOrFail($request->store);
+
         $request->validate([
             'name' => 'required|string|max:100',
             'phone' => 'required|string|max:20',
@@ -107,8 +112,10 @@ class CheckoutController extends Controller
             Session::put('order_infos', $request->all());
             Session::put('without_auth', true);
             Session::put('without_tax', true);
+
             if ($request->shipping_id) {
                 $shipping = Shipping::findOrFail($request->shipping_id);
+
                 Session::put('shipping', [
                     'id' => $shipping->id,
                     'amount' => $shipping->amount,
@@ -180,6 +187,8 @@ class CheckoutController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'rate' => $user->currency->rate ?? 0,
+                'source_data' => 'Order',
+                'source_id' => $order->id,
             ]);
 
             $seller->wallet = $seller->wallet + $amount + ($shipping->amount ?? 0);
@@ -194,6 +203,8 @@ class CheckoutController extends Controller
                 'name' => $seller->name,
                 'email' => $seller->email,
                 'rate' => $seller->currency->rate ?? 0,
+                'source_data' => 'Order',
+                'source_id' => $order->id,
             ]);
 
             // Email
@@ -208,6 +219,7 @@ class CheckoutController extends Controller
 
             $seller_template = 'mail.send-seller-invoice';
             $user_template = 'mail.send-user-invoice';
+
             if (config('system.queue.mail')) {
                 Mail::to($user->email)->queue(new SendInvoiceMail($options, $user_template));
                 Mail::to($seller->email)->queue(new SendInvoiceMail($options, $seller_template));
@@ -224,6 +236,7 @@ class CheckoutController extends Controller
             ]);
         } catch (Throwable $th) {
             DB::rollback();
+
             return response()->json([
                 'message' => __('Something went wrong.')
             ], 404);
@@ -261,6 +274,7 @@ class CheckoutController extends Controller
         $payment_data['request_from'] = 'merchant';
 
         $gateway_info = json_decode($gateway->data, true);
+
         if (!empty($gateway_info)) {
             foreach ($gateway_info as $key => $info) {
                 $payment_data[$key] = $info;
@@ -278,10 +292,12 @@ class CheckoutController extends Controller
     public function success()
     {
         abort_if(!Session::has('payment_info') && !Session::has('payment_type'), 404);
+        
         $store = Session::get('store');
+        
         DB::beginTransaction();
+        
         try {
-
             $shipping = Session::get('shipping');
             $order_infos = Session::get('order_infos');
             $price = Cart::instance('shopping_' . $store->id)->subtotal() + ($shipping['amount'] ?? 0);
@@ -315,6 +331,7 @@ class CheckoutController extends Controller
                     ]);
 
                     Cart::instance('shopping_' . $store->id)->remove($cart->rowId);
+
                     $product = Product::findOrFail($cart->id);
                     $product->quantity = $product->quantity - $cart->qty;
                     $product->save();
@@ -332,6 +349,8 @@ class CheckoutController extends Controller
                     'name' => $seller->name,
                     'email' => $seller->email,
                     'rate' => $seller->currency->rate ?? 0,
+                    'source_data' => 'Order',
+                    'source_id' => $order->id,
                 ]);
 
                 // Email
@@ -347,6 +366,7 @@ class CheckoutController extends Controller
                 // Email
                 $seller_template = 'mail.send-seller-invoice';
                 $user_template = 'mail.send-user-invoice';
+
                 if (config('system.queue.mail')) {
                     Mail::to($order_infos['email'])->queue(new SendInvoiceMail($options, $user_template));
                     Mail::to($seller->email)->queue(new SendInvoiceMail($options, $seller_template));
@@ -379,6 +399,7 @@ class CheckoutController extends Controller
             Session::forget('without_auth');
             Session::forget('shipping');
             Session::flash('error', $th->getMessage());
+
             return redirect(route('frontend.store-products', $store->id))->with('error', __('Something went wrong.'));
         }
     }
@@ -386,16 +407,19 @@ class CheckoutController extends Controller
     public function failed()
     {
         return $store = Session::get('store');
+
         Session::forget('store');
         Session::forget('order_infos');
         Session::forget('payment_info');
         Session::forget('fund_callback');
+
         return redirect($store ? route('frontend.store-products', $store->id) : url('/'));
     }
 
     function orderSuccess($id)
     {
         $order = Order::with(['orderitems.product', 'storefront'])->findOrFail($id);
+
         return view('payment.success', compact('order'));
     }
 }
