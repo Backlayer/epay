@@ -1042,5 +1042,8 @@
     "Payout sent to :name": "Payout sent to :name",
     "Upload Invoice": "Upload Invoice",
     "Upload": "Upload",
-    "Invoice Uploaded": "Invoice Uploaded"
+    "Invoice Uploaded": "Invoice Uploaded",
+    "Change Invoice No": "Change Invoice No",
+    "Record Not Found": "Record Not Found",
+    "Changes Not Saved": "Changes Not Saved"
 }

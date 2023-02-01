@@ -144,21 +144,58 @@ class TransactionsController extends Controller
         return response()->json($data);
     }
 
-    public function uploadFile(Request $request)
+    private function sourceRelations($type, $id)
     {
         $source = [
             'Invoice' => "App\Models\Invoice",
             'Qrpayment' => "App\Models\Qrpayment",
             'SingleChargeOrder' => "App\Models\SingleChargeOrder",
-        ][$request->type];
+        ][$type];
 
-        $record = $source::whereId($request->id)->first();
-        
+        $record = $source::whereId($id)->first();
+
+        if ($record) {
+            return $record;
+        }
+
+        return redirect()->back()->with('error', __('Record Not Found'));
+    }
+
+    public function uploadFile(Request $request)
+    {
+        $record = $this->sourceRelations($request->type, $request->id);
+
         $oldFile = $record->invoice_file ?? null;
-
+        
         $record->invoice_file = $this->upload($request, 'invoice_file', $oldFile);
         $record->save();
 
         return redirect()->back()->with('success', __('Invoice Uploaded'));
+    }
+
+    public function updateInvoiceNum(Request $request)
+    {
+        $saved = false;
+        $record = $this->sourceRelations($request->type, $request->id);
+
+        $record->invoice_no = $request->invoice_num;
+
+        if ($record->save()) {
+            $transaction = Transaction::whereSourceData($request->type)
+                ->whereSourceId($request->id)->first();
+
+            if ($transaction) {
+                $transaction->invoice_no = $request->invoice_num;
+                $transaction->save();
+            }
+
+            $saved = true;
+        }
+
+        if ($saved) {
+            return redirect()->back()->with('success', __('Successfully Updated'));
+        }
+
+        return redirect()->back()->with('error', __('Changes Not Saved'));
     }
 }

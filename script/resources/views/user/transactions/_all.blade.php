@@ -18,7 +18,8 @@
                 <td>
                     <x-link-upload-file
                         :type="$transaction->Source->type"
-                        :id="$transaction->Source->id"
+                        :id="$transaction->id"
+                        :id-relation="$transaction->Source->id"
                         :file="$transaction->Source->file"
                         :invoice-num="$transaction->invoice_no"
                     />
