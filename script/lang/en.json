@@ -588,6 +588,7 @@
     "Invoice charge is :percentage. Invoice is charged when invoice is paid by client.": "Invoice charge is :percentage. Invoice is charged when invoice is paid by client.",
     "Item Name": "Item Name",
     "Enter invoice title": "Enter invoice title",
+    "Enter invoice No": "Enter invoice No",
     "Quantity": "Quantity",
     "Amount per item": "Amount per item",
     "Customer Email": "Customer Email",
@@ -1045,5 +1046,7 @@
     "Invoice Uploaded": "Invoice Uploaded",
     "Change Invoice No": "Change Invoice No",
     "Record Not Found": "Record Not Found",
-    "Changes Not Saved": "Changes Not Saved"
+    "Changes Not Saved": "Changes Not Saved",
+    "Service or Product Name": "Service or Product Name",
+    "Enter service or product name": "Enter service or product name"
 }
