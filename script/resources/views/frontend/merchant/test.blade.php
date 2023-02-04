@@ -35,13 +35,14 @@
                                             {{ convert_money_direct($amount, $order->currency, $gateway->currency, true) }}
                                         </td>
                                     </tr>
+                                    @if($gateway->charge)
                                     <tr>
                                         <th>{{ __("Gateway Charge") }}</th>
                                         <td>
                                             {{ currency_format($gateway->charge, currency: $gateway->currency) }}
                                         </td>
                                     </tr>
-
+                                    @endif
                                     <tr>
                                         <th>{{ __('Total') }}</th>
                                         <td>

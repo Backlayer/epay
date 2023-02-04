@@ -64,13 +64,14 @@
                                                 {{ currency_format($total, currency:$gateway->currency) }}
                                             </td>
                                         </tr>
+                                        @if($gateway->charge)
                                         <tr>
                                             <th>{{ __('Gateway Charge') }}</th>
                                             <td>
                                                 {{ currency_format($gateway->charge, currency:$gateway->currency) }}
                                             </td>
                                         </tr>
-
+                                        @endif
                                         <tr>
                                             <th>{{ __('Gateway Rate') }}</th>
                                             <td>
