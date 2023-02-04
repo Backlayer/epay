@@ -165,10 +165,12 @@
                 </div>
 
                 <div class="d-flex justify-content-between">
+                    <!--
                     <button data-repeater-create class="btn btn-neutral" type="button">
                         <i class="fas fa-cart-plus"></i>
                         {{ __("Add Item") }}
                     </button>
+                    -->
                     <button type="submit" class="btn btn-neutral submit-btn">
                         <i class="fas fa-save"></i>
                         {{__('Update Invoice')}}
