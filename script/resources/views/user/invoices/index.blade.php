@@ -142,7 +142,7 @@
 @endsection
 
 @push('script')
-    <script src="{{ asset('admin/js/admin.js') }}"></script>
+    <script src="{{ asset('admin/js/admin.js?v=' . config('app.version')) }}"></script>
     <script src="{{ asset('plugins/clipboard-js/clipboard.min.js') }}"></script>
     <script>
         getTotalInvoices()

@@ -126,6 +126,6 @@
 @endsection
 
 @push('script')
-    <script src="{{ asset('admin/js/admin.js') }}"></script>
+    <script src="{{ asset('admin/js/admin.js?v=' . config('app.version')) }}"></script>
 @endpush
 

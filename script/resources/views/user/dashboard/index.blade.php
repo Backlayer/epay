@@ -9,9 +9,12 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <span class="h2 font-weight-bold mb-0 total-transactions">
-                                <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
-                            </span>
+                            <div class="mb-0 total-transactions">
+                                <img src="{{ asset('user/img/loading.svg') }}" height="40" class="loading mb-3 mt-1">
+
+                                <p class="h2 font-weight-bold count d-none"></p>
+                                <p class="h2 font-weight-bold sum d-none"></p>
+                            </div>
                         </div>
                         <div class="col-auto">
                             <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
@@ -19,9 +22,11 @@
                             </div>
                         </div>
                     </div>
-                    <p class="mt-3 mb-0 text-sm">
-                        <h5 class="card-title text-uppercase text-muted mb-0">{{ __('Total Transactions') }}</h5>
-                    </p>
+                    <div class="mt-3 mb-0 text-sm">
+                        <h5 class="card-title text-uppercase text-muted mb-0">
+                            {{ __('Total Transactions') }}
+                        </h5>
+                    </div>
                 </div>
             </div>
         </div>
@@ -30,9 +35,12 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <span class="h2 font-weight-bold mb-0 credit-transactions">
-                                <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
-                            </span>
+                            <div class="mb-0 credit-transactions">
+                                <img src="{{ asset('user/img/loading.svg') }}" height="40" class="loading mb-3 mt-1">
+
+                                <p class="h2 font-weight-bold count d-none"></p>
+                                <p class="h2 font-weight-bold sum d-none"></p>
+                            </div>
                         </div>
                         <div class="col-auto">
                             <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
@@ -40,9 +48,11 @@
                             </div>
                         </div>
                     </div>
-                    <p class="mt-3 mb-0 text-sm">
-                        <h5 class="card-title text-uppercase text-muted mb-0">{{ __('Credit Transactions') }}</h5>
-                    </p>
+                    <div class="mt-3 mb-0 text-sm">
+                        <h5 class="card-title text-uppercase text-muted mb-0">
+                            {{ __('Credit Transactions') }}
+                        </h5>
+                    </div>
                 </div>
             </div>
         </div>
@@ -51,9 +61,12 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <span class="h2 font-weight-bold mb-0 debit-transactions">
-                                <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
-                            </span>
+                            <div class="mb-0 debit-transactions">
+                                <img src="{{ asset('user/img/loading.svg') }}" height="40" class="loading mb-3 mt-1">
+
+                                <p class="h2 font-weight-bold count d-none"></p>
+                                <p class="h2 font-weight-bold sum d-none"></p>
+                            </div>
                         </div>
                         <div class="col-auto">
                             <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
@@ -61,9 +74,11 @@
                             </div>
                         </div>
                     </div>
-                    <p class="mt-3 mb-0 text-sm">
-                        <h5 class="card-title text-uppercase text-muted mb-0">{{ __('Debit Transactions') }}</h5>
-                    </p>
+                    <div class="mt-3 mb-0 text-sm">
+                        <h5 class="card-title text-uppercase text-muted mb-0">
+                            {{ __('Debit Transactions') }}
+                        </h5>
+                    </div>
                 </div>
             </div>
         </div>
@@ -71,7 +86,7 @@
 
     <div class="row">
         @php
-        /*
+            /*
         <div class="col-md-8">
             <div class="card shadow">
                 <div class="card-body">
@@ -112,7 +127,7 @@
             </div>
 
             @if ($transactions->count() > 0)
-            <div class="card mt-4">
+<div class="card mt-4">
                 <div class="table-responsive py-3 ">
                     <table class="table table-flush" id="table">
                         <caption></caption>
@@ -128,14 +143,14 @@
                         </thead>
                         <tbody>
                             @foreach ($transactions as $transaction)
-                                <tr>
-                                    <td>{{ $loop->index+1 }}</td>
+<tr>
+                                    <td>{{ $loop->index + 1 }}</td>
                                     <td>{{ $transaction->amount }}</td>
                                     <td>{{ $transaction->charge }}</td>
                                     <td>{{ formatted_date($transaction->created_at) }}</td>
                                     <td>{{ $transaction->reason }}</td>
                                 </tr>
-                            @endforeach
+@endforeach
                         </tbody>
                     </table>
                     <div class="card-body pb-0">
@@ -143,15 +158,15 @@
                     </div>
                 </div>
             </div>
-            @else
-            <div class="row my-5">
+@else
+<div class="row my-5">
                 <div class="col text-center">
                     <img src="{{ asset('user/img/icons/empty.svg') }}" alt="">
                     <h4 class="mt-3">{{ __('No Earning History') }}</h4>
                     <p>{{ __("We couldn't find any earning log to this account") }}</p>
                 </div>
             </div>
-            @endif
+@endif
         </div>
         */
         @endphp
@@ -160,16 +175,16 @@
             @include('user.dashboard.charts.debit-credit')
 
             <!--
-            @include('user.dashboard.charts.single-charge')
+                                                        @include('user.dashboard.charts.single-charge')
 
-            @include('user.dashboard.charts.qr-payments')
+                                                        @include('user.dashboard.charts.qr-payments')
 
-            @include('user.dashboard.charts.order')
+                                                        @include('user.dashboard.charts.order')
 
-            @include('user.dashboard.charts.donation')
+                                                        @include('user.dashboard.charts.donation')
 
-            @include('user.dashboard.charts.plans')
-            -->
+                                                        @include('user.dashboard.charts.plans')
+                                                        -->
         </div>
 
         <div class="col-lg-4 col-md-12 mb-4">
@@ -181,19 +196,20 @@
                         {!! __('QR.Dashboard.Displaimer') !!}
                     </p>
 
-                    <a href="" id="download-qr" class="custom-btn d-block btn-block mt-3 py-2 download-qr" download="{{ auth()->user()->name . '.png' }}">
+                    <a href="" id="download-qr" class="custom-btn d-block btn-block mt-3 py-2 download-qr"
+                        download="{{ auth()->user()->name . '.png' }}">
                         <i class="fas fa-download"></i> {{ __('Download') }}
                     </a>
                 </div>
             </div>
 
             @php
-            /*
+                /*
             <hr>
             <div class="row mt-5">
                 <div class="col text-center">
                     <h4 class="text-base"><i class="fas fa-cart-plus"></i> {{ __('Total Payout') }} </h4>
-                    <h3>{{ user_currency()->code ." ". number_format($payouts, 2) }}</h3>
+                    <h3>{{ user_currency()->code . ' ' . number_format($payouts, 2) }}</h3>
                     <a href="{{ route('user.profiles.index') }}" class="custom-btn d-block btn-block mt-3 py-2"><i class="fas fa-arrow-up"></i> {{ __('Upgrade Account') }} </a>
                 </div>
             </div>
@@ -201,7 +217,7 @@
             <div class="row mt-5">
                 <div class="col text-center">
                     <h4 class="text-base"><i class="fas fa-comment-dollar"></i> {{ __('Revenue') }} </h4>
-                    <h3>{{ currency_format(auth()->user()->wallet, currency:user_currency()) }}</h3>
+                    <h3>{{ currency_format(auth()->user()->wallet, currency: user_currency()) }}</h3>
                     <a href="{{ url('/user/payouts') }}" class="custom-btn d-block btn-block mt-3 py-2"><i class="fas fa-history"></i>  {{ __('All Payouts') }}</a>
                 </div>
             </div>
@@ -223,7 +239,7 @@
     <script src="{{ asset('user/vendor/jvectormap-next/jquery-jvectormap.min.js') }}"></script>
     <script src="{{ asset('user/js/vendor/jvectormap/jquery-jvectormap-world-mill.js') }}"></script>
     <script src="{{ asset('user/js/chart/dashboard.js?v=' . config('app.version')) }}"></script>
-    <script src="{{ asset('admin/js/admin.js') }}"></script>
+    <script src="{{ asset('admin/js/admin.js?v=' . config('app.version')) }}"></script>
     <script>
         getTotalTransactions()
     </script>

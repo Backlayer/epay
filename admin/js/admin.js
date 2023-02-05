@@ -30,15 +30,23 @@ function getTotalDeposits() {
 }
 
 function getTotalTransactions() {
-    let url = $("#get-transaction-url").val();
+    const url = $("#get-transaction-url").val();
+
     $.ajax({
         type: 'GET',
         url: url,
         success: function(res){
-            $('.total-transactions').text(res.total);
-            $('.credit-transactions').text(res.credit);
-            $('.debit-transactions').text(res.debit);
-            $('#loading').addClass('d-none');
+            console.log({res})
+            $('.total-transactions .count').text(res.total.count).removeClass('d-none');
+            $('.total-transactions .sum').text(res.total.sum).removeClass('d-none');
+
+            $('.credit-transactions .count').text(res.credit.count).removeClass('d-none');
+            $('.credit-transactions .sum').text(res.credit.sum).removeClass('d-none');
+
+            $('.debit-transactions .count').text(res.debit.count).removeClass('d-none');
+            $('.debit-transactions .sum').text(res.debit.sum).removeClass('d-none');
+
+            $('.loading').addClass('d-none');
         },
     })
 }
