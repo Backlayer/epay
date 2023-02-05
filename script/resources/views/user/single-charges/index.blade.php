@@ -108,6 +108,7 @@
                                     <thead class="thead-light">
                                     <tr>
                                         <th>{{ __("Title") }}</th>
+                                        <th>{{ __("Customer Name") }}</th>
                                         <th>{{ __("Amount") }}</th>
                                         <th>{{ __('Payment Status') }}</th>
                                         <th>{{ __('Link') }}</th>
@@ -119,6 +120,7 @@
                                     @foreach($charges as $charge)
                                         <tr>
                                             <td>{{ $charge->title }}</td>
+                                            <td>{{ $charge->customer_name }}</td>
                                             <td class="budget">
                                                 {{ currency_format($charge->amount, 'icon', $charge->currency->symbol) }}
                                             </td>

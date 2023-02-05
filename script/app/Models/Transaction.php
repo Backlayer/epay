@@ -47,7 +47,7 @@ class Transaction extends Model
                 return (object) [
                     'id' => $this->source_id,
                     'type' => $this->source_data,
-                    'file' => $data->invoice_file,
+                    'file' => $data?->invoice_file,
                 ];
             }
         }

@@ -83,7 +83,7 @@
                                                             <i class="fas fa-user"></i>
                                                         </span>
                                                     </div>
-                                                    <input type="text" name="name" id="name" class="form-control" placeholder="Your full name" required>
+                                                    <input type="text" name="name" id="name" class="form-control" placeholder="Your full name" value="{{ session('customer_name') }}" @readonly(session('customer_name')) required>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -169,7 +169,7 @@
                                                             <small class="form-text text-danger">
                                                                 {{ __('The phone number must contain the country code: Example: +584145551212') }}
                                                             </small>
-                                                        @endif.
+                                                        @endif
                                                     </div>
                                                 @endif
                                             @endforeach

@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Helpers\HasPayment;
 use App\Http\Controllers\Controller;
-use App\Models\Gateway;
-use App\Models\SingleCharge;
-use Hamcrest\Core\Set;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
+use Illuminate\Http\Request;
+use Hamcrest\Core\Set;
+
+use App\Models\Gateway;
+use App\Models\SingleCharge;
+use App\Helpers\HasPayment;
 
 class SingleChargeController extends Controller
 {
@@ -44,6 +45,7 @@ class SingleChargeController extends Controller
         $amount = $singleCharge->amount > 0 ? $singleCharge->amount : $request->input('amount');
 
         Session::put('amount', $amount);
+        Session::put('customer_name', $singleCharge->customer_name);
 
         $gateway = Gateway::findOrFail($request->input('gateway'));
 
@@ -62,7 +64,7 @@ class SingleChargeController extends Controller
 
         if (Auth::check()) {
             $info = [
-                'name' => Auth::user()->name,
+                'name' => Session::get('customer_name'),
                 'email' => Auth::user()->email
             ];
         } else {
