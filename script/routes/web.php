@@ -123,11 +123,16 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'App\Http\Co
         Route::get('single-charge/{singleCharge}', 'SingleChargeController@show')->name('single-charge.show');
         Route::get('single-charge/{singleCharge}/order/{singleChargeOrder}', 'SingleChargeController@order')->name('single-charge.order');
         Route::post('single-charge/{singleChargeOrder}', 'SingleChargeController@confirm')->name('single-charge.confirm');
+        Route::get('get-single-charge', 'SingleChargeController@getSingleCharge')->name('single-charge');
 
         Route::get('donations', 'DonationController@index')->name('donations.index');
         Route::get('donations/{donation}', 'DonationController@show')->name('donations.show');
         Route::get('get-donations', 'DonationController@getDonations')->name('get-donations');
-        Route::get('get-single-charge', 'SingleChargeController@getSingleCharge')->name('single-charge');
+
+        Route::get('qr-payment', 'QrPaymentController@index')->name('qr-payment.index');
+        Route::get('qr-payment/{qrPayment}', 'QrPaymentController@show')->name('qr-payment.show');
+        Route::post('qr-payment/{qrPayment}', 'QrPaymentController@confirm')->name('qr-payment.confirm');
+        Route::get('get-qr-payment', 'QrPaymentController@getQrPayments')->name('qr-payment');
     });
 
     Route::get('invoices', 'InvoiceController@index')->name('invoices.index');

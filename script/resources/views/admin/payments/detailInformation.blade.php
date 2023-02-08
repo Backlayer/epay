@@ -8,27 +8,29 @@
     <div class="d-flex flex-column align-self-start col-9">
         <h5>{{ __('Payment Details') }}</h5>
 
-        @if($payment->fields && count($payment->fields))
-        <div class="row">
-            @foreach($payment->fields as $index => $field)
-            <div class="col-6">
-                <div class="form-group">
-                    <label for="fields_{{ $loop->index }}">{{ $field['label'] }}</label>
+        @if ($payment->fields && count($payment->fields))
+            <div class="row">
+                @foreach ($payment->fields as $index => $field)
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="fields_{{ $loop->index }}">{{ $field['label'] }}</label>
 
-                    <div
-                        id="fields_{{ $loop->index }}"
-                        class="form-control form-control-static h-25"
-                    >
-                    @if($field['type'] === 'file')
-                        <a href="{{ url($payment->data[$field['label']]) }}" target="_blank" class="d-block">{{ __('View Document') }}</a>
-                    @else
-                        {{ $payment->data[$field['label']] }}
-                    @endif
+                            <div id="fields_{{ $loop->index }}" class="form-control form-control-static h-25">
+                                @if ($field['type'] === 'file')
+                                    @if (@$payment->data->{$field['label']})
+                                        <a href="{{ url($payment->data[$field['label']]) }}" target="_blank"
+                                            class="d-block">
+                                            {{ __('View Document') }}
+                                        </a>
+                                    @endif
+                                @else
+                                    {{ $payment->data[$field['label']] }}
+                                @endif
+                            </div>
+                        </div>
                     </div>
-                </div>
+                @endforeach
             </div>
-            @endforeach
-        </div>
         @endif
     </div>
 </div>

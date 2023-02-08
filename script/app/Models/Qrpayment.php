@@ -24,6 +24,16 @@ class Qrpayment extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class);
+    }
+
+    public function gateway(): BelongsTo
+    {
+        return $this->belongsTo(Gateway::class);
+    }
+
     public function getIsPaidAttribute()
     {
         return $this->checkIsPaid((object) $this->attributes);

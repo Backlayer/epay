@@ -10,7 +10,7 @@ function getTotalDeposits() {
             $('.completed-deposits').text(res.completed);
             $('.pending-deposits').text(res.pending);
             $('.rejected-deposits').text(res.rejected);
-            $('#loading').addClass('d-none');
+            $('.loading').addClass('d-none');
         },
     })
 }
@@ -23,7 +23,7 @@ function getTotalProducts() {
         success: function(res){
             $('.total').text(res.total);
             $('.quantity').text(res.quantity);
-            $('#loading').addClass('d-none');
+            $('.loading').addClass('d-none');
         },
     })
 }
@@ -36,7 +36,7 @@ function getTotalProducts() {
         success: function(res){
             $('.total').text(res.total);
             $('.amount').text(res.quantity);
-            $('#loading').addClass('d-none');
+            $('.loading').addClass('d-none');
         },
     })
 }

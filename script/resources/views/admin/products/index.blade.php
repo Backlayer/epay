@@ -44,7 +44,7 @@
                         <h4>{{ __('Total Digital Products') }}</h4>
                     </div>
                     <div class="card-body digital">
-                        <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                        <img src="{{ asset('user/img/loading.svg') }}" height="40" class="loading mb-2 mt-1">
                     </div>
                 </div>
             </div>

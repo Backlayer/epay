@@ -45,7 +45,7 @@
                         <h4>{{ __('Pending Transfers') }}</h4>
                     </div>
                     <div class="card-body pending-transfers">
-                        <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                        <img src="{{ asset('user/img/loading.svg') }}" height="40" class="loading mb-2 mt-1">
                     </div>
                 </div>
             </div>

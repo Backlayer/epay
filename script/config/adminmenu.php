@@ -59,6 +59,12 @@ return [
                 "patterns" => ["admin/payments/single-charge"],
                 "can" => ['payments-read'],
             ],
+            [
+                "title" => "Qr Payment",
+                "route" => "admin.payments.qr-payment.index",
+                "patterns" => ["admin/payments/qr-payment"],
+                "can" => ['payments-read'],
+            ],
         ]
     ],
     [

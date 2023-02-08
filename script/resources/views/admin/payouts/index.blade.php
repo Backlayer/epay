@@ -14,7 +14,7 @@
                         <h4>{{ __('Total Payouts') }}</h4>
                     </div>
                     <div class="card-body total-payouts">
-                        <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                        <img src="{{ asset('user/img/loading.svg') }}" height="40" class="loading mb-2 mt-1">
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                         <h4>{{ __('Total Completed') }}</h4>
                     </div>
                     <div class="card-body completed-payouts">
-                        <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                        <img src="{{ asset('user/img/loading.svg') }}" height="40" class="loading mb-2 mt-1">
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                         <h4>{{ __('Total Pending') }}</h4>
                     </div>
                     <div class="card-body pending-payouts">
-                        <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                        <img src="{{ asset('user/img/loading.svg') }}" height="40" class="loading mb-2 mt-1">
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                         <h4>{{ __('Total Rejected') }}</h4>
                     </div>
                     <div class="card-body rejected-payouts">
-                        <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                        <img src="{{ asset('user/img/loading.svg') }}" height="40" class="loading mb-2 mt-1">
                     </div>
                 </div>
             </div>
