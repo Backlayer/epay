@@ -56,7 +56,7 @@ class SingleCharge extends Model
         return $this->paymentStatus($this->lastOrder()?->status_paid ?? '0');
     }
 
-    /* public function getAttribute($key): mixed
+    public function getAttribute($key): mixed
     {
         $attribute = parent::getAttribute($key);
 
@@ -65,5 +65,5 @@ class SingleCharge extends Model
         }
 
         return $attribute;
-    } */
+    }
 }

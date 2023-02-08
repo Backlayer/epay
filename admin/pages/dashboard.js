@@ -128,7 +128,6 @@
                 tooltips: {
                     callbacks: {
                         label: function(tooltipItem, data) {
-                            console.log(tooltipItem)
                             var label = data.datasets[tooltipItem.datasetIndex].label || '';
 
                             if (label) {
@@ -206,7 +205,6 @@
                 tooltips: {
                     callbacks: {
                         label: function(tooltipItem, data) {
-                            console.log(tooltipItem)
                             var label = data.datasets[tooltipItem.datasetIndex].label || '';
 
                             if (label) {

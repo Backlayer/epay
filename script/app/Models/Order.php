@@ -31,10 +31,10 @@ class Order extends Model
     public static function boot()
     {
         parent::boot();
-        static::creating(function ($model) {
+        /*static::creating(function ($model) {
             $model->id = Order::max('id') + 1;
             $model->invoice_no = str_pad($model->id, 7, '0', STR_PAD_LEFT);
-        });
+        });*/
     }
 
     public function orderitems()

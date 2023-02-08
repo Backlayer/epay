@@ -30,8 +30,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-4">
-                                        <label for="item_name" class="required">{{__('Invoice Title')}}</label>
-                                        <input type="text" name="item_name" id="item_name" value="{{ $item->name }}" class="form-control" placeholder="{{ __("Enter invoice title") }}" required>
+                                        <label for="item_name" class="required">{{__('Service or Product Name')}}</label>
+                                        <input type="text" name="item_name" id="item_name" value="{{ $item->name }}" class="form-control" placeholder="{{ __("Enter service or product name") }}" required>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="amount" class="required">{{__('Amount')}}</label>
@@ -109,7 +109,7 @@
                             <span class="input-group-prepend">
                               <span class="input-group-text">#</span>
                             </span>
-                            <input type="text" class="form-control" value="{{ $invoice->invoice_no }}" >
+                            <input type="text" class="form-control" required value="{{ $invoice->invoice_no }}" >
                         </div>
                     </div>
                 </div>
@@ -165,10 +165,12 @@
                 </div>
 
                 <div class="d-flex justify-content-between">
+                    <!--
                     <button data-repeater-create class="btn btn-neutral" type="button">
                         <i class="fas fa-cart-plus"></i>
                         {{ __("Add Item") }}
                     </button>
+                    -->
                     <button type="submit" class="btn btn-neutral submit-btn">
                         <i class="fas fa-save"></i>
                         {{__('Update Invoice')}}

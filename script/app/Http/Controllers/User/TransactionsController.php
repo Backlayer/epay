@@ -12,12 +12,15 @@ use App\Models\Transaction;
 use App\Models\UserPlanSubscriber;
 use App\Models\WebOrder;
 use App\Models\Moneyrequest;
+use App\Helpers\HasUploader;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class TransactionsController extends Controller
 {
+    use HasUploader;
+
     public function index(Request $request, $type = null)
     {
         $search = $request->get('search');
@@ -78,7 +81,7 @@ class TransactionsController extends Controller
                 })
                 ->with('sender')
                 ->latest()
-                ->paginate();    
+                ->paginate();
         } elseif ($type == 'invoice') {
             $transactions =  Invoice::whereOwnerId(\Auth::id())
                 ->when(!is_null($search), function (Builder $builder) use ($search) {
@@ -134,9 +137,78 @@ class TransactionsController extends Controller
 
     public function getTransaction()
     {
-        $data['total'] = Transaction::whereUserId(auth()->id())->count();
-        $data['credit'] = Transaction::whereUserId(auth()->id())->whereType('credit')->count();
-        $data['debit'] = Transaction::whereUserId(auth()->id())->whereType('debit')->count();
+        $total = Transaction::whereUserId(auth()->id())->selectRaw('COUNT(*) AS count, SUM(amount) AS sum')->first();
+        $credit = Transaction::whereUserId(auth()->id())->whereType('credit')->selectRaw('COUNT(*) AS count, SUM(amount) AS sum')->first();
+        $debit = Transaction::whereUserId(auth()->id())->whereType('debit')->selectRaw('COUNT(*) AS count, SUM(amount) AS sum')->first();
+
+        $data['total'] = [
+            'count' => $total['count'],
+            'sum' => currency_format($total['sum'], currency: user_currency())
+        ];
+        $data['credit'] = [
+            'count' => $credit['count'],
+            'sum' => currency_format($credit['sum'], currency: user_currency())
+        ];
+        $data['debit'] = [
+            'count' => $debit['count'],
+            'sum' => currency_format($debit['sum'] * -1, currency: user_currency())
+        ];
+
         return response()->json($data);
+    }
+
+    private function sourceRelations($type, $id)
+    {
+        $source = [
+            'Invoice' => "App\Models\Invoice",
+            'Qrpayment' => "App\Models\Qrpayment",
+            'SingleChargeOrder' => "App\Models\SingleChargeOrder",
+        ][$type];
+
+        $record = $source::whereId($id)->first();
+
+        if ($record) {
+            return $record;
+        }
+
+        return redirect()->back()->with('error', __('Record Not Found'));
+    }
+
+    public function uploadFile(Request $request)
+    {
+        $record = $this->sourceRelations($request->type, $request->id);
+
+        $oldFile = $record->invoice_file ?? null;
+        
+        $record->invoice_file = $this->upload($request, 'invoice_file', $oldFile);
+        $record->save();
+
+        return redirect()->back()->with('success', __('Invoice Uploaded'));
+    }
+
+    public function updateInvoiceNum(Request $request)
+    {
+        $saved = false;
+        $record = $this->sourceRelations($request->type, $request->id);
+
+        $record->invoice_no = $request->invoice_num;
+
+        if ($record->save()) {
+            $transaction = Transaction::whereSourceData($request->type)
+                ->whereSourceId($request->id)->first();
+
+            if ($transaction) {
+                $transaction->invoice_no = $request->invoice_num;
+                $transaction->save();
+            }
+
+            $saved = true;
+        }
+
+        if ($saved) {
+            return redirect()->back()->with('success', __('Successfully Updated'));
+        }
+
+        return redirect()->back()->with('error', __('Changes Not Saved'));
     }
 }

@@ -118,7 +118,9 @@ class PaymentController extends Controller
                     'charge' => null,
                     'rate' => user_currency()->rate,
                     'reason' => __('Single Charge Payment sent to :name', ['name' => $singleCharge->user->business_name ?? $singleCharge->user->name]),
-                    'type' => 'debit'
+                    'type' => 'debit',
+                    'source_data' => 'SingleChargeOrder',
+                    'source_id' => $singleCharge->id,
                 ]);
             }
 
@@ -132,7 +134,9 @@ class PaymentController extends Controller
                 'charge' => $convertToOwnerCharge,
                 'rate' => $singleCharge->user->currency->rate,
                 'reason' => __('Single Charge Payment received from :name', ['name' => $userInfo['name']]),
-                'type' => 'credit'
+                'type' => 'credit',
+                'source_data' => 'SingleChargeOrder',
+                'source_id' => $singleCharge->id,
             ]);
 
             DB::commit();
@@ -218,7 +222,9 @@ class PaymentController extends Controller
                     'charge' => null,
                     'rate' => user_currency()->rate,
                     'reason' => __('Donation sent to :name', ['name' => $donation->user->business_name ?? $donation->user->name]),
-                    'type' => 'debit'
+                    'type' => 'debit',
+                    'source_data' => 'DonationOrder',
+                    'source_id' => $donation->id,
                 ]);
             }
 
@@ -232,7 +238,9 @@ class PaymentController extends Controller
                 'charge' => $convertToOwnerCharge,
                 'rate' => $donation->user->currency->rate,
                 'reason' => __('Donation received from :name', ['name' => $userInfo['name']]),
-                'type' => 'credit'
+                'type' => 'credit',
+                'source_data' => 'DonationOrder',
+                'source_id' => $donation->id,
             ]);
 
             DB::commit();
@@ -309,7 +317,9 @@ class PaymentController extends Controller
                     'charge' => null,
                     'rate' => user_currency()->rate,
                     'reason' => __('Invoice Payment sent to :name', ['name' => $invoice->owner->business_name ?? $invoice->owner->name]),
-                    'type' => 'debit'
+                    'type' => 'debit',
+                    'source_data' => 'Invoice',
+                    'source_id' => $invoice->id,
                 ]);
             }
 
@@ -323,7 +333,9 @@ class PaymentController extends Controller
                 'charge' => $convertToOwnerCharge,
                 'rate' => $invoice->owner->currency->rate,
                 'reason' => __('Invoice Payment received from :name', ['name' => $userInfo['name']]),
-                'type' => 'credit'
+                'type' => 'credit',
+                'source_data' => 'Invoice',
+                'source_id' => $invoice->id,
             ]);
 
             DB::commit();
@@ -403,7 +415,9 @@ class PaymentController extends Controller
                         'charge' => null,
                         'rate' => user_currency()->rate,
                         'reason' => __('Merchant payment sent to :name', ['name' => $order->user->business_name ?? $order->user->name]),
-                        'type' => 'debit'
+                        'type' => 'debit',
+                        'source_data' => 'WebOrder',
+                        'source_id' => $order->id,
                     ]);
                 }
 
@@ -417,7 +431,9 @@ class PaymentController extends Controller
                     'charge' => -$convertToOwnerCharge,
                     'rate' => $order->user->currency->rate,
                     'reason' => __('Merchant payment received from :name', ['name' => $userInfo['name']]),
-                    'type' => 'credit'
+                    'type' => 'credit',
+                    'source_data' => 'WebOrder',
+                    'source_id' => $order->id,
                 ]);
 
                 DB::commit();
@@ -464,7 +480,7 @@ class PaymentController extends Controller
             $convertToOwnerAmount = convert_money($convertToDefaultAmount, $user->currency, true);
             $convertToOwnerCharge = convert_money($totalCharge, $user->currency, true);
 
-            Qrpayment::create([
+            $qrPayment = Qrpayment::create([
                 "trx" => $paymentInfo['payment_id'],
                 "seller_id" => $user->id,
                 "gateway_id" => $gateway->id,
@@ -500,7 +516,9 @@ class PaymentController extends Controller
                     'charge' => $convertToBuyerCharge,
                     'rate' => user_currency()->rate,
                     'reason' => __('Qr Payment sent to :name', ['name' => $user->business_name ?? $user->name]),
-                    'type' => 'debit'
+                    'type' => 'debit',
+                    'source_data' => 'Qrpayment',
+                    'source_id' => $qrPayment->id,
                 ]);
             }
 
@@ -514,7 +532,9 @@ class PaymentController extends Controller
                 'charge' => $convertToOwnerCharge,
                 'rate' => $user->currency->rate,
                 'reason' => __('Qr Payment received from :name', ['name' => $userInfo['name']]),
-                'type' => 'credit'
+                'type' => 'credit',
+                'source_data' => 'Qrpayment',
+                'source_id' => $qrPayment->id,
             ]);
 
             DB::commit();

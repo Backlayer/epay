@@ -234,8 +234,6 @@ const datasets = (label, data, color) => ({
 })
 
 function dashboardChart(months, credit, debit) {
-    console.log({months, credit, debit})
-
     const dashboardCtx = document.getElementById("creditDebitChart").getContext("2d");
 
     new Chart(dashboardCtx, {

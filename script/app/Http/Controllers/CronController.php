@@ -132,6 +132,7 @@ class CronController extends Controller
                     ]);
 
                     $convertToSubscriberAmount = convert_money($convertToDefaultAmount, user_currency(), true);
+
                     //Deduct Balance from subscriber profile
                     Auth::user()->update([
                         'wallet' => Auth::user()->wallet - $convertToSubscriberAmount
@@ -147,7 +148,9 @@ class CronController extends Controller
                         'charge' => null,
                         'rate' => user_currency()->rate,
                         'reason' => __('Subscription Payment sent to :name', ['name' => $subscription->plan->owner->business_name ?? $subscription->plan->owner->name]),
-                        'type' => 'debit'
+                        'type' => 'debit',
+                        'source_data' => 'UserPlanSubscriber',
+                        'source_id' => $subscription->id,
                     ]);
 
                     //Generate Transaction for sellers
@@ -160,7 +163,9 @@ class CronController extends Controller
                         'charge' => $convertToOwnerCharge,
                         'rate' => $subscription->plan->owner->currency->rate,
                         'reason' => __('Subscription Payment received from :name', ['name' => Auth::user()->name]),
-                        'type' => 'credit'
+                        'type' => 'credit',
+                        'source_data' => 'UserPlanSubscriber',
+                        'source_id' => $subscription->id,
                     ]);
 
                     if (config('system.queue.mail')){

@@ -16,6 +16,7 @@ class DonationController extends Controller
     public function index(Request $request)
     {
         $search = $request->get('search');
+
         $donationLinks = Donation::with('user')
             ->when(!is_null($search), function (Builder $builder)use($search){
                 $builder->where('title',  'LIKE', '%'.$search.'%')
@@ -28,6 +29,7 @@ class DonationController extends Controller
             ->withCount('orders')
             ->latest()
             ->paginate();
+
         return view('admin.payments.donations.index', compact('donationLinks'));
     }
 

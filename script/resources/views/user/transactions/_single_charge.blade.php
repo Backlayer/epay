@@ -2,7 +2,7 @@
     <thead class="thead-light">
     <tr>
         <th>{{ __("S/N") }}</th>
-        <th>{{ __("Invoice") }}</th>
+        <th>{{ __('Invoice No') }}</th>
         <th>{{ __("TRX") }}</th>
         <th>{{ __("Title") }}</th>
         <th>{{ __("From") }}</th>
@@ -17,7 +17,14 @@
     @foreach($transactions as $transaction)
         <tr>
             <td>{{ $loop->index + 1 }}</td>
-            <td>{{ $transaction->invoice_no }}</td>
+            <td>
+                <x-link-upload-file
+                    type="SingleChargeOrder"
+                    :id="$transaction->id"
+                    :file="$transaction->invoice_file"
+                    :invoice-num="$transaction->invoice_no"
+                />
+            </td>
             <td>{{ $transaction->trx }}</td>
             <td>{{ $transaction->singleCharge->title }}</td>
             <td>{{ $transaction->name }}&nbsp;[{{ $transaction->email }}]</td>

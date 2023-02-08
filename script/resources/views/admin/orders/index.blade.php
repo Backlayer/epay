@@ -15,7 +15,7 @@
                         <h4>{{ __('Total Orders') }}</h4>
                     </div>
                     <div class="card-body total-orders">
-                        <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                        <img src="{{ asset('user/img/loading.svg') }}" height="40" class="loading mb-2 mt-1">
                     </div>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                         <h4>{{ __('Approved Order') }}</h4>
                     </div>
                     <div class="card-body completed-orders">
-                        <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                        <img src="{{ asset('user/img/loading.svg') }}" height="40" class="loading mb-2 mt-1">
                     </div>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                         <h4>{{ __('Pending Order') }}</h4>
                     </div>
                     <div class="card-body pending-orders">
-                        <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                        <img src="{{ asset('user/img/loading.svg') }}" height="40" class="loading mb-2 mt-1">
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                         <h4>{{ __('Cancled Order') }}</h4>
                     </div>
                     <div class="card-body cancled-orders">
-                        <img src="https://foodsify.xyz/uploads/loader.gif" height="20" id="loading">
+                        <img src="{{ asset('user/img/loading.svg') }}" height="40" class="loading mb-2 mt-1">
                     </div>
                 </div>
             </div>
@@ -183,7 +183,7 @@
 @endsection
 
 @push('script')
-    <script src="{{ asset('admin/js/admin.js') }}"></script>
+    <script src="{{ asset('admin/js/admin.js?v=' . config('app.version')) }}"></script>
     <script>
         "use strict";
         getTotalOrders()

@@ -38,6 +38,7 @@ class DepositController extends Controller
         ]);
 
         Session::put('deposit_amount', $request->input('amount'));
+
         return response()->json([
             'message' => __('Great! You are trying to deposits. Please follow the next step'),
             'redirect' => route('user.deposits.create'),
@@ -72,6 +73,7 @@ class DepositController extends Controller
         ]);
 
         $amount = convert_money(Session::get('deposit_amount'), user_currency()) * $gateway->currency->rate;
+
         Session::put('fund_callback.success_url', '/user/deposit/payment/success');
         Session::put('fund_callback.cancel_url', '/user/deposit/payment/failed');
 
@@ -82,11 +84,14 @@ class DepositController extends Controller
             ]);
 
             $payment_data['comment'] = $request->input('comment');
+
             if ($request->hasFile('screenshot')) {
                 $path = 'uploads' . '/payments' . date('/y/m/');
                 $name = uniqid() . date('dmy') . time() . "." . $request->file('screenshot')->getClientOriginalExtension();
+
                 Storage::disk(config('filesystems.default'))->put($path . $name, file_get_contents(Request()->file('screenshot')));
                 Storage::disk(config('filesystems.default'))->url($path . $name);
+
                 $payment_data['screenshot'] = $path . $name;
             }
         }
@@ -105,6 +110,7 @@ class DepositController extends Controller
         $payment_data['request_from'] = 'merchant';
 
         $gateway_info = json_decode($gateway->data, true);
+
         if (!empty($gateway_info)) {
             foreach ($gateway_info as $key => $info) {
                 $payment_data[$key] = $info;
@@ -131,6 +137,7 @@ class DepositController extends Controller
     public function success()
     {
         abort_if(!Session::has('payment_info') && !Session::has('payment_type'), 404);
+
         $amount = Session::get('deposit_amount');
         $gateway_id = Session::get('payment_info')['gateway_id'];
         $gateway = Gateway::findOrFail($gateway_id);
@@ -142,6 +149,7 @@ class DepositController extends Controller
 
         // Insert transaction data into deposit table
         \DB::beginTransaction();
+
         try {
             $meta = Session::get('payment_info')['meta'] ?? null;
 
@@ -172,8 +180,10 @@ class DepositController extends Controller
                 'name' => auth()->user()->name,
                 'email' => auth()->user()->name,
                 'type' => 'credit',
-                'reason' => 'Deposite.',
-                'currency_id' => auth()->user()->currency_id
+                'reason' => 'Deposit',
+                'currency_id' => auth()->user()->currency_id,
+                'source_data' => 'Deposit',
+                'source_id' => $deposit->id,
             ]);
 
             \DB::commit();
@@ -191,15 +201,16 @@ class DepositController extends Controller
             } else {
                 return to_route('user.deposits.create');
             }
-
         } catch (Throwable $th) {
             \DB::rollback();
+
             Session::forget('payment_info');
             Session::forget('fund_callback');
             Session::forget('deposit_amount');
             Session::forget('without_tax');
             Session::forget('payment_type');
             Session::flash('error', 'Something wrong please contact with support..!');
+
             return redirect()->route('user.deposits.index');
         }
     }
@@ -210,6 +221,7 @@ class DepositController extends Controller
         $data['completed'] = Deposit::whereUserId(auth()->id())->whereStatus(1)->count();
         $data['pending'] = Deposit::whereUserId(auth()->id())->whereStatus(2)->count();
         $data['rejected'] = Deposit::whereUserId(auth()->id())->whereStatus(0)->count();
+
         return response()->json($data);
     }
 }

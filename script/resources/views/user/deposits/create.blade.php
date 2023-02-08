@@ -50,12 +50,14 @@
                                                 <th>{{ __('Gateway Currency') }}</th>
                                                 <td>{{ $gateway->currency->code }}</td>
                                             </tr>
+                                            @if($gateway->charge)
                                             <tr>
                                                 <th>{{ __('Gateway Charge') }}</th>
                                                 <td>
                                                     {{ currency_format($gateway->charge, currency:$gateway->currency) }}
                                                 </td>
                                             </tr>
+                                            @endif
                                             <tr>
                                                 <th>{{ __('Minimum Transaction Amount') }}</th>
                                                 <td>

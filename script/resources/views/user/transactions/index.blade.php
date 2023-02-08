@@ -82,4 +82,6 @@
             </div>
         </div>
     </div>
+
+    @include('user.transactions.modal_upload_file')
 @endsection

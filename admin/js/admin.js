@@ -1,6 +1,7 @@
 "use strict";
 function getTotalCustomers() {
-    let url = $("#get-customers-url").val();
+    const url = $("#get-customers-url").val();
+
     $.ajax({
         type: 'GET',
         url: url,
@@ -9,13 +10,14 @@ function getTotalCustomers() {
             $('.active-customers').text(res.active);
             $('.paused-customers').text(res.pause);
             $('.suspend-customers').text(res.suspand);
-            $('#loading').addClass('d-none');
+            $('loading').addClass('d-none');
         },
     })
 }
 
 function getTotalDeposits() {
-    let url = $("#get-deposits-url").val();
+    const url = $("#get-deposits-url").val();
+
     $.ajax({
         type: 'GET',
         url: url,
@@ -24,27 +26,35 @@ function getTotalDeposits() {
             $('.completed-deposits').text(res.completed);
             $('.pending-deposits').text(res.pending);
             $('.rejected-deposits').text(res.rejected);
-            $('#loading').addClass('d-none');
+            $('.loading').addClass('d-none');
         },
     })
 }
 
 function getTotalTransactions() {
-    let url = $("#get-transaction-url").val();
+    const url = $("#get-transaction-url").val();
+
     $.ajax({
         type: 'GET',
         url: url,
         success: function(res){
-            $('.total-transactions').text(res.total);
-            $('.credit-transactions').text(res.credit);
-            $('.debit-transactions').text(res.debit);
-            $('#loading').addClass('d-none');
+            $('.total-transactions .count').text(res.total.count).removeClass('d-none');
+            $('.total-transactions .sum').text(res.total.sum).removeClass('d-none');
+
+            $('.credit-transactions .count').text(res.credit.count).removeClass('d-none');
+            $('.credit-transactions .sum').text(res.credit.sum).removeClass('d-none');
+
+            $('.debit-transactions .count').text(res.debit.count).removeClass('d-none');
+            $('.debit-transactions .sum').text(res.debit.sum).removeClass('d-none');
+
+            $('.loading').addClass('d-none');
         },
     })
 }
 
 function getTotalDonations() {
-    let url = $("#get-donations-url").val();
+    const url = $("#get-donations-url").val();
+
     $.ajax({
         type: 'GET',
         url: url,
@@ -52,27 +62,44 @@ function getTotalDonations() {
             $('.total-donations').text(res.total);
             $('.active-donations').text(res.active);
             $('.paused-donations').text(res.paused);
-            $('#loading').addClass('d-none');
+            $('.loading').addClass('d-none');
         },
     })
 }
 
 function getTotalSingleCharge() {
-    let url = $("#get-single-charge-url").val();
+    const url = $("#get-single-charge-url").val();
+
     $.ajax({
         type: 'GET',
         url: url,
         success: function(res){
-            $('.total-donations').text(res.total);
-            $('.active-donations').text(res.active);
-            $('.paused-donations').text(res.paused);
-            $('#loading').addClass('d-none');
+            $('.total-single-changes').text(res.total);
+            $('.active-single-changes').text(res.active);
+            $('.paused-single-changes').text(res.paused);
+            $('.loading').addClass('d-none');
+        },
+    })
+}
+
+function getTotalQrPayment() {
+    const url = $("#get-qr-payment-url").val();
+
+    $.ajax({
+        type: 'GET',
+        url: url,
+        success: function(res){
+            $('.total-qr-payments').text(res.total);
+            $('.paid-qr-payments').text(res.paid);
+            $('.confirmed-qr-payments').text(res.confirmed);
+            $('.loading').addClass('d-none');
         },
     })
 }
 
 function getTotalInvoices() {
-    let url = $("#get-invoices-url").val();
+    const url = $("#get-invoices-url").val();
+
     $.ajax({
         type: 'GET',
         url: url,
@@ -82,13 +109,14 @@ function getTotalInvoices() {
                 $('.total_items').text(res.total_items);
                 $('.total_quantity').text(res.total_quantity);
             }
-            $('#loading').addClass('d-none');
+            $('.loading').addClass('d-none');
         },
     })
 }
 
 function getTotalProducts() {
-    let url = $("#get-products-url").val();
+    const url = $("#get-products-url").val();
+
     $.ajax({
         type: 'GET',
         url: url,
@@ -96,13 +124,14 @@ function getTotalProducts() {
             $('.total').text(res.total);
             $('.physical').text(res.physical);
             $('.digital').text(res.digital);
-            $('#loading').addClass('d-none');
+            $('.loading').addClass('d-none');
         },
     })
 }
 
 function getTotalStores() {
-    let url = $("#get-stores-url").val();
+    const url = $("#get-stores-url").val();
+
     $.ajax({
         type: 'GET',
         url: url,
@@ -110,13 +139,14 @@ function getTotalStores() {
             $('.total').text(res.total);
             $('.physical').text(res.physical);
             $('.digital').text(res.digital);
-            $('#loading').addClass('d-none');
+            $('.loading').addClass('d-none');
         },
     })
 }
 
 function getTotalRequestMoney() {
-    let url = $("#get-request-money-url").val();
+    const url = $("#get-request-money-url").val();
+
     $.ajax({
         type: 'GET',
         url: url,
@@ -125,13 +155,14 @@ function getTotalRequestMoney() {
             $('.completed-deposits').text(res.completed);
             $('.pending-deposits').text(res.pending);
             $('.rejected-deposits').text(res.rejected);
-            $('#loading').addClass('d-none');
+            $('.loading').addClass('d-none');
         },
     })
 }
 
 function getTotalPayouts() {
-    let url = $("#get-payouts-url").val();
+    const url = $("#get-payouts-url").val();
+
     $.ajax({
         type: 'GET',
         url: url,
@@ -140,13 +171,14 @@ function getTotalPayouts() {
             $('.completed-payouts').text(res.approved);
             $('.pending-payouts').text(res.pending);
             $('.rejected-payouts').text(res.rejected);
-            $('#loading').addClass('d-none');
+            $('.loading').addClass('d-none');
         },
     })
 }
 
 function getTotalOrders() {
-    let url = $("#get-orders-url").val();
+    const url = $("#get-orders-url").val();
+
     $.ajax({
         type: 'GET',
         url: url,
@@ -155,13 +187,14 @@ function getTotalOrders() {
             $('.completed-orders').text(res.completed);
             $('.pending-orders').text(res.pending);
             $('.cancled-orders').text(res.cancled);
-            $('#loading').addClass('d-none');
+            $('.loading').addClass('d-none');
         },
     })
 }
 
 function getTotalTransfers() {
-    let url = $("#get-transfers-url").val();
+    const url = $("#get-transfers-url").val();
+
     $.ajax({
         type: 'GET',
         url: url,
@@ -171,7 +204,7 @@ function getTotalTransfers() {
             $('.pending-transfers').text(res.pending);
             $('.refund-transfers').text(res.refund);
             $('.cancled-transfers').text(res.cancled);
-            $('#loading').addClass('d-none');
+            $('.loading').addClass('d-none');
         },
     })
 }
