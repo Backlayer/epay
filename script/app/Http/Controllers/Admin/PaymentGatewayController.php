@@ -17,12 +17,14 @@ class PaymentGatewayController extends Controller
     {
         $fields = [];
 
-        foreach ($request->fields as $key => $value) {
-            $fields[] = [
-                'label' => $value['label'],
-                'type' => $value['type'],
-                'isRequired' => isset($value['isRequired'][0]),
-            ];
+        if (is_array($request->fields)) {
+            foreach ($request->fields as $key => $value) {
+                $fields[] = [
+                    'label' => $value['label'],
+                    'type' => $value['type'],
+                    'isRequired' => isset($value['isRequired'][0]),
+                ];
+            }
         }
 
         return $fields;
@@ -59,9 +61,9 @@ class PaymentGatewayController extends Controller
             'currency' => 'required|exists:currencies,id',
             'min_amount' => ['required', 'numeric', 'min:0'],
             'max_amount' => ['required', 'numeric', 'min:0', 'gte:min_amount'],
-            'fields' => ['required', 'array'],
-            'fields.*.label' => ['required', 'string'],
-            'fields.*.type' => ['required', 'string', Rule::in($this->types)],
+            'fields' => ['nullable', 'array'],
+            'fields.*.label' => ['string'],
+            'fields.*.type' => ['string', Rule::in($this->types)],
             'instructions' => ['nullable', 'string'],
         ]);
 
@@ -117,9 +119,9 @@ class PaymentGatewayController extends Controller
             'currency' => 'required|exists:currencies,id',
             'min_amount' => ['required', 'numeric', 'min:0'],
             'max_amount' => ['required', 'numeric', 'min:0', 'gte:min_amount'],
-            'fields' => ['required', 'array'],
-            'fields.*.label' => ['required', 'string'],
-            'fields.*.type' => ['required', 'string', Rule::in($this->types)],
+            'fields' => ['nullable', 'array'],
+            'fields.*.label' => ['string'],
+            'fields.*.type' => ['string', Rule::in($this->types)],
             'instructions' => ['nullable', 'string'],
         ]);
 
