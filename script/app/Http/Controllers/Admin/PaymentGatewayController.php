@@ -83,9 +83,13 @@ class PaymentGatewayController extends Controller
         $gateway->is_auto = $request->is_auto ?? 0;
         $gateway->image_accept = $request->image_accept;
         $gateway->status = $request->status;
-        $gateway->data = $request->instruction;
         $gateway->fields = $this->mapFields($request);
         $gateway->instructions = $request->instructions;
+
+        if ($request->is_auto == 1) {
+            $gateway->data = $request->data ? json_encode($request->data) : '';
+        }
+
         $gateway->save();
 
         return response()->json([
